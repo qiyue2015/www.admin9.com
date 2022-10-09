@@ -1,3 +1,85 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+
+  /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+  @font-face {
+    font-family: "仓耳渔阳体 W05";
+    font-weight: 400;
+    src: url("//at.alicdn.com/wf/webfont/RQ1EXEQl7KXm/Xc4RZJUXfKMwUzoFrxkcA.woff2") format("woff2"),
+    url("//at.alicdn.com/wf/webfont/RQ1EXEQl7KXm/jFqjWvJM_LQdDUHAX2Qaj.woff") format("woff");
+    font-display: swap;
+  }
+
+  a {
+    &:hover {
+      @apply text-sky-500;
+    }
+  }
+}
+
+.box {
+  ~ .box {
+    @apply mt-10;
+  }
+
+  .hd {
+    @apply flex mb-4 text-xl text-sky-500 font-semibold dark:text-sky-400;
+  }
+
+  .bd {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3;
+  }
+}
+
+.list {
+  .item {
+    @apply rounded-md bg-white p-4 overflow-hidden;
+    border: 1px solid #e4ecf3;
+    box-shadow: 1px 2px 3px #f2f6f8;
+    @apply transition ease-in-out hover:-translate-y-1;
+
+    .logo {
+      height: 40px;
+      position: relative;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 0.1rem;
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        vertical-align: middle;
+        @apply inline-block mr-2;
+      }
+    }
+
+    .desc {
+      @apply truncate text-gray-500 text-sm;
+      padding-top: 10px;
+      height: 35px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+header {
+  @apply w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white dark:bg-slate-900/75;
+  h1 {
+    font-family: "仓耳渔阳体 W05";
+    @apply text-2xl;
+  }
+}
+
+.footer {
+  @apply py-10 mt-10 text-center;
+}
