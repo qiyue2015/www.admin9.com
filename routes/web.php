@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
+use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $links = config('link');
-    return view('welcome', compact('links'));
+    $news = Article::limit(20)->get();
+    return view('welcome', compact('news'));
 });
+
+// 文章详情
+Route::get('/view/{id}.html', [ArticleController::class, 'show'])->where(['id' => '[0-9]+'])->name('article.show');

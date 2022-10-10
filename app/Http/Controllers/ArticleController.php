@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
@@ -41,21 +42,25 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\article  $article
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(article $article)
+    public function show($id)
     {
-        //
+        $article = Article::find($id);
+        $tablename = 'articles_'.$article->id % 10;
+        $data = DB::table($tablename)->find($article->id);
+        $content = $data->content;
+        return view('article.show', compact('article', 'content'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\article  $article
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function edit(article $article)
+    public function edit(Article $article)
     {
         //
     }
@@ -64,7 +69,7 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\article  $article
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, article $article)
@@ -75,10 +80,10 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\article  $article
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy(article $article)
+    public function destroy(Article $article)
     {
         //
     }

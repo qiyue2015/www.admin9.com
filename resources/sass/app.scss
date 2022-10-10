@@ -73,6 +73,19 @@
   }
 }
 
+.list {
+  li {
+    @apply whitespace-nowrap leading-8 text-ellipsis flex;
+    a {
+      @apply flex-1 inline-block overflow-hidden text-ellipsis;
+    }
+
+    span {
+      @apply text-gray-400 ml-4;
+    }
+  }
+}
+
 header {
   @apply w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white dark:bg-slate-900/75;
   h1 {
@@ -83,4 +96,27 @@ header {
 
 .footer {
   @apply py-10 mt-10 text-center;
+}
+
+
+.article-content {
+  @apply text-lg leading-8 tracking-widest text-justify;
+
+  p {
+    @apply mb-6;
+  }
+
+  .art_img_mini {
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .art_img_tit {
+      @apply text-base py-4;
+    }
+  }
 }

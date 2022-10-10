@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <title>{{ config('app.name') }}</title>
+    <title>{{ $article->title }}-{{ config('app.name') }}</title>
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/sass/app.scss'])
@@ -30,42 +30,17 @@
         </div>
     </div>
 </header>
-
-<div class="container px-4 mt-10">
-    <div class="news mb-8">
-        <div class="box">
-            <div class="hd">科技动态</div>
-            <div class="box grid gap-4 md:grid-cols-2">
-                <ul class="list">
-@foreach($news as $row)
-@if($loop->index && $loop->index % 10 === 0)
-                </ul>
-                <ul class="list">
-@endif
-                    <li><a href="{{ $row->link() }}">{{ $row->title }}</a></li>
-@endforeach
-                </ul>
-            </div>
+<div class="max-w-4xl mx-auto mt-10">
+    <h1 class="text-3xl font-bold">{{ $article->title }}</h1>
+    <div class="top-bar-inner">
+        <div class="py-4">
+            <span>{{ $article->created_at }}</span>
+            <span class="author">{{ $article->source_name }}</span>
         </div>
     </div>
-    <div id="main"></div>
+    <div class="article-content mt-4">
+        {!! $content !!}
+    </div>
 </div>
-
-<footer class="text-sm">
-    <div class="container px-4">
-        <div class="py-10 sm:flex justify-between text-slate-500 dark:border-slate-200/5">
-            <div class="sm:flex">
-                <p>Copyright © 2022 西昌齐跃网络科技有限责任公司.</p>
-                <p class="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">
-                    <a href="https://beian.miit.gov.cn/" rel="external nofollow" target="_blank">蜀ICP备2022018286号-1</a>
-                </p>
-            </div>
-            <span class="hover:text-slate-900 dark:hover:text-slate-400">Laravel v{{ Illuminate\Foundation\Application::VERSION }}</span>
-        </div>
-    </div>
-</footer>
-
-@vite('resources/js/app.js')
-
 </body>
 </html>
