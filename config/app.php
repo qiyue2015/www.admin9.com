@@ -185,6 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
+        App\Providers\OptimusServiceProvider::class,
 
         /*
          * Application Service Providers...
