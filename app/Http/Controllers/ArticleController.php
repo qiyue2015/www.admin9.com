@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jenssegers\Optimus\Optimus;
 
 class ArticleController extends Controller
 {
@@ -45,8 +46,9 @@ class ArticleController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Optimus $optimus)
     {
+        $id = $optimus->decode($id);
         $article = Article::find($id);
         $tablename = 'articles_'.$article->id % 10;
         $data = DB::table($tablename)->find($article->id);

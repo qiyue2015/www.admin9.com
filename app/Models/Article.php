@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Jenssegers\Optimus\Optimus;
 
 /**
  * App\Models\Article
@@ -44,7 +45,8 @@ class Article extends Model
      */
     public function link(array $params = []): string
     {
-        $params = array_merge(['id' => $this->id], $params);
+        $encode_id = app(Optimus::class)->encode($this->id);
+        $params = array_merge(['id' => $encode_id], $params);
         return route('article.show', $params, false);
     }
 }
