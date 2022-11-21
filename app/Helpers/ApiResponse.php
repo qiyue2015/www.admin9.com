@@ -5,7 +5,6 @@ namespace App\Helpers;
 use App\Exceptions\BusinessException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 trait ApiResponse
 {
@@ -18,6 +17,9 @@ trait ApiResponse
      */
     public function success($data = null, array $codeResponse = ResponseEnum::HTTP_SUCCESS, string $customInfo = ''): JsonResponse
     {
+        if ($data instanceof LengthAwarePaginator) {
+            return $this->successPaginate(...func_get_args());
+        }
         return $this->jsonResponse('success', $codeResponse, $data, $customInfo);
     }
 
@@ -38,71 +40,51 @@ trait ApiResponse
      * @param $status string 状态
      * @param $codeResponse array 状态码
      * @param $data mixed 数据
-     * @param $customInfo string 自定义信息
+     * @param $meta null 自定义信息
      * @return JsonResponse
      */
-    private function jsonResponse(string $status, array $codeResponse, mixed $data, string $customInfo): JsonResponse
+    private function jsonResponse(string $status, array $codeResponse, mixed $data, $meta = null): JsonResponse
     {
         [$code, $message] = $codeResponse;
-        return response()->json([
+        $result = [
             'status' => $status,
             'code' => $code,
-            'message' => $customInfo ?: $message,
-            'data' => $data ?: null,
-        ]);
+            'message' => $message,
+            'data' => $data,
+        ];
+        if ($meta) {
+            $result['meta'] = $meta;
+        }
+        return response()->json($result);
     }
 
 
     /**
      * 成功分页返回
-     * @param $page
+     * @param  $paginator
      * @return JsonResponse
      */
-    protected function successPaginate($page): JsonResponse
+    protected function successPaginate($paginator): JsonResponse
     {
-        return $this->success($this->paginate($page));
-    }
-
-    /**
-     * 返回分页数据
-     * @param $page
-     * @return mixed
-     */
-    protected function getPaginate($page): mixed
-    {
-        return $this->paginate($page);
-    }
-
-    /**
-     * 分页处理
-     * @param $page
-     * @return mixed
-     */
-    private function paginate($page): mixed
-    {
-        if ($page instanceof LengthAwarePaginator) {
-            return [
-                'list' => $page->items(), // 数据列表
-                'total_count' => $page->total(), // 数据总量
-                'page' => $page->currentPage(), // 当前页数
-                'page_size' => $page->perPage(), // 当前条数
-                'total_page' => $page->lastPage() // 总页数
-            ];
-        }
-        if ($page instanceof Collection) {
-            $page = $page->toArray();
-        }
-        if (!is_array($page)) {
-            return $page;
-        }
-        $total = count($page);
-        return [
-            'total' => $total,
-            'page' => 1,
-            'limit' => $total,
-            'pages' => 1,
-            'list' => $page,
+        [$code, $message] = ResponseEnum::HTTP_SUCCESS;
+        $currentPage = (int) $paginator->currentPage();
+        $data = [
+            'status' => 'success',
+            'code' => $code,
+            'message' => $message,
+            'data' => $paginator->getCollection(),
+            'meta' => [
+                'prev_page' => $currentPage > 1 ? $currentPage - 1 : null,
+                'next_page' => $paginator->hasMorePages() ? $currentPage + 1 : null,
+                'page' => $paginator->currentPage(), // 当前页数
+                'pagesize' => $paginator->perPage(), // 当前条数
+                'has_more' => $paginator->hasMorePages(),
+                'total_count' => $paginator->total(), // 数据总量
+                'total_page' => $paginator->lastPage(), // 总页数
+            ],
         ];
+
+        return response()->json($data);
     }
 
     /**
