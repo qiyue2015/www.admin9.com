@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -42,4 +43,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @param $device
+     * @param  array  $abilities
+     * @return array
+     */
+    #[ArrayShape(['type' => "string", 'token' => "mixed"])]
+    public function createDeviceToken($device = null, array $abilities = ['*']): array
+    {
+        $expiresAt = now()->addMinutes(config('sanctum.expiration'));
+        $textToken = $this->createToken($device ?? 'web', $abilities, $expiresAt)->plainTextToken;
+        $accessToken = last(explode('|', $textToken));
+        return [
+            'type' => 'bearer',
+            'token' => $accessToken,
+        ];
+    }
 }
