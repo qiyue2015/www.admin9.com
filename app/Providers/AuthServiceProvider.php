@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
                 if (!$accessToken->can('server:limited')) {
                     return $isValid;
                 }
-                return $isValid && $accessToken->created_at->gt(now()->subMinutes(5));
+                return $isValid && $accessToken->expires_at->gt(now());
             }
         );
     }
