@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Http\Request;
@@ -22,3 +23,5 @@ Route::post('/auth/logout', LogoutController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('accounts', AccountController::class)->middleware('auth:sanctum');
