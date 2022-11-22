@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LoginResource;
 use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
@@ -12,13 +13,11 @@ use Laravel\Sanctum\PersonalAccessToken;
 class AuthController extends Controller
 {
     /**
-     * Create a new personal access token.
-     *
      * @param  LoginRequest  $request
-     * @return JsonResponse
+     * @return LoginResource
      * @throws ValidationException
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request): LoginResource
     {
         $request->authenticateOrFail();
 
@@ -35,10 +34,7 @@ class AuthController extends Controller
             ->where('tokenable_type', $token->accessToken->tokenable_type)
             ->delete();
 
-        return $this->success([
-            'token_type' => 'Bearer',
-            'plain_text' => $token->plainTextToken,
-        ]);
+        return new LoginResource($token);
     }
 
     /**

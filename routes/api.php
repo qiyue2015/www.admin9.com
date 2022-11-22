@@ -4,7 +4,10 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,11 +25,8 @@ Route::controller(AuthController::class)->prefix('auth')->group(function (): voi
     \Route::post('/login', 'login')->name('login');
     \Route::post('/logout', 'logout')->name('logout')->middleware('auth:sanctum');
 });
-//Route::post('/auth/login', LoginController::class);
-//Route::post('/auth/logout', LogoutController::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function (Router $router) {
+    $router->apiResource('users', UserController::class);
+    $router->apiResource('accounts', AccountController::class);
 });
-
-Route::apiResource('accounts', AccountController::class)->middleware('auth:sanctum');

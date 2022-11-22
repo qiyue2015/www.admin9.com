@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AccountCollection;
 use App\Models\Account;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,15 +11,14 @@ use Illuminate\Support\Facades\Http;
 class AccountController extends Controller
 {
     /**
-     * Display a listing of the resource.
      * @param  Request  $request
      * @param  Account  $account
-     * @return JsonResponse
+     * @return AccountCollection
      */
-    public function index(Request $request, Account $account): JsonResponse
+    public function index(Request $request, Account $account): AccountCollection
     {
         $accounts = $account->paginate(20);
-        return $this->success($accounts);
+        return new AccountCollection($accounts);
     }
 
     /**
@@ -41,7 +41,8 @@ class AccountController extends Controller
             ->object();
 
         if (!Account::where('biz', $response->data->biz)->exists()) {
-            Account::create([
+            $account = new Account();
+            $account->fill([
                 'name' => $response->data->name,
                 'account' => $response->data->wxid,
                 'original' => $response->data->gh_id,
@@ -49,7 +50,7 @@ class AccountController extends Controller
                 'biz' => $response->data->biz,
                 'avatar' => $response->data->mp_head_img,
             ]);
-
+            $account->save();
             return $this->success();
         }
 
