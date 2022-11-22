@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Extensions;
 
 use App\Exceptions\BusinessException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
+use function response;
 
-trait ApiResponse
+trait ApiResponseTrait
 {
     /**
      * 成功
@@ -47,11 +48,12 @@ trait ApiResponse
     {
         [$code, $message] = $codeResponse;
         $result = [
-            'status' => $status,
             'code' => $code,
             'message' => $message,
-            'data' => $data,
         ];
+        if ($data) {
+            $result['data'] = $data;
+        }
         if ($meta) {
             $result['meta'] = $meta;
         }
@@ -79,8 +81,8 @@ trait ApiResponse
                 'page' => $paginator->currentPage(), // 当前页数
                 'pagesize' => $paginator->perPage(), // 当前条数
                 'has_more' => $paginator->hasMorePages(),
-                'total_count' => $paginator->total(), // 数据总量
-                'total_page' => $paginator->lastPage(), // 总页数
+                //'total_count' => $paginator->total(), // 数据总量
+                //'total_page' => $paginator->lastPage(), // 总页数
             ],
         ];
 

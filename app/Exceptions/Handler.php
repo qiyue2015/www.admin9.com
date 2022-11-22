@@ -2,17 +2,17 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\ApiResponse;
-use App\Helpers\ResponseEnum;
+use App\Extensions\ApiResponseTrait;
+use App\Extensions\ResponseEnum;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    use ApiResponse;
+    use ApiResponseTrait;
 
     /**
      * A list of exception types with their corresponding custom log levels.
@@ -77,7 +77,6 @@ class Handler extends ExceptionHandler
         // 自定义错误异常抛出
         if ($e instanceof BusinessException) {
             return response()->json([
-                'status' => 'fail',
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
