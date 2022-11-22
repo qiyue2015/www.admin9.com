@@ -129,4 +129,7 @@
             </div>
         </div>
     </body>
+@if (app()->isLocal())
+    @include('sudosu::user-selector')
+@endif
 </html>
