@@ -6,8 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -80,19 +80,16 @@ class User extends Authenticatable
     ];
 
     /**
-     * @param $device
+     * Create a expirable new personal access token for the user.
+     *
+     * @param  string  $name
      * @param  array  $abilities
-     * @return array
+     * @param $expiresAt
+     * @return NewAccessToken
      */
-    #[ArrayShape(['type' => "string", 'token' => "mixed"])]
-    public function createDeviceToken($device = null, array $abilities = ['*']): array
+    public function createExpirableToken(string $name, array $abilities = ['*'], $expiresAt = null): NewAccessToken
     {
-        $expiresAt = now()->addMinutes(config('sanctum.expiration'));
-        $textToken = $this->createToken($device ?? 'web', $abilities, $expiresAt)->plainTextToken;
-        $accessToken = last(explode('|', $textToken));
-        return [
-            'type' => 'bearer',
-            'token' => $accessToken,
-        ];
+        $expiresAt = $expiresAt ?? now()->addMinutes(config('sanctum.expiration'));
+        return $this->createToken($name, $abilities, $expiresAt);
     }
 }
