@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Extensions\ApiResponseTrait;
 use App\Extensions\ResponseEnum;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -72,6 +73,10 @@ class Handler extends ExceptionHandler
         // 未授权异常抛出
         if ($e instanceof AuthenticationException) {
             $this->throwBusinessException(ResponseEnum::CLIENT_HTTP_UNAUTHORIZED);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            $this->throwBusinessException(ResponseEnum::CLIENT_PARAMETER_ERROR);
         }
 
         // 自定义错误异常抛出
