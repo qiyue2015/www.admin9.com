@@ -23,10 +23,10 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-
+        $permissions = $user->getAllPermissions()->pluck('name');
         /** @var string $tokenName */
         $tokenName = $request->input('token_name', 'web');
-        $token = $user->createExpirableToken(name: $tokenName);
+        $token = $user->createExpirableToken($tokenName, $permissions->toArray());
 
         /** Delete the existing token to achieve single sign on */
         PersonalAccessToken::query()->where('tokenable_id', $token->accessToken->tokenable_id)

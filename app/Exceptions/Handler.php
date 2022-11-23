@@ -4,10 +4,12 @@ namespace App\Exceptions;
 
 use App\Extensions\ApiResponseTrait;
 use App\Extensions\ResponseEnum;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
@@ -58,6 +60,10 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+        if ($e instanceof AuthorizationException) {
+            $this->throwBusinessException([401, $e->getMessage()]);
+        }
+
         // 请求类型错误异常抛出
         if ($e instanceof MethodNotAllowedHttpException) {
             $this->throwBusinessException(ResponseEnum::CLIENT_METHOD_HTTP_TYPE_ERROR);
