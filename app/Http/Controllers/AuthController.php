@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LoginResource;
+use App\Http\Resources\PermissionResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
@@ -53,5 +55,16 @@ class AuthController extends Controller
         $token->delete();
 
         return $this->success();
+    }
+
+    public function info(Request $request): UserResource
+    {
+        return new UserResource($request->user());
+    }
+
+    public function permissions(Request $request)
+    {
+        $permissions = $request->user()->getAllPermissions();
+        return PermissionResource::collection($permissions);
     }
 }

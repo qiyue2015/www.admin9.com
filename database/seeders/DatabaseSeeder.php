@@ -26,11 +26,18 @@ class DatabaseSeeder extends Seeder
         // 初始化用户角色，将 1 号用户指派为『站长』
         $user = User::find(1);
         $user->assignRole('Founder');
-        $user->update(['password' => Hash::make('123456')]);
+        $user->update([
+            'email' => 'necessitatibus14@example.org',
+            'password' => Hash::make('123456'),
+        ]);
 
         // 将 2 号用户指派为『管理员』
         $user = User::find(2);
         $user->assignRole('Maintainer');
-        $user->update(['password' => Hash::make('123456')]);
+        $user->givePermissionTo(['accounts.index', 'accounts.show']);
+        $user->update([
+            'email' => 'reprehenderit.at@example.com',
+            'password' => Hash::make('123456'),
+        ]);
     }
 }

@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,19 +20,19 @@ return new class extends Migration
         app(Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         // 先创建权限
-        Permission::create(['name' => 'manage_contents']);
-        Permission::create(['name' => 'manage_users']);
-        Permission::create(['name' => 'edit_settings']);
+        Permission::create(['name' => 'accounts.index']);
+        Permission::create(['name' => 'accounts.store']);
+        Permission::create(['name' => 'accounts.show']);
+        Permission::create(['name' => 'accounts.update']);
+        Permission::create(['name' => 'accounts.destroy']);
 
         // 创建站长角色，并赋予权限
         $founder = Role::create(['name' => 'Founder']);
-        $founder->givePermissionTo('manage_contents');
-        $founder->givePermissionTo('manage_users');
-        $founder->givePermissionTo('edit_settings');
+        $founder->givePermissionTo(['accounts.index', 'accounts.store', 'accounts.show', 'accounts.update', 'accounts.destroy']);
 
         // 创建管理员角色，并赋予权限
         $maintainer = Role::create(['name' => 'Maintainer']);
-        $maintainer->givePermissionTo('manage_contents');
+        $maintainer->givePermissionTo(['accounts.index', 'accounts.show']);
     }
 
     /**
