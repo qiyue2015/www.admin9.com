@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Sanctum\NewAccessToken;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -78,18 +77,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Create a expirable new personal access token for the user.
-     *
-     * @param  string  $name
-     * @param  array  $abilities
-     * @param $expiresAt
-     * @return NewAccessToken
-     */
-    public function createExpirableToken(string $name, array $abilities = ['*'], $expiresAt = null): NewAccessToken
-    {
-        $expiresAt = $expiresAt ?? now()->addMinutes(config('sanctum.expiration'));
-        return $this->createToken($name, $abilities, $expiresAt);
-    }
 }

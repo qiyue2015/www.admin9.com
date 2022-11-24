@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -20,14 +23,18 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  UserRequest  $request
+     * @return UserResource
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return new UserResource($user);
     }
 
     /**
@@ -48,17 +55,44 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->success($id);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|min:6|max:16',
+            'password' => 'required|min:6|max:16|confirmed',
+        ], [
+            'old_password.required' => '旧密码不能为空',
+            'old_password.min' => '旧密码最少6个字符',
+            'old_password.max' => '旧密码最多16个字符',
+        ]);
+
+        $request->user()->update(['password' => bcrypt($request->password)]);
+        return $this->success();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * 删除指定用户
+     * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, int $id): JsonResponse
     {
-        //
+        if ($request->user()->id === $id) {
+            return $this->fail('自己不能删除自己.');
+        }
+
+        if (!User::whereId($id)->exists()) {
+            return $this->fail('用户不存在.');
+        }
+
+        if (User::findOrFail($id)->delete()) {
+            return $this->success();
+        }
+
+        return $this->fail('删除失败.');
     }
 }

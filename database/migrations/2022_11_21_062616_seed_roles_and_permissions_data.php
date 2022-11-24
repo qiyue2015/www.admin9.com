@@ -20,19 +20,25 @@ return new class extends Migration {
         app(Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         // 先创建权限
-        Permission::create(['name' => 'accounts.index']);
-        Permission::create(['name' => 'accounts.store']);
-        Permission::create(['name' => 'accounts.show']);
-        Permission::create(['name' => 'accounts.update']);
-        Permission::create(['name' => 'accounts.destroy']);
+        $permissions = [
+            'user.index', 'user.store', 'user.show', 'user.update', 'user.destroy', 'user.change-password',
+            'role.index', 'role.store', 'role.show', 'role.update', 'role.destroy',
+        ];
+        collect($permissions)->each(function ($value) {
+            Permission::create(['name' => $value]);
+        });
 
-        // 创建站长角色，并赋予权限
+        // 创建站长角色
         $founder = Role::create(['name' => 'Founder']);
-        $founder->givePermissionTo(['accounts.index', 'accounts.store', 'accounts.show', 'accounts.update', 'accounts.destroy']);
+        $founder->givePermissionTo($permissions); // 赋予全部权限
 
-        // 创建管理员角色，并赋予权限
+        // 创建管理员角色
         $maintainer = Role::create(['name' => 'Maintainer']);
-        $maintainer->givePermissionTo(['accounts.index', 'accounts.show']);
+        $permissions = collect($permissions)->filter(function ($value) {
+            // 并赋予除删除外的权限
+            return !Str::contains($value, '.destroy');
+        });
+        $maintainer->givePermissionTo($permissions);
     }
 
     /**

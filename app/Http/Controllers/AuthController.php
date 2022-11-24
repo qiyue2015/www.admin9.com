@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\LoginResource;
-use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,8 +24,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
+        $user = User::whereEmail($request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -74,9 +70,9 @@ class AuthController extends Controller
         return new UserResource($request->user());
     }
 
-    public function permissions(Request $request)
+    public function permissions(Request $request): JsonResponse
     {
-        $permissions = $request->user()->getAllPermissions();
-        return PermissionResource::collection($permissions);
+        $permissions = $request->user()->getAllPermissions()->pluck('name');
+        return $this->success($permissions);
     }
 }
