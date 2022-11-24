@@ -9,26 +9,35 @@ use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
     /**
-     * @param  LoginRequest  $request
-     * @return LoginResource
+     * @param  Request  $request
+     * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(LoginRequest $request): LoginResource
+    public function login(Request $request): JsonResponse
     {
-        $request->authenticateOrFail();
+        $request->validate([
+            'email' => 'required|email|string|exists:users,email',
+            'password' => 'required',
+        ]);
 
-        /** @var User $user */
-        $user = $request->user();
-        $permissions = $user->getAllPermissions()->pluck('name');
-        /** @var string $tokenName */
-        $tokenName = $request->input('token_name', 'web');
-        $token = $user->createExpirableToken($tokenName, $permissions->toArray());
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
+        $permissions = $user->getAllPermissions()->pluck('name')->toArray();
+
+        $token = $user->createToken('api', $permissions);
 
         /** Delete the existing token to achieve single sign on */
         PersonalAccessToken::query()->where('tokenable_id', $token->accessToken->tokenable_id)
@@ -36,7 +45,10 @@ class AuthController extends Controller
             ->where('tokenable_type', $token->accessToken->tokenable_type)
             ->delete();
 
-        return new LoginResource($token);
+        return $this->success([
+            'token_type' => 'Bearer',
+            'token' => $token->plainTextToken,
+        ]);
     }
 
     /**
