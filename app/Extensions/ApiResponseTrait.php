@@ -51,12 +51,19 @@ trait ApiResponseTrait
             'code' => $code,
             'message' => $message,
         ];
+
         if ($data) {
             $result['data'] = $data;
         }
+
         if ($meta) {
-            $result['meta'] = $meta;
+            if (is_array($meta)) {
+                $result['meta'] = $meta;
+            } else {
+                $result['message'] = $meta;
+            }
         }
+
         return response()->json($result);
     }
 
