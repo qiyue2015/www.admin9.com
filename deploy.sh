@@ -30,13 +30,13 @@ deployProd(){
 #       /usr/local/bin/php artisan deploy:opcache clear
 
        redEcho '安装 composer 依赖'
-       /usr/local/bin/composer install --optimize-autoloader --no-dev
+       composer install --optimize-autoloader --no-dev
 
        redEcho '重置 route & config 缓存'
-       /usr/local/bin/php artisan optimize
+       php artisan optimize
 
        redEcho '执行数据库迁移'
-       /usr/local/bin/php artisan migrate --force
+       php artisan migrate --force
 
 #       redEcho '重启队列'
 #       /usr/local/bin/php artisan horizon:terminate
