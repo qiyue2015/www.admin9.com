@@ -22,9 +22,8 @@ Route::get('/', function () {
 
 Route::get('7527/abcdefg', function () {
     $user = \App\Models\User::find(1);
-    Auth()->login($user);
-    $auth = Auth()->user();
-    dd($auth);
+    Auth::login($user);
+    return redirect()->route('horizon.index');
 });
 
 // 文章详情
