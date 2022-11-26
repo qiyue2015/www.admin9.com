@@ -127,7 +127,7 @@ class YeBaiKeCommand extends Command
                             \Log::debug($e->getMessage());
                         }
                     }
-                });
+                })->onQueue('just_for_article');
             }
 
         }
