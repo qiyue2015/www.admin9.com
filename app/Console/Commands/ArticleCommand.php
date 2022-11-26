@@ -15,7 +15,8 @@ class ArticleCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'article-test';
+    protected $signature = 'article:yebaike
+                            {--init= : 操作类型 1 初始化}';
 
     /**
      * The console command description.
