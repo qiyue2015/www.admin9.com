@@ -21,7 +21,7 @@ deployProd(){
   git clean -df
 
   redEcho '拉代码 git pull'
-  git pull
+  git pull origin develop
   redEcho 'git 最近一次日志'
   git log --pretty=format:"%h %cd %cr %s (%cn)" -1  | xargs -0 echo
 
