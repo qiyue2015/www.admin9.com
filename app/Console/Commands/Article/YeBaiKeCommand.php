@@ -27,6 +27,8 @@ class YeBaiKeCommand extends Command
      */
     protected $description = 'Command description';
 
+    protected int $runId = 0;
+
     protected array $categoryIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 26, 27, 28, 29, 30, 31, 32];
 
     /**
@@ -69,33 +71,32 @@ class YeBaiKeCommand extends Command
 
     protected function checkLink($num): void
     {
-        $count = Article::where('checked', 0)->where('category_id', 1)->count();
-        $id = Article::where('checked', 0)->where('category_id', 1)->min('id');
+        $categoryId = 17;
+        $count = Article::where('checked', 0)->where('category_id', $categoryId)->count();
+        $runId = Article::where('checked', 0)->where('category_id', $categoryId)->min('id');
         $bar = $this->output->createProgressBar($count);
 
+        $this->runId = $runId - 1;
+
         $this->line('开始');
-        $this->info('初始ID'.$id);
+        $this->info('初始ID：'.$this->runId);
         $this->info('待数据：'.$count);
         $this->info('每次运行：'.$num);
 
         $i = 0;
         while ($i < $count) {
             $i++;
-            $bar->advance($num);
+            $bar->advance();
 
             $list = Article::where('checked', 0)
-                ->where('id', '>', $id)
-                ->where('category_id', 1)
+                ->where('id', '>=', $this->runId)
+                ->where('category_id', $categoryId)
                 ->limit($num)
                 ->get();
 
-            if (empty($list)) {
-                dd('all ok.');
-            }
-
             foreach ($list as $row) {
-                $id = $row->id;
-                $url = 'https://www.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$id;
+                $this->runId = $row->id;
+                $url = 'https://www.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$row->id;
                 dispatch(static function () use ($url, $row) {
                     $response = Http::withoutVerifying()->get($url);
                     if (str()->contains($response->body(), '此信息不存在')) {
@@ -127,14 +128,11 @@ class YeBaiKeCommand extends Command
                             ], [
                                 'content' => implode(PHP_EOL, $content),
                             ]);
-
                         } catch (\Exception $e) {
-                            \Log::debug($e->getMessage());
                         }
                     }
                 })->onQueue('just_for_article');
             }
-
         }
     }
 }

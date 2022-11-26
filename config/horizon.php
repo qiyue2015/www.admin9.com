@@ -204,6 +204,10 @@ return [
         'local' => [
             'default' => [
                 'connection' => 'redis',
+                'queue' => [
+                    'default',
+                    'just_for_article',
+                ],
                 'maxProcesses' => 30,
             ],
         ],
