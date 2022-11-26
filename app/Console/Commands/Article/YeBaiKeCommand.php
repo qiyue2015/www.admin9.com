@@ -97,15 +97,12 @@ class YeBaiKeCommand extends Command
             foreach ($list as $row) {
                 $this->runId = $row->id;
 
-                echo $row->id." ";
-
                 dispatch(static function () use ($row) {
                     $url = 'https://www.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$row->id;
                     $response = Http::withoutVerifying()->get($url);
                     if (str()->contains($response->body(), '此信息不存在')) {
                         $row->category_id++;
                         $row->save();
-                        dd($row);
                     } else {
                         try {
                             $crawler = new Crawler();
