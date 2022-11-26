@@ -73,10 +73,15 @@ class YeBaiKeCommand extends Command
         $id = Article::where('checked', 0)->where('category_id', 1)->min('id');
         $bar = $this->output->createProgressBar($count);
 
+        $this->line('开始');
+        $this->info('初始ID'.$id);
+        $this->info('待数据：'.$count);
+        $this->info('每次运行：'.$num);
+
         $i = 0;
         while ($i < $count) {
             $i++;
-            $bar->advance();
+            $bar->advance($num);
 
             $list = Article::where('checked', 0)
                 ->where('id', '>', $id)
