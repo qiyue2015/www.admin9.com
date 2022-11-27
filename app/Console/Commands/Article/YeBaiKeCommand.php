@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Article;
 
+use App\Jobs\ArticleJob;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Console\Command;
@@ -73,67 +74,26 @@ class YeBaiKeCommand extends Command
     {
         $categoryId = 1;
         $count = Article::where('checked', 0)->where('category_id', $categoryId)->count();
-        $runId = Article::where('checked', 0)->where('category_id', $categoryId)->min('id');
+        $lastId = Article::where('checked', 0)->where('category_id', $categoryId)->min('id');
         $bar = $this->output->createProgressBar($count);
 
-        $this->runId = $runId - 1;
-
-        $this->line('开始');
-        $this->info('初始ID：'.$this->runId);
-        $this->info('待数据：'.$count);
-        $this->info('每次运行：'.$num);
+        $this->line('开始...');
+        $this->info('初始ID：'.$lastId);
+        $this->info('待处理数据：'.$count);
+        $this->info('每次执行：'.$num);
 
         $i = 0;
         while ($i < $count) {
             $i++;
             $bar->advance();
 
-            $list = Article::where('checked', 0)
-                ->where('id', '>=', $this->runId)
+            Article::where('checked', 0)
+                ->where('id', '>=', $lastId)
                 ->where('category_id', $categoryId)
-                ->limit($num)
-                ->get();
-
-            foreach ($list as $row) {
-                $this->runId = $row->id;
-
-                dispatch(static function () use ($row) {
-                    $url = 'https://www.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$row->id;
-                    $response = Http::withoutVerifying()->get($url);
-                    if (str()->contains($response->body(), '此信息不存在')) {
-                        $row->category_id++;
-                        $row->save();
-                    } else {
-                        try {
-                            $crawler = new Crawler();
-                            $crawler->addHtmlContent($response->body());
-                            $title = $crawler->filter('h1.title')->text();
-                            $date = $crawler->filterXPath('//div[@class="header"]/div/span[1]')->text();
-                            $categoryName = $crawler->filterXPath('//div[@class="header"]/div/span[2]/a')->text();
-                            $content = $crawler->filter('.article .text p')
-                                ->each(function (Crawler $cr) {
-                                    return '<p>'.$cr->html().'</p>';
-                                });
-
-                            $category = Category::firstOrCreate(['name' => $categoryName]);
-
-                            $row->category_id = $category->id;
-                            $row->title = $title;
-                            $row->checked = true;
-                            $row->created_at = now()->parse($date)->toDateTimeString();
-                            $row->save();
-
-                            $subtable = $row->id % 10;
-                            DB::table('articles_'.$subtable)->updateOrInsert([
-                                'id' => $row->id,
-                            ], [
-                                'content' => implode(PHP_EOL, $content),
-                            ]);
-                        } catch (\Exception $e) {
-                        }
-                    }
-                })->onQueue('just_for_article');
-            }
+                ->take($num)
+                ->each(function ($artcile) {
+                    ArticleJob::dispatch($artcile)->onQueue('just_for_article');
+                });
         }
     }
 }

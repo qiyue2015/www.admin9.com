@@ -208,7 +208,7 @@ return [
                     'default',
                     'just_for_article',
                 ],
-                'maxProcesses' => 30,
+                'maxProcesses' => 100,
             ],
         ],
     ],
