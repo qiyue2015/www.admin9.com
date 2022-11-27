@@ -38,8 +38,8 @@ deployProd(){
        redEcho '执行数据库迁移'
        php artisan migrate --force
 
-#       redEcho '重启队列'
-#       /usr/local/bin/php artisan horizon:terminate
+       redEcho '重启队列'
+       php artisan horizon:terminate
   fi
 
   #  if [ "$1" != 'backend'  ]; then
