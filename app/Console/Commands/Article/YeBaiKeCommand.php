@@ -28,8 +28,6 @@ class YeBaiKeCommand extends Command
      */
     protected $description = 'Command description';
 
-    protected int $runId = 0;
-
     protected array $categoryIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 26, 27, 28, 29, 30, 31, 32];
 
     /**
@@ -73,8 +71,8 @@ class YeBaiKeCommand extends Command
     protected function checkLink($num): void
     {
         $categoryId = 1;
+        $lastId = 0;
         $count = Article::where('checked', 0)->where('category_id', $categoryId)->count();
-        $lastId = Article::where('checked', 0)->where('category_id', $categoryId)->min('id');
         $bar = $this->output->createProgressBar($count);
 
         $this->line('开始...');
@@ -87,13 +85,16 @@ class YeBaiKeCommand extends Command
             $i++;
             $bar->advance();
 
-            Article::where('checked', 0)
-                ->where('id', '>=', $lastId)
+            $list = Article::where('checked', 0)
+                ->where('id', '>', $lastId)
                 ->where('category_id', $categoryId)
                 ->take($num)
-                ->each(function ($artcile) {
-                    ArticleJob::dispatch($artcile)->onQueue('just_for_article');
-                });
+                ->get();
+
+            foreach ($list as $artcile) {
+                $lastId = $artcile->id;
+                ArticleJob::dispatch($artcile)->onQueue('just_for_article');
+            }
         }
     }
 }
