@@ -5,7 +5,6 @@ namespace App\Extensions;
 use App\Exceptions\BusinessException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use function response;
 
 trait ApiResponseTrait
 {
