@@ -11,11 +11,13 @@ use Jenssegers\Optimus\Optimus;
  * App\Models\Article
  *
  * @property int $id
+ * @property int $channel_id 频道ID
  * @property int $category_id 分类ID
  * @property string $title 标题
  * @property string|null $author_name 作者
  * @property string|null $digest 摘要
  * @property int $view_num 点击量
+ * @property int $checked 已审核
  * @property string|null $cover_url 封面图片
  * @property string|null $source_name 来源
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -25,6 +27,8 @@ use Jenssegers\Optimus\Optimus;
  * @method static \Illuminate\Database\Eloquent\Builder|Article query()
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereAuthorName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereChecked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCoverUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereDigest($value)
