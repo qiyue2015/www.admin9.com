@@ -4,11 +4,7 @@ namespace App\Console\Commands\Article;
 
 use App\Jobs\ArticleJob;
 use App\Models\Article;
-use App\Models\Category;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Symfony\Component\DomCrawler\Crawler;
 
 class YeBaiKeCommand extends Command
 {

@@ -36,15 +36,15 @@ class ArticleJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $url = 'https://www.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$this->article->id;
+        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid=32&id='.$this->article->id;
         $response = Http::withoutVerifying()->get($url);
         try {
             $crawler = new Crawler();
             $crawler->addHtmlContent($response->body());
-            $title = $crawler->filter('h1.title')->text();
-            $date = $crawler->filterXPath('//div[@class="header"]/div/span[1]')->text();
-            $categoryName = $crawler->filterXPath('//div[@class="header"]/div/span[2]/a')->text();
-            $content = $crawler->filter('.article .text p')->each(function (Crawler $cr) {
+            $title = $crawler->filter('.weui-c-title')->text();
+            $date = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[1]')->text();
+            $categoryName = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[2]/a')->text();
+            $content = $crawler->filter('.weui-c-article p')->each(function (Crawler $cr) {
                 return '<p>'.$cr->html().'</p>';
             });
 
@@ -55,6 +55,7 @@ class ArticleJob implements ShouldQueue
                 'checked' => true,
                 'created_at' => now()->parse($date)->toDateTimeString(),
             ]);
+            $this->article->save();
 
             $subtable = $this->article->id % 10;
             DB::table('articles_'.$subtable)->updateOrInsert([
