@@ -83,7 +83,6 @@ class YeBaiKeCommand extends Command
         $i = 0;
         while ($i < $count) {
             $i++;
-            $bar->advance();
 
             $list = Article::where('checked', 0)
                 ->where('id', '>', $lastId)
@@ -95,6 +94,8 @@ class YeBaiKeCommand extends Command
                 $lastId = $artcile->id;
                 ArticleJob::dispatch($artcile)->onQueue('just_for_article');
             }
+
+            $bar->advance($list->count());
         }
     }
 }
