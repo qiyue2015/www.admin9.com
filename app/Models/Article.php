@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,10 @@ class Article extends Model
 
     protected $guarded = [];
 
+    public function scopeChecked($query): void
+    {
+        $query->where('checked', true);
+    }
     /**
      * @param  array  $params
      * @return string
@@ -54,5 +59,25 @@ class Article extends Model
         $encode_id = app(Optimus::class)->encode($this->id);
         $params = array_merge(['id' => $encode_id], $params);
         return route('article.show', $params, false);
+    }
+
+    /**
+     * 上一条
+     * @return Article|Article[]|Collection|Model|null
+     */
+    public function prev(): Model|Article|Collection|array|null
+    {
+        $id = self::where('id', '<', $this->id)->checked()->max('id');
+        return self::find($id);
+    }
+
+    /**
+     * 下一条
+     * @return Article|Article[]|Collection|Model|null
+     */
+    public function next(): Model|Article|Collection|array|null
+    {
+        $id = self::where('id', '>', $this->id)->checked()->min('id');
+        return self::find($id);
     }
 }

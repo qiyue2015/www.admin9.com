@@ -120,3 +120,19 @@ header {
     }
   }
 }
+
+.article-nav {
+  @apply flex items-center mt-10;
+
+  .article-nav-prev, .article-nav-next {
+    @apply flex items-center;
+
+    a {
+      @apply ml-2;
+    }
+  }
+
+  .article-nav-next {
+    @apply ml-auto;
+  }
+}

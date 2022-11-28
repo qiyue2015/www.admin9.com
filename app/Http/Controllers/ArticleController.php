@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Optimus\Optimus;
@@ -41,18 +44,18 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @param  Optimus  $optimus
+     * @return Application|Factory|View
      */
-    public function show($id, Optimus $optimus)
+    public function show($id, Optimus $optimus): View|Factory|Application
     {
         $id = $optimus->decode($id);
         $article = Article::find($id);
         $tablename = 'articles_'.$article->id % 10;
         $data = DB::table($tablename)->find($article->id);
         $content = $data->content;
+
         return view('article.show', compact('article', 'content'));
     }
 

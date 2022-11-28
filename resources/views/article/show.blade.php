@@ -41,6 +41,14 @@
     <div class="article-content mt-4">
         {!! $content !!}
     </div>
+    <nav class="article-nav">
+@if($article->prev())
+        <span class="article-nav-prev">上一篇<br> <a href="{{ $article->prev()->link() }}">{{ $article->prev()->title }}</a></span>
+@endif
+@if($article->next())
+        <span class="article-nav-next">下一篇<br> <a href="{{ $article->next()->link() }}">{{ $article->next()->title }}</a></span>
+@endif
+    </nav>
 </div>
 </body>
 </html>
