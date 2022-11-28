@@ -34,7 +34,10 @@ class Test extends Command
     public function handle(): void
     {
         $url = 'https://www.yebaike.com/32/202210/3492335.html';
-        $response = Http::withoutVerifying()->timeout(30)->get($url);
+        $response = Http::withoutVerifying()
+            ->withUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36')
+            ->timeout(30)
+            ->get($url);
         dd($response->body());
 
         $star = 0;
