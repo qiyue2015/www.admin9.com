@@ -9,6 +9,7 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\DomCrawler\Crawler;
 
 class Test extends Command
 {
@@ -33,12 +34,21 @@ class Test extends Command
 
     public function handle(): void
     {
-        $url = 'https://m.yebaike.com/32/202210/3492335.html';
+        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid=32&id=3393948';
         $response = Http::withoutVerifying()
             ->withUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36')
             ->timeout(30)
             ->get($url);
-        dd($response->body());
+
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($response->body());
+        $title = $crawler->filter('.weui-c-title')->text();
+        $date = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[1]')->text();
+        $categoryName = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[2]/a')->text();
+        $content = $crawler->filter('.weui-c-article p')->each(function (Crawler $cr) {
+            return '<p>'.$cr->html().'</p>';
+        });
+        dd($title, $date, $categoryName, $content);
 
         $star = 0;
         $lastId = 0;
