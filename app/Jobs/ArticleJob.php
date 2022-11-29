@@ -36,7 +36,7 @@ class ArticleJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid=13&id='.$this->article->id;
+        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid=14&id='.$this->article->id;
         $response = Http::withoutVerifying()->get($url);
         try {
             $crawler = new Crawler();

@@ -66,7 +66,7 @@ class YeBaiKeCommand extends Command
 
     protected function checkLink($num): void
     {
-        $categoryId = 4;
+        $categoryId = 5;
         $lastId = 0;
         $count = Article::where('checked', 0)->where('category_id', $categoryId)->count();
         $bar = $this->output->createProgressBar($count);
