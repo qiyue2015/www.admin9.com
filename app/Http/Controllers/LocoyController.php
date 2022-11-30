@@ -17,7 +17,7 @@ class LocoyController extends Controller
     public function index(Request $request)
     {
         $categoryIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 26, 27, 28, 29, 30, 31, 32];
-        $limit = $request->get('limit', 1000);
+        $limit = $request->get('limit', 100);
         $data = Article::where('checked', 0)->orderByDesc('id')->simplePaginate($limit);
         return view('locoy', compact('data', 'categoryIds'));
     }
