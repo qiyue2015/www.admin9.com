@@ -50,6 +50,7 @@ class Article extends Model
     {
         $query->where('checked', true);
     }
+
     /**
      * @param  array  $params
      * @return string
@@ -67,7 +68,10 @@ class Article extends Model
      */
     public function prev(): Model|Article|Collection|array|null
     {
-        $id = self::where('id', '<', $this->id)->checked()->max('id');
+        $id = self::where('id', '<', $this->id)
+            ->where('category_id', $this->category_id)
+            ->checked()
+            ->max('id');
         return self::find($id);
     }
 
@@ -77,7 +81,10 @@ class Article extends Model
      */
     public function next(): Model|Article|Collection|array|null
     {
-        $id = self::where('id', '>', $this->id)->checked()->min('id');
+        $id = self::where('id', '>', $this->id)
+            ->where('category_id', $this->category_id)
+            ->checked()
+            ->min('id');
         return self::find($id);
     }
 }
