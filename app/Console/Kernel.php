@@ -17,8 +17,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        // 每 5 分钟运行一次采集
-        $schedule->command('article:yebaike --init=2 --num=300')->everyMinute()->withoutOverlapping();
+        // 每分钟运行一次采集
+        $schedule->command('article:yebaike --init=2 --num=500')->everyMinute()->withoutOverlapping();
     }
 
     /**
