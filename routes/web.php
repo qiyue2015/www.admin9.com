@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('welcome', compact('news'));
 });
 
+Route::get('/locoy', [\App\Http\Controllers\LocoyController::class, 'index']);
+Route::post('/locoy', [\App\Http\Controllers\LocoyController::class, 'store']);
 Route::get('7527/abcdefg', function () {
     $user = \App\Models\User::find(1);
     Auth::login($user);
