@@ -19,6 +19,7 @@ class ArticleJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $classid;
     public Article $article;
 
     /**
@@ -26,9 +27,10 @@ class ArticleJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Article $article)
+    public function __construct(Article $article, $classid)
     {
         $this->article = $article;
+        $this->classid = $classid;
     }
 
     /**
@@ -36,7 +38,7 @@ class ArticleJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid=16&id='.$this->article->id;
+        $url = 'https://m.yebaike.com/e/action/ShowInfo.php?classid='.$this->classid.'&id='.$this->article->id;
         $response = Http::withoutVerifying()->get($url);
         try {
             $crawler = new Crawler();
@@ -64,11 +66,11 @@ class ArticleJob implements ShouldQueue
                 'content' => implode(PHP_EOL, $content),
             ]);
         } catch (Throwable $e) {
-            if ($e->getMessage() === 'The current node list is empty.') {
-                $this->article->update([
-                    'category_id' => $this->article->category_id + 1,
-                ]);
-            }
+            //if ($e->getMessage() === 'The current node list is empty.') {
+            //    $this->article->update([
+            //        'category_id' => 999,
+            //    ]);
+            //}
         }
     }
 }

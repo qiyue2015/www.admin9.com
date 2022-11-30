@@ -14,8 +14,8 @@ class YeBaiKeCommand extends Command
      * @var string
      */
     protected $signature = 'article:yebaike
-                            {--init= : 类型 1 初始化id}
-                            {--num=10 : 数量}';
+                            {--init= : 类型 1初始化id 2递增采集内容}
+                            {--num=5 : 数量}';
 
     /**
      * The console command description.
@@ -29,10 +29,11 @@ class YeBaiKeCommand extends Command
     /**
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $init = (int) $this->option('init');
         $num = (int) $this->option('num');
+
         if ($init === 1) {
             $this->init($num);
         }
@@ -66,9 +67,35 @@ class YeBaiKeCommand extends Command
 
     protected function checkLink($num): void
     {
-        $categoryId = 7;
+        $list = Article::where('checked', 0)->where('category_id', 8)->take($num)->get();
+        $count = $list->count() * count($this->categoryIds);
+        $bar = $this->output->createProgressBar($count);
+        $ids = [];
+        foreach ($list as $artcile) {
+            $ids[] = $artcile->id;
+
+            // 每个分类都拿出来跑一下
+            foreach ($this->categoryIds as $categoryId) {
+                $bar->advance();
+
+                // 这几个分类是全量跑过的
+                if (in_array($categoryId, [13, 14, 15, 16], true)) {
+                    continue;
+                }
+
+                // 扔入队例
+                ArticleJob::dispatch($artcile, $categoryId)->onQueue('just_for_article');
+            }
+        }
+
+        // 修改状态
+        Article::whereIn('id', $ids)->update(['category_id' => 99]);
+    }
+
+    protected function checkLink1($num): void
+    {
         $lastId = 0;
-        $count = Article::where('checked', 0)->where('category_id', $categoryId)->count();
+        $count = Article::where('checked', 0)->count();
         $bar = $this->output->createProgressBar($count);
 
         $this->line('开始...');
@@ -82,13 +109,17 @@ class YeBaiKeCommand extends Command
 
             $list = Article::where('checked', 0)
                 ->where('id', '>', $lastId)
-                ->where('category_id', $categoryId)
                 ->take($num)
                 ->get();
 
             foreach ($list as $artcile) {
                 $lastId = $artcile->id;
-                ArticleJob::dispatch($artcile)->onQueue('just_for_article');
+                foreach ($this->categoryIds as $categoryId) {
+                    if (in_array($categoryId, [13, 14, 15, 16], true)) {
+                        continue;
+                    }
+                    ArticleJob::dispatch($artcile, $categoryId)->onQueue('just_for_article');
+                }
             }
 
             $bar->advance($list->count());
