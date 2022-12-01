@@ -1,0 +1,8 @@
+.footer {
+  @apply relative overflow-hidden mt-4 py-4 bg-gray-100 border-t;
+  @apply text-sm text-gray-600 text-center;
+
+  .copyrights p {
+    @apply my-4;
+  }
+}

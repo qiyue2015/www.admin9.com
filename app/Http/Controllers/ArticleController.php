@@ -56,7 +56,13 @@ class ArticleController extends Controller
         $data = DB::table($tablename)->find($article->id);
         $content = $data->content;
 
-        return view('article.show', compact('article', 'content'));
+        $hotList = Article::whereCategoryId($article->category_id)
+            ->where('id', '<', $article->id)
+            ->where('checked', true)
+            ->take(10)
+            ->get();
+
+        return view('article.show', compact('article', 'content', 'hotList'));
     }
 
     /**

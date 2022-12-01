@@ -3,6 +3,9 @@
 @import 'tailwindcss/utilities';
 
 @layer base {
+  body {
+    @apply pt-24;
+  }
 
   /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
   @font-face {
@@ -18,6 +21,10 @@
       @apply text-sky-500;
     }
   }
+}
+
+@layer components {
+  @import './components/header';
 }
 
 .box {
@@ -86,13 +93,6 @@
   }
 }
 
-header {
-  @apply w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white dark:bg-slate-900/75;
-  h1 {
-    font-family: "仓耳渔阳体 W05";
-    @apply text-2xl;
-  }
-}
 
 .footer {
   @apply py-10 mt-10 text-center;
@@ -100,20 +100,20 @@ header {
 
 
 .article-content {
-  @apply text-lg leading-8 tracking-widest text-justify;
+  @apply text-lg leading-8 tracking-wide text-justify;
 
   p {
     @apply mb-6;
   }
 
+  img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+
   .art_img_mini {
     text-align: center;
-
-    img {
-      max-width: 100%;
-      display: block;
-      margin: 0 auto;
-    }
 
     .art_img_tit {
       @apply text-base py-4;
@@ -121,18 +121,39 @@ header {
   }
 }
 
-.article-nav {
-  @apply flex items-center mt-10;
+.detail-container {
+  @apply max-w-5xl mx-auto flex;
 
-  .article-nav-prev, .article-nav-next {
-    @apply flex items-center;
+  .main {
+    width: 676px;
+  }
 
-    a {
-      @apply ml-2;
+  .sidebar {
+    @apply ml-10 flex-1;
+
+    .box .bd {
+      @apply grid grid-cols-1 gap-0 sm:grid-cols-1 md:grid-cols-1;
     }
   }
 
-  .article-nav-next {
-    @apply ml-auto;
+  h1 {
+    @apply text-2xl text-slate-800 leading-normal font-bold;
   }
+
+  .article-nav {
+    @apply flex items-center mt-10;
+
+    .article-nav-prev, .article-nav-next {
+      @apply flex items-center;
+
+      a {
+        @apply ml-2;
+      }
+    }
+
+    .article-nav-next {
+      @apply ml-auto;
+    }
+  }
+
 }

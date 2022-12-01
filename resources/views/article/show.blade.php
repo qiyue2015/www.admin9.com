@@ -30,25 +30,42 @@
         </div>
     </div>
 </header>
-<div class="max-w-4xl mx-auto mt-10">
-    <h1 class="text-3xl font-bold">{{ $article->title }}</h1>
-    <div class="top-bar-inner">
-        <div class="py-4">
-            <span>{{ $article->created_at }}</span>
-            <span class="author">{{ $article->source_name }}</span>
+<div class="detail-container">
+    <div class="main">
+        <h1>{{ $article->title }}</h1>
+        <div class="top-bar-inner">
+            <div class="py-4">
+                <span>{{ $article->created_at }}</span>
+                <span class="author">{{ $article->source_name }}</span>
+                <span class="category"><a href="">{{ $article->category_id }}</a></span>
+            </div>
+        </div>
+        <div class="article-content mt-4">
+            {!! $content !!}
+        </div>
+        <nav class="article-nav text-sm">
+    @if($article->prev())
+            <span class="article-nav-prev">上一篇<br> <a href="{{ $article->prev()->link() }}">{{ $article->prev()->title }}</a></span>
+    @endif
+    @if($article->next())
+            <span class="article-nav-next">下一篇<br> <a href="{{ $article->next()->link() }}">{{ $article->next()->title }}</a></span>
+    @endif
+        </nav>
+    </div>
+    <div class="sidebar">
+        <div class="box hot">
+            <div class="hd">
+                <div class="title">热榜</div>
+            </div>
+            <div class="bd">
+                <ol class="text-base">
+@foreach($hotList as $hot)
+                    <li class="leading-10"><a href="{{ $hot->link() }}">{{ $hot->title }}</a></li>
+@endforeach
+                </ol>
+            </div>
         </div>
     </div>
-    <div class="article-content mt-4">
-        {!! $content !!}
-    </div>
-    <nav class="article-nav">
-@if($article->prev())
-        <span class="article-nav-prev">上一篇<br> <a href="{{ $article->prev()->link() }}">{{ $article->prev()->title }}</a></span>
-@endif
-@if($article->next())
-        <span class="article-nav-next">下一篇<br> <a href="{{ $article->next()->link() }}">{{ $article->next()->title }}</a></span>
-@endif
-    </nav>
 </div>
 </body>
 </html>

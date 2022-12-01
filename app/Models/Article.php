@@ -62,6 +62,8 @@ class Article extends Model
         return route('article.show', $params, false);
     }
 
+
+
     /**
      * 上一条
      * @return Article|Article[]|Collection|Model|null
