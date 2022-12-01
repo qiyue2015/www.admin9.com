@@ -59,6 +59,7 @@ class ArticleController extends Controller
         $hotList = Article::whereCategoryId($article->category_id)
             ->where('id', '<', $article->id)
             ->where('checked', true)
+            ->orderByDesc('id')
             ->take(10)
             ->get();
 
