@@ -30,7 +30,7 @@
         </div>
     </div>
 </header>
-<div class="detail-container">
+<div class="px-4 detail-container">
     <div class="main">
         <h1>{{ $article->title }}</h1>
         <div class="top-bar-inner">

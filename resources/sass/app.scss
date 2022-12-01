@@ -125,11 +125,11 @@
   @apply max-w-5xl mx-auto flex;
 
   .main {
-    width: 676px;
+    @apply flex-1;
   }
 
   .sidebar {
-    @apply ml-10 flex-1;
+    @apply hidden lg:block w-64 ml-10;
 
     .box .bd {
       @apply grid grid-cols-1 gap-0 sm:grid-cols-1 md:grid-cols-1;
