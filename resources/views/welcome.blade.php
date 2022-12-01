@@ -31,7 +31,7 @@
     </div>
 </header>
 
-<div class="container px-4 mt-10">
+<div class="container px-4">
     <div class="news mb-8">
         <div class="box">
             <div class="hd">科技动态</div>

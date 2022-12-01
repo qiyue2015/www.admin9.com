@@ -1,5 +1,6 @@
 header {
-  @apply fixed z-50 top-0 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white dark:bg-slate-900/75;
+  @apply fixed top-0 w-full backdrop-blur flex-none transition-colors duration-500 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white dark:bg-slate-900/75;
+  @apply lg:z-10;
 
   h1 {
     font-family: "仓耳渔阳体 W05";

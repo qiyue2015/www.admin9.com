@@ -43,14 +43,20 @@
         <div class="article-content mt-4">
             {!! $content !!}
         </div>
-        <nav class="article-nav text-sm">
-    @if($article->prev())
-            <span class="article-nav-prev">上一篇<br> <a href="{{ $article->prev()->link() }}">{{ $article->prev()->title }}</a></span>
-    @endif
-    @if($article->next())
-            <span class="article-nav-next">下一篇<br> <a href="{{ $article->next()->link() }}">{{ $article->next()->title }}</a></span>
-    @endif
-        </nav>
+        <div class="entry-page">
+@if($article->prev())
+            <div class="entry-page-prev">
+                <a href="{{ $article->prev()->link() }}" title="{{ $article->prev()->title }}" rel="prev"><span>{{ $article->prev()->title }}</span></a>
+                <div class="entry-page-info"><span class="float-left"><< 上一篇</span></div>
+            </div>
+@endif
+@if($article->next())
+                <div class="entry-page-next">
+                    <a href="{{ $article->next()->link() }}" title="{{ $article->next()->title }}" rel="next"><span>{{ $article->next()->title }}</span></a>
+                    <div class="entry-page-info"><span class="float-right">下一篇 >></span></div>
+                </div>
+@endif
+        </div>
     </div>
     <div class="sidebar">
         <div class="box hot">
