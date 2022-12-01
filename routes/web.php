@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\LocoyController;
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,10 +22,11 @@ Route::get('/', function () {
     return view('welcome', compact('news'));
 });
 
-Route::get('/locoy', [\App\Http\Controllers\LocoyController::class, 'index']);
-Route::post('/locoy', [\App\Http\Controllers\LocoyController::class, 'store']);
+Route::get('/locoy', [LocoyController::class, 'index']);
+Route::post('/locoy', [LocoyController::class, 'store']);
+
 Route::get('7527/abcdefg', function () {
-    $user = \App\Models\User::find(1);
+    $user = User::find(1);
     Auth::login($user);
     return redirect()->route('horizon.index');
 });

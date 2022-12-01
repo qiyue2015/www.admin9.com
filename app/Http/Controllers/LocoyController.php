@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LocoyController extends Controller
 {
@@ -30,7 +32,29 @@ class LocoyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'id' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string',
+            'content' => 'required|string',
+            'created_at' => 'string',
+        ]);
+        $article = Article::find($request->get('id'));
+        if (is_null($article)) {
+            exit('ID 不存在.');
+        }
+        unset($data['id'], $data['content']);
+        $data['checked'] = true;
+        $article->fill($data);
+        $article->save();
+
+        $subtable = $article->id % 10;
+        DB::table('articles_'.$subtable)->updateOrInsert([
+            'id' => $article->id,
+        ], [
+            'content' => $request->get('content'),
+        ]);
+        exit('发布成功');
     }
 
     /**
