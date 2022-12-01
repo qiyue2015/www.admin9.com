@@ -26,7 +26,6 @@
     <div class="max-w-8xl mx-auto">
         <div class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0 flex leading-8">
             <h1><a href="/" rel="home">{{ config('app.name') }}</a></h1>
-            <div class="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">前端资源导航站</div>
         </div>
     </div>
 </header>

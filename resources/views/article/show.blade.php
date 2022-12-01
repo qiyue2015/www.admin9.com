@@ -26,7 +26,7 @@
     <div class="max-w-8xl mx-auto">
         <div class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0 flex leading-8">
             <h1><a href="/" rel="home">{{ config('app.name') }}</a></h1>
-            <div class="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">前端资源导航站</div>
+            <div class="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">{{ $article->category ? $article->category->name : '' }}</div>
         </div>
     </div>
 </header>
@@ -37,7 +37,7 @@
             <div class="py-4">
                 <span>{{ $article->created_at }}</span>
                 <span class="author">{{ $article->source_name }}</span>
-                <span class="category"><a href="">{{ $article->category_id }}</a></span>
+                <span class="category">{{ $article->category ? $article->category->name : '' }}</span>
             </div>
         </div>
         <div class="article-content mt-4">

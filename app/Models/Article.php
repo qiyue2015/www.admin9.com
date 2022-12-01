@@ -46,6 +46,12 @@ class Article extends Model
 
     protected $guarded = [];
 
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+
     public function scopeChecked($query): void
     {
         $query->where('checked', true);
@@ -61,7 +67,6 @@ class Article extends Model
         $params = array_merge(['id' => $encode_id], $params);
         return route('article.show', $params, false);
     }
-
 
 
     /**
