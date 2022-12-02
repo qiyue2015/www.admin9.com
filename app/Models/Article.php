@@ -67,31 +67,4 @@ class Article extends Model
         $params = array_merge(['id' => $encode_id], $params);
         return route('article.show', $params, false);
     }
-
-
-    /**
-     * 上一条
-     * @return Article|Article[]|Collection|Model|null
-     */
-    public function prev(): Model|Article|Collection|array|null
-    {
-        $id = self::where('id', '<', $this->id)
-            ->where('category_id', $this->category_id)
-            ->checked()
-            ->max('id');
-        return self::find($id);
-    }
-
-    /**
-     * 下一条
-     * @return Article|Article[]|Collection|Model|null
-     */
-    public function next(): Model|Article|Collection|array|null
-    {
-        $id = self::where('id', '>', $this->id)
-            ->where('category_id', $this->category_id)
-            ->checked()
-            ->min('id');
-        return self::find($id);
-    }
 }

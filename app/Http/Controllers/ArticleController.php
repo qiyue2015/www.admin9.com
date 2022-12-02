@@ -51,19 +51,54 @@ class ArticleController extends Controller
     public function show($id, Optimus $optimus): View|Factory|Application
     {
         $id = $optimus->decode($id);
-        $article = Article::find($id);
+        $article = cache()->rememberForever('view:'.$id, function () use ($id) {
+            return Article::find($id);
+        });
+        if (is_null($article)) {
+            abort(404);
+        }
+
         $tablename = 'articles_'.$article->id % 10;
         $data = DB::table($tablename)->find($article->id);
         $content = $data->content;
 
-        $hotList = Article::whereCategoryId($article->category_id)
-            ->where('id', '<', $article->id)
-            ->where('checked', true)
-            ->orderByDesc('id')
-            ->take(10)
-            ->get();
+        $prev = cache()->remember('prev:'.$article->id, now()->endOfDay(), function () use ($article) {
+            $prevId = Article::where('id', '<', $article->id)
+                ->where('category_id', $article->category_id)
+                ->checked()
+                ->max('id');
+            if ($prevId) {
+                return Article::find($prevId);
+            }
+            return null;
+        });
 
-        return view('article.show', compact('article', 'content', 'hotList'));
+        $next = cache()->remember('next:'.$article->id, now()->endOfDay(), function () use ($article) {
+            $nextId = Article::where('id', '>', $article->id)
+                ->where('category_id', $article->category_id)
+                ->checked()
+                ->min('id');
+            if ($nextId) {
+                return Article::find($nextId);
+            }
+
+            return null;
+        });
+
+        $hotList = cache()->remember('hot:'.$article->category_id, now()->endOfDay(), function () use ($article) {
+            return Article::whereCategoryId($article->category_id)
+                ->where('id', '<', $article->id)
+                ->where('checked', true)
+                ->orderByDesc('id')
+                ->take(10)
+                ->get();
+        });
+
+        return view('article.show', compact(
+            'article', 'content',
+            'next', 'prev',
+            'hotList'
+        ));
     }
 
     /**
