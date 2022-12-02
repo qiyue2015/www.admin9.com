@@ -44,15 +44,15 @@
             {!! $content !!}
         </div>
         <div class="entry-page">
-@if($article->prev())
+@if($prev)
             <div class="entry-page-prev">
-                <a href="{{ $article->prev()->link() }}" title="{{ $article->prev()->title }}" rel="prev"><span>{{ $article->prev()->title }}</span></a>
+                <a href="{{ $prev->link() }}" title="{{ $prev->title }}" rel="prev"><span>{{ $prev->title }}</span></a>
                 <div class="entry-page-info"><span class="float-left"><< 上一篇</span></div>
             </div>
 @endif
-@if($article->next())
+@if($next)
                 <div class="entry-page-next">
-                    <a href="{{ $article->next()->link() }}" title="{{ $article->next()->title }}" rel="next"><span>{{ $article->next()->title }}</span></a>
+                    <a href="{{ $next->link() }}" title="{{ $next->title }}" rel="next"><span>{{ $next->title }}</span></a>
                     <div class="entry-page-info"><span class="float-right">下一篇 >></span></div>
                 </div>
 @endif
