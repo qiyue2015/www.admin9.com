@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $news = Article::where('checked', 1)->orderByDesc('updated_at')->limit(20)->get();
+    $news = cache()->remember('home:list', now()->endOfMinute(), function () {
+        return Article::where('checked', 1)->orderByDesc('updated_at')->limit(20)->get();
+    });
     return view('welcome', compact('news'));
 });
 
