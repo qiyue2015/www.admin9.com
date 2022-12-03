@@ -26,7 +26,7 @@ class TrainTagsCommand extends Command
      */
     protected $description = '清理数据然后正式发布';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('导入待清洗数据...');
 
@@ -36,10 +36,8 @@ class TrainTagsCommand extends Command
         $this->comment('频道['.$channel_id.']，每次执行['.$num.']，待处理['.$count.']');
         if ($count) {
             $list = Article::whereChannelId(0)->whereChecked(true)->orderByDesc('id')->take($num)->get();
-            $bar = $this->output->createProgressBar($count);
-
-            $channelIds = [];
-            collect($list)->each(function ($article) use ($bar, &$channelIds) {
+            $bar = $this->output->createProgressBar($list->count());
+            collect($list)->each(function ($article) use ($bar) {
                 $bar->advance();
                 $train = [
                     'id' => $article->id,
