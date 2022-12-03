@@ -63,26 +63,17 @@ class ArticleController extends Controller
         $content = $data->content;
 
         $prev = cache()->remember('prev:'.$article->id, now()->endOfDay(), function () use ($article) {
-            $prevId = Article::where('id', '<', $article->id)
+            return Article::where('id', '<', $article->id)
                 ->where('category_id', $article->category_id)
                 ->checked()
-                ->max('id');
-            if ($prevId) {
-                return Article::find($prevId);
-            }
-            return null;
+                ->first();
         });
 
         $next = cache()->remember('next:'.$article->id, now()->endOfDay(), function () use ($article) {
-            $nextId = Article::where('id', '>', $article->id)
+            return Article::where('id', '>', $article->id)
                 ->where('category_id', $article->category_id)
                 ->checked()
-                ->min('id');
-            if ($nextId) {
-                return Article::find($nextId);
-            }
-
-            return null;
+                ->first();
         });
 
         $hotList = cache()->remember('hot:'.$article->category_id, now()->endOfDay(), function () use ($article) {
