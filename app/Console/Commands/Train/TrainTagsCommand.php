@@ -35,7 +35,7 @@ class TrainTagsCommand extends Command
         $count = Article::whereChannelId(0)->whereChecked(true)->count();
         $this->comment('频道['.$channel_id.']，每次执行['.$num.']，待处理['.$count.']');
         if ($count) {
-            $list = Article::whereChannelId(0)->whereChecked(true)->take($num)->get();
+            $list = Article::whereChannelId(0)->whereChecked(true)->orderByDesc('id')->take($num)->get();
             $bar = $this->output->createProgressBar($count);
 
             $channelIds = [];
