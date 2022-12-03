@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/index.php', function () {
+    abort('302');
+});
 
 Route::get('/', function () {
     $news = cache()->remember('home:list', now()->endOfMinute(), function () {
-        return Article::where('checked', 1)->take(20)->get();
+        return Article::where('checked', 1)->orderByDesc('id')->take(100)->get();
     });
     return view('welcome', compact('news'));
 });
