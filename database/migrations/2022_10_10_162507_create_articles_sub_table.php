@@ -15,7 +15,6 @@ return new class extends Migration {
         collect(range(0, 9))->each(function ($i) {
             Schema::create('articles_'.$i, function (Blueprint $table) {
                 $table->unsignedBigInteger('id')->primary();
-                $table->string('source_url', 255)->nullable()->comment('来源链接');
                 $table->mediumText('content')->nullable()->comment('内容');
                 // 关联
                 $table->foreign('id')->references('id')->on('articles')->onDelete('cascade');
