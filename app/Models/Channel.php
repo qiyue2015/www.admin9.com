@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Channel whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Channel whereSort($value)
  * @mixin \Eloquent
+ * @property string|null $mapping 映射名称
+ * @method static \Illuminate\Database\Eloquent\Builder|Channel whereMapping($value)
  */
 class Channel extends Model
 {

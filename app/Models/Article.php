@@ -39,6 +39,10 @@ use Jenssegers\Optimus\Optimus;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereViewNum($value)
  * @mixin \Eloquent
+ * @property string|null $keyboard 关键词
+ * @property-read \App\Models\Category|null $category
+ * @method static \Illuminate\Database\Eloquent\Builder|Article checked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeyboard($value)
  */
 class Article extends Model
 {
