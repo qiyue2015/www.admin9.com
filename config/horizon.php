@@ -201,7 +201,7 @@ return [
             ],
             'just_for_train' => [
                 'connection' => 'redis',
-                'queue' => ['just_for_article'],
+                'queue' => ['just_for_train'],
                 'balance' => 'auto',
                 'maxProcesses' => 20,
                 'minProcesses' => 10,
