@@ -73,7 +73,7 @@ class Test extends Command
                     ];
                 }
 
-                DB::table('archives')->insert($index);
+                DB::table('archive_index')->insert($index);
                 Archive::insert($data);
             } else {
                 $star = 0;
