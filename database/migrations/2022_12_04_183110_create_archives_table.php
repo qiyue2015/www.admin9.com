@@ -16,10 +16,17 @@ return new class extends Migration {
             $table->id();
             $table->unsignedSmallInteger('channel_id')->comment('频道ID');
             $table->unsignedSmallInteger('category_id')->comment('分类ID');
-            $table->boolean('checked')->index()->comment('已审核');
-            $table->timestamp('publish_at')->nullable();
+            $table->boolean('checked')->comment('已审核');
+            $table->timestamp('publish_at')->comment('发布时间');
+            $table->timestamps();
 
-            $table->index(['channel_id', 'category_id']);
+            $table->index('channel_id');
+            $table->index('category_id');
+            $table->index('checked');
+            $table->index('publish_at');
+
+            $table->index(['created_at', 'id']);
+            $table->index(['channel_id', 'category_id', 'created_at', 'checked', 'id']);
         });
 
         Schema::create('archives', function (Blueprint $table) {
@@ -38,8 +45,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('view_num')->default(0)->comment('点击量');
             $table->boolean('is_make')->default(false)->comment('是已生成');
             $table->boolean('checked')->index()->comment('已审核');
+            $table->timestamp('publish_at')->comment('发布时间');
             $table->timestamps();
-            $table->timestamp('publish_at')->nullable();
 
             $table->index(['checked', 'channel_id', 'category_id', 'flag']);
             $table->index('publish_at');

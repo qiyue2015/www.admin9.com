@@ -37,24 +37,25 @@ class Test extends Command
 
         $star = 1;
         while ($star) {
-            $list = Article::where('id', '>', $lastId)->take(100)->get();
+            $list = Article::where('id', '>', $lastId)->take(1000)->get();
             if (!$list->isEmpty()) {
                 $bar->advance($list->count());
 
                 $data = [];
+                $index = [];
                 foreach ($list as $article) {
                     $lastId = $article->id;
 
-                    $indexId = DB::table('archive_index')->insertGetId([
+                    $index[] = [
                         'id' => $article->id,
                         'channel_id' => $article->channel_id,
                         'category_id' => $article->category_id,
                         'checked' => $article->checked,
                         'publish_at' => $article->created_at ?: $article->updated_at,
-                    ]);
+                    ];
 
                     $data[] = [
-                        'id' => $indexId,
+                        'id' => $article->id,
                         'channel_id' => $article->channel_id,
                         'category_id' => $article->category_id,
                         'title' => $article->title,
@@ -72,6 +73,7 @@ class Test extends Command
                     ];
                 }
 
+                DB::table('archives')->insert($index);
                 Archive::insert($data);
             } else {
                 $star = 0;
