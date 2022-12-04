@@ -36,7 +36,7 @@ return new class extends Migration {
             $table->string('title', 100)->comment('标题');
             $table->char('short_title', 36)->comment('短标题');
             $table->set('flag', ['h', 'c', 'f', 'a', 's', 'b', 'p', 'j'])->comment('属性：头条 推荐 幻灯 特荐 滚动 加粗 图片 跳转');
-            $table->char('keywords', 30)->comment('关键词');
+            $table->char('keywords', 50)->comment('关键词');
             $table->char('thumbnail', 100)->comment('封面图片');
             $table->char('source_name', 30)->comment('来源');
             $table->char('author_name', 20)->comment('作者');

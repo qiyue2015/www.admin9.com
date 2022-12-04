@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->unsignedSmallInteger('category_id')->index()->comment('分类ID');
-            $table->char('title', 100)->index()->comment('标题');
+            $table->char('title', 100)->comment('标题');
             $table->char('author_name', 20)->nullable()->comment('作者');
             $table->string('digest', 255)->nullable()->comment('摘要');
             $table->unsignedBigInteger('view_num')->default(0)->comment('点击量');
