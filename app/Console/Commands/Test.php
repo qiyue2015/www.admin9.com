@@ -63,7 +63,7 @@ class Test extends Command
                         'author_name' => '',
                         'description' => '',
                         'filename' => '',
-                        'keywords' => $article->keyboard,
+                        'keywords' => $article->keyboard ?: '',
                         'checked' => $article->checked,
                         'created_at' => $article->created_at ?: $article->updated_at,
                         'updated_at' => $article->updated_at,
