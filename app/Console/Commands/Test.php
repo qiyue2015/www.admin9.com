@@ -33,10 +33,10 @@ class Test extends Command
         $count = Article::count();
         $bar = $this->output->createProgressBar($count);
 
-        $lastId = 0;
+        $lastId = DB::table('archive_index')->orderByDesc('id')->value('id');
         $star = 1;
         while ($star) {
-            $list = Article::where('id', '>', $lastId)->take(2)->get();
+            $list = Article::where('id', '>', $lastId)->take(200)->get();
             if (!$list->isEmpty()) {
                 $bar->advance($list->count());
 
