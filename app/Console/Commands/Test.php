@@ -70,6 +70,7 @@ class Test extends Command
                         'checked' => $article->checked,
                         'created_at' => $article->created_at ?: $article->updated_at,
                         'updated_at' => $article->updated_at,
+                        'publish_at' => $article->updated_at,
                     ];
                 }
 
