@@ -37,10 +37,11 @@ class Test extends Command
 
         $star = 1;
         while ($star) {
-            $list = Article::where('id', '>', $lastId)->take(200)->get();
+            $list = Article::where('id', '>', $lastId)->take(100)->get();
             if (!$list->isEmpty()) {
                 $bar->advance($list->count());
 
+                $data = [];
                 foreach ($list as $article) {
                     $lastId = $article->id;
 
@@ -52,7 +53,7 @@ class Test extends Command
                         'publish_at' => $article->created_at ?: $article->updated_at,
                     ]);
 
-                    $data = [
+                    $data[] = [
                         'id' => $indexId,
                         'channel_id' => $article->channel_id,
                         'category_id' => $article->category_id,
