@@ -52,8 +52,8 @@ class Test extends Command
                         'category_id' => $article->category_id,
                         'checked' => $article->checked,
                         'created_at' => $article->created_at ?: $article->updated_at,
-                        'updated_at' => $article->updated_at,
-                        'publish_at' => $article->updated_at,
+                        'updated_at' => $article->updated_at ?: now(),
+                        'publish_at' => $article->created_at ?: $article->updated_at,
                     ];
 
                     $data[] = [
@@ -71,8 +71,8 @@ class Test extends Command
                         'keywords' => $article->keyboard ?: '',
                         'checked' => $article->checked,
                         'created_at' => $article->created_at ?: $article->updated_at,
-                        'updated_at' => $article->updated_at,
-                        'publish_at' => $article->updated_at,
+                        'updated_at' => $article->updated_at ?: now(),
+                        'publish_at' => $article->created_at ?: $article->updated_at,
                     ];
                 }
 
