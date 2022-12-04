@@ -30,10 +30,11 @@ class Test extends Command
      */
     public function handle()
     {
-        $count = Article::count();
+        $lastId = DB::table('archive_index')->orderByDesc('id')->value('id');
+        $lastId = (int) $lastId;
+        $count = Article::where('id', '>', $lastId)->count();
         $bar = $this->output->createProgressBar($count);
 
-        $lastId = DB::table('archive_index')->orderByDesc('id')->value('id');
         $star = 1;
         while ($star) {
             $list = Article::where('id', '>', $lastId)->take(200)->get();
