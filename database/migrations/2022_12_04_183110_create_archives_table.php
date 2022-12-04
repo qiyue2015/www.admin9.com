@@ -23,7 +23,7 @@ return new class extends Migration {
         });
 
         Schema::create('archives', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->unsignedSmallInteger('channel_id')->comment('频道ID');
             $table->unsignedSmallInteger('category_id')->comment('分类ID');
             $table->string('title', 100)->comment('标题');
