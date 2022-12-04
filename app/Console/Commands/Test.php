@@ -51,7 +51,9 @@ class Test extends Command
                         'channel_id' => $article->channel_id,
                         'category_id' => $article->category_id,
                         'checked' => $article->checked,
-                        'publish_at' => $article->created_at ?: $article->updated_at,
+                        'created_at' => $article->created_at ?: $article->updated_at,
+                        'updated_at' => $article->updated_at,
+                        'publish_at' => $article->updated_at,
                     ];
 
                     $data[] = [
