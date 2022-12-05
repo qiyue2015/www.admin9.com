@@ -43,6 +43,10 @@ use Jenssegers\Optimus\Optimus;
  * @property-read \App\Models\Category|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Article checked()
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeyboard($value)
+ * @property string $description 描述
+ * @property string $keywords 关键词
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeywords($value)
  */
 class Article extends Model
 {

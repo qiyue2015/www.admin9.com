@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,11 +13,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('tags_data', function (Blueprint $table) {
+        Schema::create('tags_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('tags_id')->comment('Tags ID');
-            $table->unsignedSmallInteger('channel_id')->comment('频道ID');
-            $table->unsignedBigInteger('article_id')->comment('信息ID');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('tags_data');
+        Schema::dropIfExists('tags_lists');
     }
 };
