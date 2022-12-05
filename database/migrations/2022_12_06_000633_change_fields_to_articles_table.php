@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::table('articles', function (Blueprint $table) {
             $table->dropColumn('digest');
             $table->dropColumn('keyboard');
-            $table->char('keywords', 30)->change();
+            $table->char('keywords', 50)->change();
             $table->char('author_name', 20)->nullable(false)->change();
             $table->char('source_name', 30)->nullable(false)->change();
             $table->string('cover_url')->nullable(false)->change();
