@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->dropColumn('digest');
             $table->dropColumn('keyboard');
             $table->char('keywords', 30)->change();
-            $table->string('source_name')->nullable(false)->change();
-            $table->string('author_name')->nullable(false)->change();
+            $table->char('author_name', 20)->nullable(false)->change();
+            $table->char('source_name', 30)->nullable(false)->change();
             $table->string('cover_url')->nullable(false)->change();
         });
     }
