@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::table('articles', function (Blueprint $table) {
             $table->dropColumn('channel_id');
             $table->char('author_name', 20)->after('source_name')->change();
-            $table->string('keywords')->after('title')->comment('关键词');
             $table->string('description')->after('title')->comment('描述');
+            $table->string('keywords')->after('title')->comment('关键词');
         });
 
         Schema::dropIfExists('trains');
