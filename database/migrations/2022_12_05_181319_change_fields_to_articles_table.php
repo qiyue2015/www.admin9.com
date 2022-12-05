@@ -20,7 +20,6 @@ return new class extends Migration {
         });
 
         Schema::dropIfExists('trains');
-        Schema::dropIfExists('tags');
         Schema::dropIfExists('tags_data');
     }
 
