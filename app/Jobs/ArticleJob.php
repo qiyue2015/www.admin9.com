@@ -54,6 +54,8 @@ class ArticleJob implements ShouldQueue
             $this->article->fill([
                 'category_id' => $category->id,
                 'title' => $title,
+                'keywords' => '',
+                'description' => '',
                 'checked' => true,
                 'created_at' => now()->parse($date)->toDateTimeString(),
             ]);
