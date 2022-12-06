@@ -76,12 +76,16 @@ class ExtractKeywords extends Command
                         }
                     }
                 }
-                $row->fill([
-                    'description' => $description,
-                    'has_train' => true,
-                    'tags_info' => $tagsInfo,
-                ]);
-                $row->save();
+                try {
+                    $row->fill([
+                        'description' => $description,
+                        'has_train' => true,
+                        'tags_info' => $tagsInfo,
+                    ]);
+                    $row->save();
+                } catch (\Exception $exception) {
+                    \Log::debug($exception->getMessage());
+                }
             });
         }
     }
