@@ -43,7 +43,7 @@ class ExtractKeywords extends Command
             $list = Article::where('id', '>', $star)
                 ->where('checked', 1)
                 ->where('has_train', 0)
-                ->take(20)
+                ->take(50)
                 ->get();
             $bar->advance($list->count());
 
