@@ -2,10 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Archive;
-use App\Models\Article;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class Test extends Command
 {
@@ -25,63 +22,11 @@ class Test extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $lastId = DB::table('archive_index')->orderByDesc('id')->value('id');
-        $lastId = (int) $lastId;
-        $count = Article::where('id', '>', $lastId)->count();
-        $bar = $this->output->createProgressBar($count);
-
-        $star = 1;
-        while ($star) {
-            $list = Article::where('id', '>', $lastId)->take(1000)->get();
-            if (!$list->isEmpty()) {
-                $bar->advance($list->count());
-
-                $data = [];
-                $index = [];
-                foreach ($list as $article) {
-                    $lastId = $article->id;
-
-                    $index[] = [
-                        'id' => $article->id,
-                        'channel_id' => $article->channel_id,
-                        'category_id' => $article->category_id,
-                        'checked' => $article->checked,
-                        'created_at' => $article->created_at ?: $article->updated_at,
-                        'updated_at' => $article->updated_at ?: now(),
-                        'publish_at' => $article->created_at ?: $article->updated_at,
-                    ];
-
-                    $data[] = [
-                        'id' => $article->id,
-                        'channel_id' => $article->channel_id,
-                        'category_id' => $article->category_id,
-                        'title' => $article->title,
-                        'short_title' => '',
-                        'flag' => '',
-                        'thumbnail' => '',
-                        'source_name' => '',
-                        'author_name' => '',
-                        'description' => '',
-                        'filename' => '',
-                        'keywords' => $article->keyboard ?: '',
-                        'checked' => $article->checked,
-                        'created_at' => $article->created_at ?: $article->updated_at,
-                        'updated_at' => $article->updated_at ?: now(),
-                        'publish_at' => $article->created_at ?: $article->updated_at,
-                    ];
-                }
-
-                DB::table('archive_index')->insert($index);
-                Archive::insert($data);
-            } else {
-                $star = 0;
-            }
-        }
+        //
     }
 
 
