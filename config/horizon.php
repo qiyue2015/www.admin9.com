@@ -207,23 +207,33 @@ return [
                 'tries' => 1,
                 'timeout' => 120,
             ],
+            'just_for_dataset' => [
+                'connection' => 'redis',
+                'queue' => ['just_for_dataset'],
+                'processes' => 2,
+            ],
         ],
 
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'queue' => [ 'default' ],
+                'queue' => ['default'],
                 'maxProcesses' => 10,
             ],
             'just_for_article' => [
                 'connection' => 'redis',
-                'queue' => [ 'just_for_article' ],
+                'queue' => ['just_for_article'],
                 'maxProcesses' => 100,
             ],
             'just_for_train' => [
                 'connection' => 'redis',
-                'queue' => [ 'just_for_train' ],
+                'queue' => ['just_for_train'],
                 'maxProcesses' => 100,
+            ],
+            'just_for_dataset' => [
+                'connection' => 'redis',
+                'queue' => ['just_for_dataset'],
+                'processes' => 2,
             ],
         ],
     ],
