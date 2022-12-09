@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Optimus\Optimus;
 
@@ -12,41 +13,35 @@ use Jenssegers\Optimus\Optimus;
  * App\Models\Article
  *
  * @property int $id
- * @property int $channel_id 频道ID
  * @property int $category_id 分类ID
  * @property string $title 标题
- * @property string|null $author_name 作者
- * @property string|null $digest 摘要
+ * @property string $keywords 关键词
+ * @property string $description 描述
  * @property int $view_num 点击量
  * @property int $checked 已审核
- * @property string|null $cover_url 封面图片
- * @property string|null $source_name 来源
+ * @property string $cover_url 封面图片
+ * @property string $source_name 来源
+ * @property string $author_name 作者
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Category|null $category
+ * @method static \Illuminate\Database\Eloquent\Builder|Article checked()
  * @method static \Illuminate\Database\Eloquent\Builder|Article newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Article newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Article query()
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereAuthorName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereChannelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereChecked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCoverUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereDigest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeywords($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereSourceName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereViewNum($value)
  * @mixin \Eloquent
- * @property string|null $keyboard 关键词
- * @property-read \App\Models\Category|null $category
- * @method static \Illuminate\Database\Eloquent\Builder|Article checked()
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeyboard($value)
- * @property string $description 描述
- * @property string $keywords 关键词
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeywords($value)
  */
 class Article extends Model
 {
@@ -54,11 +49,10 @@ class Article extends Model
 
     protected $guarded = [];
 
-    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-
 
     public function scopeChecked($query): void
     {

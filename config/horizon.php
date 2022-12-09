@@ -212,11 +212,17 @@ return [
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'queue' => [
-                    'default',
-                    'just_for_article',
-                    'just_for_train',
-                ],
+                'queue' => [ 'default' ],
+                'maxProcesses' => 10,
+            ],
+            'just_for_article' => [
+                'connection' => 'redis',
+                'queue' => [ 'just_for_article' ],
+                'maxProcesses' => 100,
+            ],
+            'just_for_train' => [
+                'connection' => 'redis',
+                'queue' => [ 'just_for_train' ],
                 'maxProcesses' => 100,
             ],
         ],
