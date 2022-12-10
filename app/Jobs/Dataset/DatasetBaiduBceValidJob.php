@@ -36,8 +36,8 @@ class DatasetBaiduBceValidJob implements ShouldQueue
      */
     public function handle()
     {
-        // 每分钟限制执行10次JOB（注意是JOB，而不是整个队列）
-        Redis::throttle('baidubce-locks')->allow(120)->every(60)->then(function () {
+        // 每秒限制执行2次JOB（注意是JOB，而不是整个队列）
+        Redis::throttle('baidubce-locks')->allow(2)->every(1)->then(function () {
             $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?access_token='.$this->getAccessToken().'&charset=UTF-8';
             $response = Http::timeout(30)
                 ->asJson()
