@@ -32,7 +32,7 @@ class SpiderYeBaikeCommand extends Command
      */
     public function handle(): void
     {
-        $url = 'https://www.yebaike.com/e/web/?type=rss2';
+        $url = 'https://m.yebaike.com/e/web/?type=rss2';
         $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
         $this->comment('开始请求：'.$url);
         if (preg_match_all('/<link>(.*?)<\/link>/', $response->body(), $matches)) {
