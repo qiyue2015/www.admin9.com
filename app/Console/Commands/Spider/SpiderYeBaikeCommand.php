@@ -49,7 +49,7 @@ class SpiderYeBaikeCommand extends Command
                 }
             });
         } else {
-            dd($matches);
+            dd($response->body(), $matches);
         }
     }
 }
