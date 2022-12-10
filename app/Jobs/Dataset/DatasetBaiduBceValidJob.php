@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redis;
 
 class DatasetBaiduBceValidJob implements ShouldQueue
 {
@@ -31,24 +32,30 @@ class DatasetBaiduBceValidJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Redis\LimiterTimeoutException
      */
-    public function handle(): void
+    public function handle()
     {
-        $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?access_token='.$this->getAccessToken().'&charset=UTF-8';
-        $response = Http::timeout(30)
-            ->asJson()
-            ->post($url, [
-                'content' => $this->dataset->desc.PHP_EOL.$this->dataset->answer,
-                'title' => $this->dataset->title,
-            ]);
+        // 每分钟限制执行10次JOB（注意是JOB，而不是整个队列）
+        Redis::throttle('baidubce-locks')->allow(120)->every(60)->then(function () {
+            $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?access_token='.$this->getAccessToken().'&charset=UTF-8';
+            $response = Http::timeout(30)
+                ->asJson()
+                ->post($url, [
+                    'content' => $this->dataset->desc.PHP_EOL.$this->dataset->answer,
+                    'title' => $this->dataset->title,
+                ]);
 
-        if ($response->json('item.lv1_tag_list.0.tag')) {
-            $this->dataset->update([
-                'status' => 1,
-                'category' => $response->json('item.lv1_tag_list.0.tag'),
-                'tags' => $response->body(),
-            ]);
-        }
+            if ($response->json('item.lv1_tag_list.0.tag')) {
+                $this->dataset->update([
+                    'status' => 1,
+                    'category' => $response->json('item.lv1_tag_list.0.tag'),
+                    'tags' => $response->body(),
+                ]);
+            }
+        }, function () {
+            $this->release(10);
+        });
     }
 
     /**
