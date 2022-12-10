@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -39,6 +40,13 @@ class SpiderYeBaikeJob implements ShouldQueue
      */
     public function handle()
     {
+        $key = 'spider:'.md5($this->link);
+        if (Cache::get($key)) {
+            return;
+        }
+
+        Cache::forever($key, $this->link);
+
         $response = Http::get($this->link);
         try {
             $crawler = new Crawler();

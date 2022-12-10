@@ -43,11 +43,7 @@ class SpiderYeBaikeCommand extends Command
             collect($matches[1])->each(function ($link) use ($bar) {
                 $bar->advance();
                 if (str()->contains($link, '.html')) {
-                    $key = 'spider:'.md5($link);
-                    if (!Cache::get($key)) {
-                        SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
-                        Cache::forever($key, $link);
-                    }
+                    SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
                 } else {
                     Log::channel('spider')->error($link);
                 }
