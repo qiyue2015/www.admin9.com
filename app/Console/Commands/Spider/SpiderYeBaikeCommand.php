@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Spider;
 
+use App\Exceptions\FakeUserAgent;
 use App\Jobs\Spider\SpiderYeBaikeJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
@@ -32,7 +33,7 @@ class SpiderYeBaikeCommand extends Command
     public function handle(): void
     {
         $url = 'https://www.yebaike.com/e/web/?type=rss2';
-        $response = Http::get($url);
+        $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
         $this->comment('开始请求：'.$url);
         if (preg_match_all('/<link>(.*?)<\/link>/', $response->body(), $matches)) {
             $bar = $this->output->createProgressBar(count($matches[1]));
