@@ -7,7 +7,7 @@ use App\Jobs\Spider\SpiderYeBaikeJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\Facades\Log;
 
 class SpiderYeBaikeCommand extends Command
 {
@@ -35,6 +35,9 @@ class SpiderYeBaikeCommand extends Command
         $url = 'https://m.yebaike.com/e/web/?type=rss2';
         $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
         $this->comment('开始请求：'.$url);
+
+        Log::channel('spider')->error('请求 rss2');
+
         if (preg_match_all('/<link>(.*?)<\/link>/', $response->body(), $matches)) {
             $bar = $this->output->createProgressBar(count($matches[1]));
             collect($matches[1])->each(function ($link) use ($bar) {
@@ -43,13 +46,15 @@ class SpiderYeBaikeCommand extends Command
                     $link = str_replace('www.', 'm.', $link);
                     $key = md5($link);
                     if (!Cache::get($key)) {
-                        Cache::forever($key, $link);
                         SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
+                        Cache::forever($key, $link);
                     }
                 }
             });
         } else {
-            dd($response->body(), $matches);
+            Log::channel('spider')->error('未获得相关内容', ['content' => $response->body()]);
         }
+
+        Log::channel('spider')->error(PHP_EOL.' -------------- End -------------- '.PHP_EOL);
     }
 }
