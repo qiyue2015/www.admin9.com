@@ -42,6 +42,7 @@ class SpiderYeBaikeCommand extends Command
                     $link = str_replace('www.', 'm.', $link);
                     $key = md5($link);
                     if (!Cache::get($key)) {
+                        Cache::forever($key, $link);
                         SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
                     }
                 }
