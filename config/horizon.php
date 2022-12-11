@@ -194,8 +194,8 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_article'],
                 'balance' => 'auto',
-                'maxProcesses' => 100,
-                'minProcesses' => 30,
+                'maxProcesses' => 10,
+                'minProcesses' => 3,
                 'tries' => 1,
                 'timeout' => 120,
             ],
@@ -203,7 +203,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_train'],
                 'balance' => 'auto',
-                'processes' => 3,
+                'processes' => 100,
                 'tries' => 1,
                 'timeout' => 120,
             ],
@@ -218,7 +218,7 @@ return [
             'default' => [
                 'connection' => 'redis',
                 'queue' => ['default'],
-                'maxProcesses' => 10,
+                'maxProcesses' => 100,
             ],
             'just_for_article' => [
                 'connection' => 'redis',
