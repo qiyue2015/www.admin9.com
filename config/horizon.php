@@ -203,7 +203,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_train'],
                 'balance' => 'auto',
-                'processes' => 100,
+                'processes' => 60,
                 'tries' => 1,
                 'timeout' => 120,
             ],
