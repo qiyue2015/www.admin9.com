@@ -64,14 +64,14 @@ class ArticleController extends Controller
 
         $prev = cache()->remember('prev:'.$article->id, now()->endOfDay(), function () use ($article) {
             return Article::where('id', '<', $article->id)
-                ->where('category_id', $article->category_id)
+                //->where('category_id', $article->category_id)
                 ->checked()
                 ->first();
         });
 
         $next = cache()->remember('next:'.$article->id, now()->endOfDay(), function () use ($article) {
             return Article::where('id', '>', $article->id)
-                ->where('category_id', $article->category_id)
+                //->where('category_id', $article->category_id)
                 ->checked()
                 ->first();
         });
