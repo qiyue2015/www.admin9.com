@@ -36,22 +36,21 @@ class SpiderYeBaikeCommand extends Command
         $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
         $this->comment('开始请求：'.$url);
 
-        Log::channel('spider')->error('请求 rss2');
+        Log::channel('spider')->error(' -------------- Start -------------- ');
 
         if (preg_match_all('/<link>(.*?)<\/link>/', $response->body(), $matches)) {
             $bar = $this->output->createProgressBar(count($matches[1]));
             collect($matches[1])->each(function ($link) use ($bar) {
                 $bar->advance();
                 if (str()->contains($link, '.html')) {
+                    Log::channel('spider')->info($link);
                     SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
-                } else {
-                    Log::channel('spider')->error($link);
                 }
             });
         } else {
             Log::channel('spider')->error('未获得相关内容', ['content' => $response->body()]);
         }
 
-        Log::channel('spider')->error(PHP_EOL.' -------------- End -------------- '.PHP_EOL);
+        Log::channel('spider')->error(' -------------- End -------------- '.PHP_EOL);
     }
 }
