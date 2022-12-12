@@ -22,8 +22,8 @@ Route::get('/index.php', function () {
 
 Route::get('/', function () {
     $news = cache()->remember('home:list', now()->endOfMinute(), function () {
-        return Article::where('checked', 1)
-            ->orderByDesc('created_at')
+        return Article::checked()
+            ->orderByDesc('id')
             ->take(100)
             ->get();
     });
