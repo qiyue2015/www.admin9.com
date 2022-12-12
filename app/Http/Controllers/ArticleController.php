@@ -80,7 +80,6 @@ class ArticleController extends Controller
 
         $hotList = cache()->remember('hot:'.$article->category_id, now()->endOfDay(), function () use ($article) {
             return Article::whereCategoryId($article->category_id)
-                ->where('id', '<', $article->id)
                 ->where('checked', true)
                 ->orderByDesc('id')
                 ->take(10)
