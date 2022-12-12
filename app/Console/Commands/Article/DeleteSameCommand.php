@@ -30,25 +30,58 @@ class DeleteSameCommand extends Command
      */
     public function handle(): void
     {
-        $list = Article::select(DB::raw('COUNT(title) as dd, title'))
-            ->groupBy('title')
-            ->orderByDesc('dd')
-            ->take(100)
-            ->get();
-        $bar = $this->output->createProgressBar($list->count());
-        collect($list)->each(function ($row) use ($bar) {
-            $bar->advance();
-            if ($row->dd > 1) {
-                Article::whereTitle($row->title)->get(['id', 'title'])->each(function ($row, $index) {
-                    if ($index) {
-                        $row->delete();
-                        Log::channel('same')->info('删除重复标题', [
-                            'id' => $row->id,
-                            'title' => $row->title,
-                        ]);
-                    }
-                });
+        $this->comment('删除文章表重复标题…');
+
+        $star = 1;
+        while ($star) {
+            $this->info('正在执行（'.$star.'）');
+
+            $list = Article::select(DB::raw('COUNT(title) as dd, title'))
+                ->where('id', '>=', $star)
+                ->groupBy('title')
+                ->orderByDesc('dd')
+                ->take(100)
+                ->get();
+
+            if ($list->isEmpty()) {
+                $this->info('全部执行完毕.');
+                break;
             }
-        });
+
+            foreach ($list as $row) {
+                $star = $row->id;
+                if ($row->dd === 1) {
+                    break 2;
+                }
+
+                echo $row->title."\t";
+                //Article::whereTitle($row->title)->get(['id', 'title'])->each(function ($row, $index) {
+                //    if ($index) {
+                //        $row->delete();
+                //        Log::channel('same')->info('删除重复标题', [
+                //            'id' => $row->id,
+                //            'title' => $row->title,
+                //        ]);
+                //    }
+                //});
+            }
+
+            //collect($list)->each(function ($row) use ($bar, &$star) {
+            //    $bar->advance();
+            //    $star = $row->id;
+            //
+            //    if ($row->dd > 1) {
+            //        Article::whereTitle($row->title)->get(['id', 'title'])->each(function ($row, $index) {
+            //            if ($index) {
+            //                $row->delete();
+            //                Log::channel('same')->info('删除重复标题', [
+            //                    'id' => $row->id,
+            //                    'title' => $row->title,
+            //                ]);
+            //            }
+            //        });
+            //    }
+            //});
+        }
     }
 }
