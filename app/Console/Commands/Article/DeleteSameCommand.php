@@ -33,6 +33,7 @@ class DeleteSameCommand extends Command
         $this->comment('删除文章表重复标题…');
 
         $star = 1;
+        $num = 0;
         while ($star) {
             $this->info('正在执行（'.$star.'）');
 
@@ -50,20 +51,25 @@ class DeleteSameCommand extends Command
 
             foreach ($list as $row) {
                 $star = $row->id;
+                $title = $row->title;
+
                 if ($row->dd === 1) {
                     break 2;
                 }
 
-                echo $row->title."\t";
-                //Article::whereTitle($row->title)->get(['id', 'title'])->each(function ($row, $index) {
-                //    if ($index) {
-                //        $row->delete();
-                //        Log::channel('same')->info('删除重复标题', [
-                //            'id' => $row->id,
-                //            'title' => $row->title,
-                //        ]);
-                //    }
-                //});
+                $num++;
+
+                dispatch(static function () use ($title) {
+                    Article::whereTitle($title)->get(['id', 'title'])->each(function ($row, $index) {
+                        if ($index) {
+                            //$row->delete();
+                            Log::channel('same')->info('删除重复标题', [
+                                'id' => $row->id,
+                                'title' => $row->title,
+                            ]);
+                        }
+                    });
+                });
             }
 
             //collect($list)->each(function ($row) use ($bar, &$star) {
@@ -83,5 +89,7 @@ class DeleteSameCommand extends Command
             //    }
             //});
         }
+
+        $this->error('共删除'.$num);
     }
 }
