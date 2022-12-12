@@ -26,8 +26,8 @@ deployProd(){
   git log --pretty=format:"%h %cd %cr %s (%cn)" -1  | xargs -0 echo
 
   if [ "$1" != 'frontend' ]; then
-#       redEcho '清理 opcache'
-#       /usr/local/bin/php artisan deploy:opcache clear
+       redEcho '清理 opcache'
+       php artisan deploy:opcache clear
 
        redEcho '安装 composer 依赖'
        composer install --optimize-autoloader --no-dev
