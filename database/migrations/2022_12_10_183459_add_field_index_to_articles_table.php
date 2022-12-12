@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->index(['id', 'category_id', 'checked']);
+            $table->index(['category_id', 'checked']);
         });
     }
 
@@ -25,7 +25,8 @@ return new class extends Migration {
     public function down()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->dropIndex('articles_category_id_checked_index');
+            //$table->dropIndex('articles_category_id_checked_index');
+            $table->dropIndex('articles_id_category_id_checked_index');
         });
     }
 };
