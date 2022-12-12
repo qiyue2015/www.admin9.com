@@ -60,7 +60,7 @@ class ArticleController extends Controller
 
         $tablename = 'articles_'.$article->id % 10;
         $data = DB::table($tablename)->find($article->id);
-        $content = $data->content;
+        $content = $data ? $data->content : '';
 
         $prev = cache()->remember('prev:'.$article->id, now()->endOfDay(), function () use ($article) {
             return Article::where('id', '<', $article->id)
