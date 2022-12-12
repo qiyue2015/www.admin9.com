@@ -41,7 +41,7 @@ class DeleteSameCommand extends Command
                 ->where('id', '>=', $star)
                 ->groupBy('title')
                 ->orderByDesc('dd')
-                ->take(100)
+                ->take(10)
                 ->get();
 
             if ($list->isEmpty()) {
@@ -62,32 +62,15 @@ class DeleteSameCommand extends Command
                 dispatch(static function () use ($title) {
                     Article::whereTitle($title)->get(['id', 'title'])->each(function ($row, $index) {
                         if ($index) {
-                            //$row->delete();
+                            $row->delete();
                             Log::channel('same')->info('删除重复标题', [
                                 'id' => $row->id,
                                 'title' => $row->title,
                             ]);
                         }
                     });
-                });
+                })->onQueue('default');
             }
-
-            //collect($list)->each(function ($row) use ($bar, &$star) {
-            //    $bar->advance();
-            //    $star = $row->id;
-            //
-            //    if ($row->dd > 1) {
-            //        Article::whereTitle($row->title)->get(['id', 'title'])->each(function ($row, $index) {
-            //            if ($index) {
-            //                $row->delete();
-            //                Log::channel('same')->info('删除重复标题', [
-            //                    'id' => $row->id,
-            //                    'title' => $row->title,
-            //                ]);
-            //            }
-            //        });
-            //    }
-            //});
         }
 
         $this->error('共删除'.$num);
