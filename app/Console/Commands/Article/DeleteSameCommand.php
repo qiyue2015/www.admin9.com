@@ -33,26 +33,16 @@ class DeleteSameCommand extends Command
         $this->comment('删除文章表重复标题…');
 
         $star = 1;
-        $limit = 10;
-        $page = 0;
+        $limit = 100;
+
         while ($star) {
             $this->info('正在执行（'.$star.'）');
 
-            $skip = $page * $limit;
             $list = Article::select(DB::raw('COUNT(title) as dd, title'))
                 ->groupBy('title')
                 ->orderByDesc('dd')
-                ->skip($skip)
                 ->take($limit)
                 ->get();
-            dd($list);
-
-            if ($list->isEmpty()) {
-                $this->info('全部执行完毕.');
-                break;
-            }
-
-            $page++;
 
             foreach ($list as $row) {
                 $star = $row->id;
@@ -62,20 +52,18 @@ class DeleteSameCommand extends Command
                     break 2;
                 }
 
-                //dispatch(static function () use ($title) {
-                //    Article::whereTitle($title)->get(['id', 'title'])->each(function ($row, $index) {
-                //        if ($index) {
-                //            $row->delete();
-                //            Log::channel('same')->info('删除重复标题', [
-                //                'id' => $row->id,
-                //                'title' => $row->title,
-                //            ]);
-                //        }
-                //    });
-                //})->onQueue('default');
+                dispatch(static function () use ($title) {
+                    Article::whereTitle($title)->get(['id', 'title'])->each(function ($row, $index) {
+                        if ($index) {
+                            $row->delete();
+                            Log::channel('same')->info('删除重复标题', [
+                                'id' => $row->id,
+                                'title' => $row->title,
+                            ]);
+                        }
+                    });
+                })->onQueue('default');
             }
         }
-
-        $this->error('共删除'.$num);
     }
 }
