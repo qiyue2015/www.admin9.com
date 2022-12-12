@@ -66,6 +66,7 @@ class ArticleController extends Controller
             return Article::where('id', '<', $article->id)
                 //->where('category_id', $article->category_id)
                 ->checked()
+                ->orderByDesc('id')
                 ->first();
         });
 
@@ -73,6 +74,7 @@ class ArticleController extends Controller
             return Article::where('id', '>', $article->id)
                 //->where('category_id', $article->category_id)
                 ->checked()
+                ->orderByDesc('id')
                 ->first();
         });
 
