@@ -38,13 +38,13 @@
                 <div class="hd">科技动态</div>
                 <div class="box grid gap-4 md:grid-cols-3">
                     <ul class="list">
-    @foreach($news as $row)
-    @if($loop->index && $loop->index % 10 === 0)
+@foreach($news as $row)
+@if($loop->index && $loop->index % 10 === 0)
                     </ul>
                     <ul class="list">
-    @endif
+@endif
                         <li><a href="{{ $row->link() }}">{{ $row->title }}</a></li>
-    @endforeach
+@endforeach
                     </ul>
                 </div>
             </div>
