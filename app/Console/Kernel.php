@@ -22,6 +22,9 @@ class Kernel extends ConsoleKernel
 
         // 每天早上 2 点到 6 点每 5 分钟执行脚本
         $schedule->command('article:delete-same')->between('2:00', '6:00')->everyFiveMinutes();
+
+        // 从百度经验获取验证集数据
+        $schedule->command('dataset:init-valid')->everyThreeMinutes()->withoutOverlapping();
     }
 
     /**
