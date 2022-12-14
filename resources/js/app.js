@@ -3,8 +3,8 @@ import _ from 'lodash';
 window._ = _;
 
 // import './bootstrap';
-import links from './link'
-
+// import links from './link'
+const links = []
 let htmlTpl = ''
 _.forEach(links, row => {
     let itemTpl = _.map(row.list, (item) => {

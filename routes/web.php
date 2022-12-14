@@ -16,15 +16,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/index.php', function () {
-    abort('302');
-});
 
 Route::get('/', function () {
     $news = cache()->remember('home:list', now()->endOfMinute(), function () {
         return Article::checked()
             ->orderByDesc('id')
-            ->take(100)
+            ->take(90)
             ->get();
     });
     return view('welcome', compact('news'));
@@ -40,4 +37,6 @@ Route::get('7527/abcdefg', function () {
 });
 
 // 文章详情
-Route::get('/view/{id}.html', [ArticleController::class, 'show'])->where(['id' => '[0-9]+'])->name('article.show');
+Route::get('/view/{id}.html', [ArticleController::class, 'show'])
+    ->where(['id' => '[0-9]+'])
+    ->name('article.show');
