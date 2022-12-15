@@ -36,34 +36,33 @@ class DatasetInitTrainCommand extends Command
 
         while ($star < $lastId) {
             $bar->advance();
+            $list = Article::checked()->where('id', '>', $star)->take(2000)->get();
+            collect($list)->each(function ($article) use (&$star, &$txt) {
+                $star = $article->id;
 
-            dispatch(static function () use ($star) {
-                $list = Article::checked()->where('id', '>', $star)->take(1000)->get();
-                collect($list)->each(function ($article) use (&$star, &$txt) {
-                    $star = $article->id;
+                $txt = $article->title;
+                $content = DB::table('articles_'.($article->id % 10))->where('id', $article->id)->value('content');
 
-                    $txt = $article->title;
-                    $content = DB::table('articles_'.($article->id % 10))->where('id', $article->id)->value('content');
+                if (!is_null($content) && $content = strip_tags($content)) {
+                    $rows = explode(PHP_EOL, $content);
 
-                    if (!is_null($content) && $content = strip_tags($content)) {
-                        $rows = explode(PHP_EOL, $content);
-
-                        $string = '';
-                        foreach ($rows as $row) {
-                            if (mb_strwidth($string) > 300) {
-                                return $string;
-                            }
-                            $string .= trim($row);
+                    $string = '';
+                    foreach ($rows as $row) {
+                        if (mb_strwidth($string) > 300) {
+                            return $string;
                         }
-
-                        if ($string) {
-                            $txt .= PHP_EOL.$string;
-                            $path = 'articles-baidu-bce/'.($article->id % 1000).'/'.$article->id.'.txt';
-                            Storage::put($path, $txt);
-                        }
+                        $string .= trim($row);
                     }
-                });
-            })->onQueue('just_for_train');
+
+                    if ($string) {
+                        $txt .= PHP_EOL.$string;
+                        $path = 'articles-baidu-bce/'.($article->id % 1000).'/'.$article->id.'.txt';
+                        Storage::put($path, $txt);
+                    }
+                }
+            });
+
+            $bar->advance($list->count());
         }
     }
 }
