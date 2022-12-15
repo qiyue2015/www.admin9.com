@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Article;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Test extends Command
 {
@@ -26,7 +29,16 @@ class Test extends Command
      */
     public function handle(): void
     {
-        //
+        //$path = '/Users/fengqiyue/Documents/Project/caishengfeiyang/tv/videos';
+        //$files = \File::files($path);
+        //foreach ($files as $file) {
+        //    $outFileName = str_replace(['videos', '.mp4'], ['images', '.jpg'], $file->getPathname());
+        //    // 运行命令
+        //    //$command = "ffmpeg -i ".$file->getPathname()." -y -f image2 -t 15 -s 3840x2160 ".$outFileName;
+        //    $command = "ffmpeg -i {$file->getPathname()} -ss 00:00:15 -frames:v 1 ".$outFileName;
+        //    $this->info($command);
+        //    system($command);
+        //}
     }
 
 
