@@ -32,13 +32,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('api')
-                ->prefix('api')
                 ->group(function () {
-                    require base_path('routes/api.php');
-
                     // 放在 api 目录的其它相关路由
                     $files = File::allFiles(base_path('routes/api'));
                     foreach ($files as $file) {
