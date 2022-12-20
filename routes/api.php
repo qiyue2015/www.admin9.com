@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RoleController;
@@ -30,5 +29,4 @@ Route::controller(AuthController::class)->prefix('auth')->group(function (Router
 
 Route::middleware('auth:sanctum')->group(function (Router $router) {
     $router->apiResource('roles', RoleController::class);
-    $router->apiResource('accounts', AccountController::class);
 });
