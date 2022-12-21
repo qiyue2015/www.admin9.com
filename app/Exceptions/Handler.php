@@ -82,7 +82,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof ModelNotFoundException) {
-            $this->throwBusinessException(ResponseEnum::CLIENT_PARAMETER_ERROR);
+            $this->throwBusinessException(ResponseEnum::CLIENT_PARAMETER_ERROR, $e->getMessage());
         }
 
         // 自定义错误异常抛出
