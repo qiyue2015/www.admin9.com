@@ -41,7 +41,7 @@ class DatasetInitValidCommand extends Command
             108 => '母婴教育', 123 => '时尚美容',
         ];
         $star = 1;
-        while ($star) {
+        while ($star < 10) {
             $this->info('第'.$star.'次');
             collect($ids)->each(function ($cid) use ($cname) {
                 echo $cid."\t";
