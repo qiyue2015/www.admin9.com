@@ -218,17 +218,17 @@ return [
             'default' => [
                 'connection' => 'redis',
                 'queue' => ['default'],
-                'maxProcesses' => 100,
+                'maxProcesses' => 10,
             ],
             'just_for_article' => [
                 'connection' => 'redis',
                 'queue' => ['just_for_article'],
-                'maxProcesses' => 100,
+                'maxProcesses' => 80,
             ],
             'just_for_train' => [
                 'connection' => 'redis',
                 'queue' => ['just_for_train'],
-                'maxProcesses' => 100,
+                'maxProcesses' => 50,
             ],
             'just_for_dataset' => [
                 'connection' => 'redis',

@@ -56,15 +56,9 @@ class DeleteSameCommand extends Command
                     Article::whereTitle($title)->get(['id', 'title'])->each(function ($row, $index) {
                         if ($index) {
                             $row->delete();
-                            Log::channel('same')->error('删除重复标题', [
-                                'id' => $row->id,
-                                'title' => $row->title,
-                            ]);
+                            Log::channel('same')->error('删除重复标题', ['id' => $row->id, 'title' => $row->title]);
                         } else {
-                            Log::channel('same')->info('--------保留', [
-                                'id' => $row->id,
-                                'title' => $row->title,
-                            ]);
+                            Log::channel('same')->info('----保留----', ['id' => $row->id, 'title' => $row->title]);
                         }
                     });
                 })->onQueue('default');

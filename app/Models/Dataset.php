@@ -36,6 +36,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereType($value)
  * @mixin \Eloquent
+ * @property string $body 长文本
+ * @property string $content
+ * @property string $link 链接
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Dataset whereUpdatedAt($value)
  */
 class Dataset extends Model
 {

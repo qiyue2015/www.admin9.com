@@ -5,6 +5,7 @@ namespace App\Console\Commands\Dataset;
 use App\Exceptions\FakeUserAgent;
 use App\Models\Dataset;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,56 +33,49 @@ class DatasetInitValidCommand extends Command
     public function handle()
     {
         ini_set('memory_limit', -1);
+        $path = Storage::path('百科类问答json版');
+        $files = File::files($path);
+        foreach ($files as $file) {
+            $rows = explode(PHP_EOL, $file->getcontents());
 
-        // 百度经验分类
-        $ids = [1, 10, 37, 50, 73, 86, 93, 101, 108, 123];
-        $cname = [
-            1 => '美食营养', 10 => '游戏数码', 37 => '手工爱好', 50 => '生活家居',
-            73 => '健康养生', 86 => '运动户外', 93 => '职场理财', 101 => '情感交际',
-            108 => '母婴教育', 123 => '时尚美容',
-        ];
-        $star = 1;
-        while ($star < 10) {
-            $this->info('第'.$star.'次');
-            collect($ids)->each(function ($cid) use ($cname) {
-                echo $cid."\t";
-                dispatch(static function () use ($cname, $cid) {
-                    $url = 'https://jingyan.baidu.com/ajax/home/getcolumn?cid='.$cid.'&pn=18';
-                    $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
-                    if ($response->ok()) {
-                        $list = $response->json('data.specialColumn.list');
-                        if (empty($list)) {
-                            dd($response->body());
-                        }
-                        foreach ($list as $row) {
-                            $bcid = $response->json('data.specialColumn.cid');
-                            $data = [
-                                'type' => 'valid',
-                                'category1' => $cname[$bcid] ?: $bcid,
-                                'category2' => $row['cid'],
-                                'tags' => '',
-                                'title' => $row['title'],
-                                'desc' => $row['brief'],
-                                'body' => '',
-                                'link' => 'https://jingyan.baidu.com/article/'.$row['eidEnc'].'.html',
-                                'status' => 0,
-                            ];
+            $this->info($file->getBasename());
 
-                            $checkTitleExists = Dataset::where('title', $data['title'])->where('category1', $data['category1'])->doesntExist();
-                            if ($checkTitleExists) {
-                                Dataset::insert($data);
-                            } else {
-                                echo 'x:'.$data['title'];
-                            }
-                        }
+            $bar = $this->output->createProgressBar(count($rows));
+            collect($rows)->chunk(100)->each(function ($rows) use ($bar) {
+                foreach ($rows as $row) {
+
+                    $bar->advance();
+                    $result = json_decode($row);
+                    if (empty($result->category)) {
+                        return '';
                     }
-                });
-            });
+                    $result->category = str_replace('-', '/', $result->category);
+                    $cateArr = explode('/', $result->category);
+                    $category = $cateArr[0];
+                    $filename = 'baike-json-data/'.$category.'/'.$result->qid;
 
-            $seconds = random_int(5, 10);
-            $this->error(PHP_EOL.'End Sleep'.$seconds);
-            sleep($seconds);
-            $star++;
+                    $body = $result->title;
+                    if ($result->desc) {
+                        $body .= PHP_EOL.$result->desc;
+                    }
+                    $answer = trim(strip_tags($result->answer));
+                    if ($answer) {
+                        $body .= PHP_EOL.$answer;
+                    }
+
+                    $tags = [];
+                    foreach ($cateArr as $cate) {
+                        $tags['labels'][] = ['name' => trim($cate)];
+                    }
+                    $tags = json_encode($tags, JSON_UNESCAPED_UNICODE);
+
+                    //dd($filename, $body, $tags);
+                    dispatch(static function () use ($filename, $body, $tags) {
+                        Storage::put($filename.'.txt', $body);
+                        Storage::put($filename.'.json', $tags);
+                    })->onQueue('just_for_train');
+                }
+            });
         }
     }
 

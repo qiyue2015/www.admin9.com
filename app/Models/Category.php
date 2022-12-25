@@ -34,6 +34,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereChannelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereChildren($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereParents($value)
+ * @property int $num 分类信息数量
+ * @property int $is_show 导航展示 1展示
+ * @property int $baike_classid 对应百科分类
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereBaikeClassid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereIsShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereNum($value)
  */
 class Category extends Model
 {

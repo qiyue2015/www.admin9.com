@@ -2,123 +2,77 @@
 
 namespace App\Jobs;
 
-use App\Models\Article;
-use App\Models\Channel;
-use App\Models\Train;
+use App\Models\Dataset;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
+use Symfony\Component\DomCrawler\Crawler;
 
 class TrainTagsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Train $train;
+    protected Dataset $dataset;
 
-    protected Article $article;
-
-    protected string $appid = '1224070';
-
-    protected string $secret = '026a8f6cc2624b808254227f088e9f32';
-
-    /**
-     * @param  Train  $train
-     */
-    public function __construct(Train $train, Article $article)
+    public function __construct(Dataset $dataset)
     {
-        $this->train = $train;
-        $this->article = $article;
+        $this->dataset = $dataset;
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function handle()
     {
-        $tags = $this->getCategories($this->train->title, $this->train->content);
-        $scoreArr = array_column($tags['lv1_tag_list'], 'score'); // 处理一级
-        array_multisort($scoreArr, SORT_DESC, $tags['lv1_tag_list']);
-
-        // 一级标签用来处理为频道
-        $lv1 = head($tags['lv1_tag_list']);
-        $channel = cache()->rememberForever('channel:'.$lv1['tag'], function () use ($lv1) {
-            return Channel::whereName($lv1['tag'])->first();
-        });
-
-        // 二级 tags 暂时存储
-        $keyboard = [];
-        collect($tags['lv2_tag_list'])->map(function ($row) use ($lv1, &$keyboard) {
-            if ($row['tag'] !== $lv1['tag']) {
-                $keyboard[] = $row;
+        try {
+            $response = Http::getWithProxy($this->dataset->link);
+            $category2 = '';
+            if (preg_match_all('/<a href="#!" data-cateid="[\d]+">(.*?)<\/a>/u', $response->body(), $categoryMatches) && count($categoryMatches[1]) === 3) {
+                $category2 = $categoryMatches[1][2];
             }
-        });
 
-        // 重新去拉取文章标签
-        $newTags = [];
-        $tagsResult = $this->getTags($this->train->title, $this->train->content);
-        foreach ($tagsResult as $key => $newTag) {
-            if ($key >= 4) {
-                continue;
-            }
-            $newTags[] = $newTag['tag'];
+            $crawler = new Crawler();
+            $crawler->addHtmlContent($response->body());
+            $stepsForCatalog = $crawler->filter('.guide-detail>li>p')->each(function (Crawler $cr) {
+                return $cr->text();
+            });
+
+            $multiSteps = $crawler->filter('.guide-detail>li')->each(function (Crawler $cr) {
+                $text = $cr->filter('.guide-content')->each(function (Crawler $c) {
+                    return '<p>'.$c->text().'</p>';
+                });
+
+                $imgs = $cr->filter('img')->each(function (Crawler $c) {
+                    return '<p><img src="'.$c->attr('data-src').'" alt=""></p>';
+                });
+
+                return implode(PHP_EOL, $text).implode(PHP_EOL, $imgs);
+            });
+
+            $data = [
+                'status' => 1,
+                'category2' => $category2,
+                //'created_at' => now()->parse($timestamp)->toDateTimeString(),
+                'content' => implode(PHP_EOL, $multiSteps),
+                'body' => implode(PHP_EOL, $stepsForCatalog),
+            ];
+            $this->dataset->fill($data)->save();
+        } catch (RuntimeException $exception) {
+            $this->fail($exception);
         }
-        $newTags = array_unique($newTags);
-
-        //$this->train->lv1_categories = $channel->name;
-        //$this->train->lv2_categories = json_encode($keyboard, JSON_UNESCAPED_UNICODE);
-        //$this->train->tags = json_encode($newTags, JSON_UNESCAPED_UNICODE);
-        //$this->train->save();
-
-        $this->article->channel_id = $channel->id;
-        $this->article->keyboard = $newTags ? implode(',', $newTags) : '';
-        $this->article->save();
     }
 
-    /**
-     * 提取分类
-     * @param $title
-     * @param $content
-     * @return array|mixed
-     */
-    private function getCategories($title, $content)
+    public function clearBom($str): array|string
     {
-        $url = 'https://route.showapi.com/1750-7';
-        $data = [
-            'showapi_appid' => $this->appid,
-            'showapi_sign' => $this->secret,
-            'title' => $title,
-            'content' => $content,
-        ];
-
-        $response = Http::timeout(30)->withoutVerifying()->asForm()->post($url, $data);
-        if ($response->json('showapi_res_code') === 0) {
-            return $response->json('showapi_res_body.data.item');
+        if (0 === strpos(bin2hex($str), 'efbbbf')) {
+            return substr($str, 3);
         }
-
-        throw new RuntimeException($response->json('showapi_res_error'));
+        return $str;
     }
 
-    /**
-     * 提取标签
-     */
-    private function getTags(string $title, string $content)
-    {
-        $url = 'https://route.showapi.com/1750-5';
-        $data = [
-            'showapi_appid' => $this->appid,
-            'showapi_sign' => $this->secret,
-            'title' => $title,
-            'content' => $content,
-        ];
-
-        $response = Http::timeout(30)->withoutVerifying()->asForm()->post($url, $data);
-        if ($response->json('showapi_res_code') === 0) {
-            return $response->json('showapi_res_body.data.items');
-        }
-
-        throw new RuntimeException($response->json('showapi_res_error'));
-    }
 }

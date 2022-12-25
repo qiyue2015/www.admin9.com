@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Dataset;
 
-use App\Models\Article;
+use App\Jobs\TrainTagsJob;
+use App\Models\Dataset;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DatasetInitTrainCommand extends Command
@@ -21,46 +21,56 @@ class DatasetInitTrainCommand extends Command
      *
      * @var string
      */
-    protected $description = '导入训练集';
+    protected $description = '彩集训练集';
 
     public function handle(): void
     {
         ini_set('memory_limit', -1);
-
-        $this->comment('导入 Articles 表 数据...');
-
-        $star = 0;
-        $lastId = Article::checked()->max('id');
-        $count = Article::checked()->count();
+        $status = 0;
+        $count = Dataset::whereStatus($status)->count();
         $bar = $this->output->createProgressBar($count);
-
+        $lastId = Dataset::whereStatus($status)->max('id');
+        $star = 0;
         while ($star < $lastId) {
-            $bar->advance();
-            $list = Article::checked()->where('id', '>', $star)->take(2000)->get();
-            collect($list)->each(function ($article) use (&$star, &$txt) {
-                $star = $article->id;
+            $list = Dataset::whereStatus($status)
+                ->where('id', '>', $star)
+                ->orderBy('id', 'ASC')
+                ->take(1000)
+                ->get(['id', 'category1', 'category2', 'title', 'desc', 'body', 'link', 'status']);
 
-                $txt = $article->title;
-                $content = DB::table('articles_'.($article->id % 10))->where('id', $article->id)->value('content');
-
-                if (!is_null($content) && $content = strip_tags($content)) {
-                    $rows = explode(PHP_EOL, $content);
-
-                    $string = '';
-                    foreach ($rows as $row) {
-                        if (mb_strwidth($string) > 300) {
-                            return $string;
-                        }
-                        $string .= trim($row);
-                    }
-
-                    if ($string) {
-                        $txt .= PHP_EOL.$string;
-                        $path = 'articles-baidu-bce/'.($article->id % 1000).'/'.$article->id.'.txt';
-                        Storage::put($path, $txt);
-                    }
+            $ids = [];
+            foreach ($list as $row) {
+                $star = $row->id;
+                $ids[] = $row->id;
+                if (empty($row->category2)) {
+                    continue;
                 }
-            });
+                $category1 = str_replace('/', '', $row->category1);
+                $category2 = str_replace('/', '', $row->category2);
+                $path = 'dataset-train-data/'.$row->id;
+
+                $body = $row->title;
+                if (!empty($row->desc)) {
+                    $body .= PHP_EOL.$row->desc;
+                }
+                $body .= str_replace('\n', PHP_EOL, $row->body);
+
+                $categories = [
+                    'labels' => [
+                        ['name' => $category1.'-'.$category2],
+                    ],
+                ];
+                $categories = json_encode($categories, JSON_UNESCAPED_UNICODE);
+
+                dispatch(static function () use ($path, $categories, $body) {
+                    Storage::put($path.'.txt', $body);
+                    Storage::put($path.'.json', $categories);
+                })->onQueue('just_for_train');
+
+                //TrainTagsJob::dispatch($row)->onQueue('just_for_train');
+            }
+
+            Dataset::whereIn('id', $ids)->update(['status' => 1]);
 
             $bar->advance($list->count());
         }
