@@ -27,14 +27,15 @@ class InitCategoryIdCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
         Article::whereCategoryId(99)
-            ->orderByDesc('id')
-            ->limit(1000)->each(function ($article) {
-                InitCategoryIdJob::dispatch($article);
-            });
+                ->orderByDesc('id')
+                ->limit(1000)
+                ->each(function ($article) {
+                    InitCategoryIdJob::dispatch($article);
+                });
     }
 }
