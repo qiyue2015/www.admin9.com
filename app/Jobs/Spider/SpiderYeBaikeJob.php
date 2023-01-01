@@ -72,11 +72,12 @@ class SpiderYeBaikeJob implements ShouldQueue
                 DB::table('articles_'.($article->id % 10))->updateOrInsert([
                     'id' => $article->id,
                 ], [
+                    'tags' => '',
                     'content' => implode(PHP_EOL, $content),
                 ]);
             });
         } catch (\Throwable $e) {
-            Log::info($e->getMessage());
+            $this->fail();
         }
     }
 }
