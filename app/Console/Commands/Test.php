@@ -14,7 +14,7 @@ class Test extends Command
      *
      * @var string
      */
-    protected $signature = 'test';
+    protected $signature = 'test {keyword}';
 
     /**
      * The console command description.
@@ -29,8 +29,9 @@ class Test extends Command
      */
     public function handle(): void
     {
-        $list = Article::whereFullText('title', '给猪绝育是哪种猪')->take(10)->get();
-        dd($list);
+        $keyword = $this->argument('keyword');
+        $list = Article::whereFullText('title', $keyword)->take(10);
+        dd($list->get(['id', 'title'])->toArray());
         //$path = '/Users/fengqiyue/Documents/Project/caishengfeiyang/tv/videos';
         //$files = \File::files($path);
         //foreach ($files as $file) {
