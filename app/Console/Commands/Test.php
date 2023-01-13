@@ -29,6 +29,8 @@ class Test extends Command
      */
     public function handle(): void
     {
+        $list = Article::whereFullText('title', '给猪绝育是哪种猪')->take(10)->get();
+        dd($list);
         //$path = '/Users/fengqiyue/Documents/Project/caishengfeiyang/tv/videos';
         //$files = \File::files($path);
         //foreach ($files as $file) {
