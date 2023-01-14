@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Optimus\Optimus;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Article
@@ -45,9 +46,23 @@ use Jenssegers\Optimus\Optimus;
  */
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $guarded = [];
+
+    /**
+     * 获取模型的可索引的数据。
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $array = [];
+        $array['title'] = $this->title;
+        $array['description'] = $this->description;
+        $array['keywords'] = $this->keywords;
+        return $array;
+    }
 
     public function category(): BelongsTo
     {
