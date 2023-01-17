@@ -87,7 +87,7 @@ class ArticleController extends Controller
         //});
 
         $hotList = cache()->remember('hot:meilisearch:'.$article->id, now()->endOfDay(), function () use ($article) {
-            return Article::search($article->title)->take(10)->get();
+            return Article::search($article->title)->whereNot('id', $article->id)->take(10)->get();
         });
 
         return view('article.show', compact(
