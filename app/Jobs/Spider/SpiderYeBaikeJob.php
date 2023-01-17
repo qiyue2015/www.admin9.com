@@ -51,7 +51,7 @@ class SpiderYeBaikeJob implements ShouldQueue
                 return '<p>'.$cr->html().'</p>';
             });
 
-            $category = Category::firstOrCreate(['name' => $categoryName]);
+            $category = Category::firstOrCreate(['name' => $categoryName], ['num' => 0]);
 
             $data = [
                 'category_id' => $category->id,
@@ -77,7 +77,7 @@ class SpiderYeBaikeJob implements ShouldQueue
                 ]);
             });
         } catch (\Throwable $e) {
-            $this->fail();
+            $this->fail($e);
         }
     }
 }
