@@ -78,22 +78,22 @@ class ArticleController extends Controller
                 ->first();
         });
 
-        //$hotList = cache()->remember('hot:'.$article->category_id, now()->endOfDay(), function () use ($article) {
-        //    //return Article::whereCategoryId($article->category_id)
-        //    //    ->where('checked', true)
-        //    //    ->orderByDesc('id')
-        //    //    ->take(10)
-        //    //    ->get();
-        //});
+        $hotList = cache()->remember('hot:'.$article->category_id, now()->endOfDay(), function () use ($article) {
+            return Article::whereCategoryId($article->category_id)
+                ->where('checked', true)
+                ->orderByDesc('id')
+                ->take(10)
+                ->get();
+        });
 
-        $hotList = cache()->remember('hot:meilisearch:'.$article->id, now()->endOfDay(), function () use ($article) {
-            return Article::search($article->title)->take(10)->get();
+        $recommendeds = cache()->remember('recommendeds:meilisearch:'.$article->id, now()->endOfDay(), function () use ($article) {
+            return Article::search($article->title)->take(20)->get();
         });
 
         return view('article.show', compact(
             'article', 'content',
             'next', 'prev',
-            'hotList'
+            'hotList', 'recommendeds'
         ));
     }
 

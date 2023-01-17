@@ -43,6 +43,10 @@
         </div>
         <div class="article-content mt-4">
             {!! $content !!}
+            <p>推荐阅读：</p>
+@foreach($recommendeds as $row)
+            <p><a href="{{ $row->link() }}" target="_blank">{{ $row->title }}</a></p>
+@endforeach
         </div>
         <div class="entry-page">
 @if($prev)
