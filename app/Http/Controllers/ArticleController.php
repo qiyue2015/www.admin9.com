@@ -87,7 +87,7 @@ class ArticleController extends Controller
         });
 
         $recommendeds = cache()->remember('recommendeds:meilisearch:'.$article->id, now()->endOfMonth(), function () use ($article) {
-            return Article::search($article->title)->take(20)->get();
+            return Article::search($article->title)->take(10)->get();
         });
 
         return view('article.show', compact(
