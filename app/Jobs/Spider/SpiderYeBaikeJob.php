@@ -51,7 +51,15 @@ class SpiderYeBaikeJob implements ShouldQueue
                 return '<p>'.$cr->html().'</p>';
             });
 
-            $category = Category::firstOrCreate(['name' => $categoryName], ['num' => 0]);
+            $category = Category::firstOrCreate(['name' => $categoryName], [
+                'num' => 0,
+                'is_show' => 0,
+                'baike_classid' => 0,
+                'is_last' => 1,
+                'is_list' => 1,
+                'children' => '',
+                'parents' => '',
+            ]);
 
             $data = [
                 'category_id' => $category->id,
