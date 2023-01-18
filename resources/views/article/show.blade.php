@@ -43,11 +43,17 @@
         </div>
         <div class="article-content mt-4">
             {!! $content !!}
-            <p>推荐阅读：</p>
-@foreach($recommendeds as $row)
-            <p><a href="{{ $row->link() }}" target="_blank">{{ $row->title }}</a></p>
-@endforeach
         </div>
+@if(count($recommendeds))
+        <div class="pb-8">
+            <div class="text-sky-500 dark:text-sky-400 mb-2">推荐阅读</div>
+            <ul class="list-disc list-inside">
+@foreach($recommendeds as $row)
+                <li><a href="{{ $row->link() }}" target="_blank">{{ $row->title }}</a></li>
+@endforeach
+            </ul>
+        </div>
+@endif
         <div class="entry-page">
 @if($prev)
             <div class="entry-page-prev">
