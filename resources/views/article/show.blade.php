@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <title>{{ $article->title }}-{{ config('app.name') }}</title>
-    <meta name="keywords" content="{{ $article->keyboard }}" />
+    <meta name="keywords" content="{{ $article->keyboard??'' }}" />
+    <meta name="description" content="{{ $article->description ?? '' }}" />
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/sass/app.scss'])
