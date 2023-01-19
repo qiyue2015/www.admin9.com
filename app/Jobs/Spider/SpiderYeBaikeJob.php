@@ -45,24 +45,13 @@ class SpiderYeBaikeJob implements ShouldQueue
             $crawler->addHtmlContent($response->body());
             $title = $crawler->filter('.weui-c-title')->text();
             $date = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[1]')->text();
-            $categoryName = $crawler->filterXPath('//div[@class="weui-c-content"]/div/span[2]/a')->text();
             $cover_url = $crawler->filter('.weui-c-article p>img')->attr('src');
             $content = $crawler->filter('.weui-c-article p')->each(function (Crawler $cr) {
                 return '<p>'.$cr->html().'</p>';
             });
 
-            $category = Category::firstOrCreate(['name' => $categoryName], [
-                'num' => 0,
-                'is_show' => 0,
-                'baike_classid' => 0,
-                'is_last' => 1,
-                'is_list' => 1,
-                'children' => '',
-                'parents' => '',
-            ]);
-
             $data = [
-                'category_id' => $category->id,
+                'category_id' => 0,
                 'title' => $title,
                 'keywords' => '',
                 'description' => '',
