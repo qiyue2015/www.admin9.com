@@ -44,7 +44,7 @@ class BaiduAiCategoryCommand extends Command
             $star = $list->last()->id;
             $bar->advance($list->count());
             collect($list)->each(function ($article) {
-                BaiduAiCategoryJob::dispatch($article);
+                BaiduAiCategoryJob::dispatch($article)->onQueue('just_for_train');
             });
         }
     }
