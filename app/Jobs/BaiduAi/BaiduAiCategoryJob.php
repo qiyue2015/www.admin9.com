@@ -25,6 +25,16 @@ class BaiduAiCategoryJob implements ShouldQueue
 
     private Article $article;
 
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(Article $article)
+    {
+        $this->article = $article;
+    }
+
     private function getToken()
     {
         return Cache::remember('baidu-ai-token', now()->addDays(30), function () {
@@ -37,16 +47,6 @@ class BaiduAiCategoryJob implements ShouldQueue
     {
         $subtable = 'articles_'.$this->article->id % 10;
         return DB::table($subtable)->where('id', $this->article->id);
-    }
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Article $article)
-    {
-        $this->article = $article;
     }
 
     public function getCategory($name)
@@ -73,26 +73,33 @@ class BaiduAiCategoryJob implements ShouldQueue
         Redis::funnel('key')->limit(20)->then(function () {
             if ($this->article->title && $this->article->description) {
                 try {
-                    $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
-                    $response = Http::asJson()->post($url, [
-                        'title' => $this->article->title,
-                        'content' => $this->article->description,
-                    ]);
-                    $result = $response->object();
+                    // 取副表内容
+                    $subItem = $this->subQuery()->first();
+                    if ($subItem) {
+                        $content = strip_tags($subItem->content);
+                        $content = trim($content);
+                        $content = preg_replace("/s+/", " ", $content);
+                        $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
+                        $response = Http::asJson()->post($url, [
+                            'title' => $this->article->title,
+                            'content' => $content,
+                        ]);
+                        $result = $response->object();
 
-                    if ($result && isset($result->item)) {
-                        // 设置分类
-                        $topic = collect($result->item->lv1_tag_list)->first();
-                        $category = $this->getCategory($topic->tag);
-                        $this->article->category_id = $category->id;
-                        $this->article->save();
+                        if ($result && isset($result->item)) {
+                            // 设置分类
+                            $topic = collect($result->item->lv1_tag_list)->first();
+                            $category = $this->getCategory($topic->tag);
+                            $this->article->category_id = $category->id;
+                            $this->article->save();
 
-                        // 设置 TAGS
-                        if ($result->item->lv2_tag_list) {
-                            $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                                return $val->tag;
-                            })->toArray();
-                            $this->subQuery()->update(['tags' => implode(',', $tags)]);
+                            // 设置 TAGS
+                            if ($result->item->lv2_tag_list) {
+                                $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                                    return $val->tag;
+                                })->toArray();
+                                $this->subQuery()->update(['tags' => implode(',', $tags)]);
+                            }
                         }
                     }
                 } catch (\Exception $exception) {
