@@ -40,6 +40,8 @@ class BaiduAiCategoryCommand extends Command
         $count = $this->query()->count();
         $bar = $this->output->createProgressBar($count);
         while ($star < $lastId) {
+            $this->info(PHP_EOL.'执行（'.$star.'）组');
+
             $list = $this->query()->where('id', '>', $star)->take($limit)->get();
             $star = $list->last()->id;
             $bar->advance($list->count());
