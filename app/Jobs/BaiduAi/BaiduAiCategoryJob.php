@@ -70,7 +70,7 @@ class BaiduAiCategoryJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Redis::funnel('key')->limit(20)->then(function () {
+        Redis::funnel('key')->limit(5)->then(function () {
             if ($this->article->title && $this->article->description) {
                 try {
                     // 取副表内容
