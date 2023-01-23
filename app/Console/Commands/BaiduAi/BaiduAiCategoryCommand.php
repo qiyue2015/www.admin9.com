@@ -24,7 +24,7 @@ class BaiduAiCategoryCommand extends Command
 
     private function query()
     {
-        return Article::query()->where('category_id', 0);
+        return Article::query()->where('category_id', 0)->checked();
     }
 
     /**

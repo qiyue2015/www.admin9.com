@@ -70,45 +70,41 @@ class BaiduAiCategoryJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Redis::funnel('key')->limit(5)->then(function () {
-            if ($this->article->title && $this->article->description) {
-                try {
-                    // 取副表内容
-                    $subItem = $this->subQuery()->first();
-                    if ($subItem) {
-                        $content = strip_tags($subItem->content);
-                        $content = trim($content);
-                        $content = preg_replace("/s+/", " ", $content);
-                        $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
-                        $response = Http::asJson()->post($url, [
-                            'title' => $this->article->title,
-                            'content' => $content,
-                        ]);
-                        $result = $response->object();
+        if ($this->article->title && $this->article->description) {
+            try {
+                // 取副表内容
+                $subItem = $this->subQuery()->first();
+                if ($subItem) {
+                    $content = strip_tags($subItem->content);
+                    $content = trim($content);
+                    $content = preg_replace("/s+/", " ", $content);
+                    $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
+                    $response = Http::asJson()->post($url, [
+                        'title' => $this->article->title,
+                        'content' => $content,
+                    ]);
+                    $result = $response->object();
 
-                        // 设置分类
-                        $topic = collect($result->item->lv1_tag_list)->first();
-                        $category = $this->getCategory($topic->tag);
-                        $this->article->category_id = $category->id;
-                        $this->article->save();
+                    // 设置分类
+                    $topic = collect($result->item->lv1_tag_list)->first();
+                    $category = $this->getCategory($topic->tag);
+                    $this->article->category_id = $category->id;
+                    $this->article->save();
 
-                        // 设置 TAGS
-                        if ($result->item->lv2_tag_list) {
-                            $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                                return $val->tag;
-                            })->toArray();
-                            $this->subQuery()->update(['tags' => implode(',', $tags)]);
-                        }
+                    // 设置 TAGS
+                    if ($result->item->lv2_tag_list) {
+                        $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                            return $val->tag;
+                        })->toArray();
+                        $this->subQuery()->update(['tags' => implode(',', $tags)]);
                     }
-                } catch (\Exception $exception) {
-                    $this->fail($exception);
                 }
-            } else {
-                $this->article->checked = 0;
-                $this->article->save();
+            } catch (\Exception $exception) {
+                $this->fail($exception);
             }
-        }, function () {
-            $this->release(10);
-        });
+        } else {
+            $this->article->checked = 0;
+            $this->article->save();
+        }
     }
 }
