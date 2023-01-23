@@ -5,7 +5,6 @@ namespace App\Console\Commands\BaiduAi;
 use App\Jobs\BaiduAi\BaiduAiCategoryJob;
 use App\Models\Article;
 use Illuminate\Console\Command;
-use function Clue\StreamFilter\fun;
 
 class BaiduAiCategoryCommand extends Command
 {
@@ -14,14 +13,14 @@ class BaiduAiCategoryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'baidu-ai:category';
+    protected $signature = 'baidu-ai:category {limit=500 : 每批处理数量}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '通过百度AI进行分类';
 
     private function query()
     {
@@ -35,12 +34,13 @@ class BaiduAiCategoryCommand extends Command
      */
     public function handle()
     {
+        $limit = (int) $this->argument('limit');
         $star = 0;
         $lastId = $this->query()->max('id');
         $count = $this->query()->count();
         $bar = $this->output->createProgressBar($count);
         while ($star < $lastId) {
-            $list = $this->query()->where('id', '>', $star)->take(10)->get();
+            $list = $this->query()->where('id', '>', $star)->take($limit)->get();
             $star = $list->last()->id;
             $bar->advance($list->count());
             collect($list)->each(function ($article) {
