@@ -86,20 +86,18 @@ class BaiduAiCategoryJob implements ShouldQueue
                         ]);
                         $result = $response->object();
 
-                        if ($result && isset($result->item)) {
-                            // 设置分类
-                            $topic = collect($result->item->lv1_tag_list)->first();
-                            $category = $this->getCategory($topic->tag);
-                            $this->article->category_id = $category->id;
-                            $this->article->save();
+                        // 设置分类
+                        $topic = collect($result->item->lv1_tag_list)->first();
+                        $category = $this->getCategory($topic->tag);
+                        $this->article->category_id = $category->id;
+                        $this->article->save();
 
-                            // 设置 TAGS
-                            if ($result->item->lv2_tag_list) {
-                                $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                                    return $val->tag;
-                                })->toArray();
-                                $this->subQuery()->update(['tags' => implode(',', $tags)]);
-                            }
+                        // 设置 TAGS
+                        if ($result->item->lv2_tag_list) {
+                            $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                                return $val->tag;
+                            })->toArray();
+                            $this->subQuery()->update(['tags' => implode(',', $tags)]);
                         }
                     }
                 } catch (\Exception $exception) {
