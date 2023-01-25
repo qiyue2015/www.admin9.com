@@ -211,7 +211,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_category'],
                 'balance' => 'auto',
-                'processes' => 3,
+                'processes' => 1,
                 'tries' => 1,
                 'timeout' => 120,
             ],
