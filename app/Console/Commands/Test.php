@@ -41,6 +41,9 @@ class Test extends Command
                 'title' => $row->title,
             ];
         }
+
+        $data[] = ['id' => '-', 'title' => count($list)];
+
         $this->table(['id' => 'ID', 'title' => '标题'], $data);
 
         //$list = Article::whereFullText('title', $keyword, ['mode' => 'boolean'])->take(10);
