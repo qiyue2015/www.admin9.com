@@ -33,8 +33,15 @@ class Test extends Command
 
         $this->info($keyword);
 
-        $list = Article::search($keyword)->take(20)->get();
-        dd($list);
+        $list = Article::search($keyword)->take(200)->get();
+        $data = [];
+        foreach ($list as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'title' => $row->title,
+            ];
+        }
+        $this->table(['id' => 'ID', 'title' => '标题'], $data);
 
         //$list = Article::whereFullText('title', $keyword, ['mode' => 'boolean'])->take(10);
         //dd($list->get(['id', 'title'])->toArray());
