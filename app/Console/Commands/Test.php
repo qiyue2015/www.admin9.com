@@ -30,8 +30,14 @@ class Test extends Command
     public function handle(): void
     {
         $keyword = $this->argument('keyword');
-        $list = Article::whereFullText('title', $keyword, ['mode' => 'boolean'])->take(10);
-        dd($list->get(['id', 'title'])->toArray());
+
+        $this->info($keyword);
+
+        $list = Article::search($keyword)->take(20)->get();
+        dd($list);
+
+        //$list = Article::whereFullText('title', $keyword, ['mode' => 'boolean'])->take(10);
+        //dd($list->get(['id', 'title'])->toArray());
         //$path = '/Users/fengqiyue/Documents/Project/caishengfeiyang/tv/videos';
         //$files = \File::files($path);
         //foreach ($files as $file) {
