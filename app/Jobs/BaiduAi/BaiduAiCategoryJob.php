@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class BaiduAiCategoryJob implements ShouldQueue
@@ -86,6 +87,7 @@ class BaiduAiCategoryJob implements ShouldQueue
                     ]);
                     $result = $response->object();
                     if (isset($result->error_code)) {
+                        Log::info($content);
                         throw new RuntimeException($response->body());
                     }
 
