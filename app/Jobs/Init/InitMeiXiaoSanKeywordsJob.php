@@ -62,7 +62,7 @@ class InitMeiXiaoSanKeywordsJob implements ShouldQueue
                     'title' => Str::limit($this->article->title, 80, ''),
                     'content' => $description,
                 ]);
-            try {
+            if ($response->object()->code !== 0) {
                 $content = $response->object()->data;
                 $keywords = str_replace('未提取到关键词!', '', $content->newtext);
                 $this->article->update([
@@ -70,9 +70,6 @@ class InitMeiXiaoSanKeywordsJob implements ShouldQueue
                     'keywords' => $keywords,
                     'description' => $description,
                 ]);
-            } catch (\Exception $exception) {
-                Log::error('xxxx:'.$response->body());
-                $this->fail($exception);
             }
         }
     }
