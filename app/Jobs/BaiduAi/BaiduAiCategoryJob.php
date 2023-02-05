@@ -13,9 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
-use mysql_xdevapi\Exception;
+use RuntimeException;
 
 class BaiduAiCategoryJob implements ShouldQueue
 {
@@ -87,7 +85,7 @@ class BaiduAiCategoryJob implements ShouldQueue
                     ]);
                     $result = $response->object();
                     if (isset($result->error_code)) {
-                        throw new Exception($result->body());
+                        throw new RuntimeException($result->body());
                     }
 
                     // 设置分类
