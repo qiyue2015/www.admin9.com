@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class BaiduAiCategoryJob implements ShouldQueue
@@ -84,6 +85,9 @@ class BaiduAiCategoryJob implements ShouldQueue
                         'content' => $content,
                     ]);
                     $result = $response->object();
+                    if (is_null($result)) {
+                        Log::debug($response->body());
+                    }
 
                     // 设置分类
                     $topic = collect($result->item->lv1_tag_list)->first();
