@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', static function () {
     $news = cache()->remember('home:list', now()->addMinutes(5), function () {
-        return Article::checked()->take(90)->get();
+        return Article::checked()
+            ->orderByDesc('id')
+            ->take(90)
+            ->get();
     });
     return view('welcome', compact('news'));
 });
