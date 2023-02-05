@@ -59,6 +59,7 @@ class Article extends Model
         $array['title'] = $this->title;
         $array['description'] = $this->description;
         $array['keywords'] = $this->keywords;
+        $array['category_id'] = $this->category_id;
         return $array;
     }
 
