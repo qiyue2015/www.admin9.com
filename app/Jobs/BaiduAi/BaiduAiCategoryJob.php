@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use mysql_xdevapi\Exception;
 
 class BaiduAiCategoryJob implements ShouldQueue
 {
@@ -85,7 +86,9 @@ class BaiduAiCategoryJob implements ShouldQueue
                         'content' => $content,
                     ]);
                     $result = $response->object();
-                    Log::debug($response->body());
+                    if (isset($result->error_code)) {
+                        throw new Exception($result->body());
+                    }
 
                     // 设置分类
                     $topic = collect($result->item->lv1_tag_list)->first();
