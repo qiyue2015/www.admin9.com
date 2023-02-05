@@ -80,7 +80,7 @@ class BaiduAiCategoryJob implements ShouldQueue
                     $content = trim($content);
                     $content = preg_replace("/s+/", " ", $content);
                     $content = str($content)->limit(1000);
-                    Log::info($content);
+                    Log::error($content);
                     $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
                     $response = Http::asJson()->post($url, [
                         'title' => $this->article->title,
