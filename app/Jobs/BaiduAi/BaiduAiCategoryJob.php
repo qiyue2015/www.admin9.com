@@ -72,41 +72,39 @@ class BaiduAiCategoryJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->article->title && $this->article->description) {
+        // 取副表内容
+        $subItem = $this->subQuery()->first();
+        if ($this->article->title && $subItem) {
             try {
-                // 取副表内容
-                $subItem = $this->subQuery()->first();
-                if ($subItem) {
-                    $content = strip_tags($subItem->content);
-                    $content = trim($content);
-                    $content = preg_replace("[\r\n|\r|\t|\s]", " ", $content);
-                    $content = $this->deleteHtml($content);
+                $content = strip_tags($subItem->content);
+                $content = trim($content);
+                $content = preg_replace("[\r\n|\r|\t|\s]", " ", $content);
+                $content = $this->deleteHtml($content);
 
-                    $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
-                    $data = [
-                        'title' => Str::limit($this->article->title, 40, ''),
-                        'content' => Str::limit($content, 3000),
-                    ];
-                    $response = Http::asJson()->post($url, $data);
-                    $result = $response->object();
-                    if (isset($result->error_code)) {
-                        Log::error($result->error_msg, $data);
-                        throw new RuntimeException($response->body());
-                    }
+                $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
+                $data = [
+                    'title' => Str::limit($this->article->title, 40, ''),
+                    'content' => Str::limit($content, 3000),
+                ];
+                $response = Http::asJson()->post($url, $data);
+                $result = $response->object();
+                if (isset($result->error_code)) {
+                    Log::error($result->error_msg, $data);
+                    throw new RuntimeException($response->body());
+                }
 
-                    // 设置分类
-                    $topic = collect($result->item->lv1_tag_list)->first();
-                    $category = $this->getCategory($topic->tag);
-                    $this->article->category_id = $category->id;
-                    $this->article->save();
+                // 设置分类
+                $topic = collect($result->item->lv1_tag_list)->first();
+                $category = $this->getCategory($topic->tag);
+                $this->article->category_id = $category->id;
+                $this->article->save();
 
-                    // 设置 TAGS
-                    if ($result->item->lv2_tag_list) {
-                        $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                            return $val->tag;
-                        })->toArray();
-                        $this->subQuery()->update(['tags' => implode(',', $tags)]);
-                    }
+                // 设置 TAGS
+                if ($result->item->lv2_tag_list) {
+                    $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                        return $val->tag;
+                    })->toArray();
+                    $this->subQuery()->update(['tags' => implode(',', $tags)]);
                 }
             } catch (\Exception $exception) {
                 $this->fail($exception);
