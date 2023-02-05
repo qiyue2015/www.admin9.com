@@ -65,6 +65,16 @@ class InitMeiXiaoSanKeywordsJob implements ShouldQueue
             if ($response->object()->code !== 0) {
                 $content = $response->object()->data;
                 $keywords = str_replace('未提取到关键词!', '', $content->newtext);
+                if ($keywords) {
+                    $keywords = explode(',', $keywords);
+                    $newtext = [];
+                    foreach ($keywords as $key => $word) {
+                        if ($key < 3) {
+                            $newtext[] = $word;
+                        }
+                    }
+                    $keywords = implode(',', $newtext);
+                }
                 $this->article->update([
                     'status' => 1,
                     'keywords' => $keywords,
