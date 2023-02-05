@@ -85,7 +85,7 @@ class BaiduAiCategoryJob implements ShouldQueue
                     ]);
                     $result = $response->object();
                     if (isset($result->error_code)) {
-                        throw new RuntimeException($result->body());
+                        throw new RuntimeException($response->body());
                     }
 
                     // 设置分类
