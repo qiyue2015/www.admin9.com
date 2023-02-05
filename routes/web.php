@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', static function () {
     $news = cache()->remember('home:list', now()->endOfMinute(), function () {
         return Article::checked()
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')
             ->take(90)
             ->get();
     });
