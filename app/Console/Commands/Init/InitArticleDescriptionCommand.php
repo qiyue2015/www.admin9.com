@@ -50,7 +50,7 @@ class InitArticleDescriptionCommand extends Command
                     $subTable = 'articles_'.($row->id % 10);
                     $sub = DB::table($subTable)->where('id', $row->id)->first();
                     $content = trim(strip_tags($sub->content));
-                    if (is_null($content)) {
+                    if (empty($content)) {
                         return;
                     }
 

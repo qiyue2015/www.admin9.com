@@ -78,7 +78,6 @@ class BaiduAiCategoryJob implements ShouldQueue
             try {
                 $content = strip_tags($subItem->content);
                 $content = trim($content);
-                $content = preg_replace("[\r\n|\r|\t|\s]", " ", $content);
                 $content = $this->deleteHtml($content);
 
                 $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
