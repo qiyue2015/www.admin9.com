@@ -85,12 +85,14 @@ class BaiduAiCategoryJob implements ShouldQueue
                     Log::error('xxx', [$content]);
 
                     $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
-                    $response = Http::asJson()->post($url, [
+                    $data = [
                         'title' => $this->article->title,
                         'content' => Str::limit($content, 1000),
-                    ]);
+                    ];
+                    $response = Http::asJson()->post($url, );
                     $result = $response->object();
                     if (isset($result->error_code)) {
+                        Log::error($result->error_msg, $data);
                         throw new RuntimeException($response->body());
                     }
 
