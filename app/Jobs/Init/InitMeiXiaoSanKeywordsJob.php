@@ -62,9 +62,10 @@ class InitMeiXiaoSanKeywordsJob implements ShouldQueue
                     'content' => $description,
                 ]);
             $content = $response->object()->data;
+            $keywords = str_replace('未提取到关键词!', '', $content->newtext);
             $this->article->update([
                 'status' => 1,
-                'keywords' => $content->newtext === '未提取到关键词!' ? '' : $content->newtext,
+                'keywords' => $keywords,
                 'description' => $description,
             ]);
         }
