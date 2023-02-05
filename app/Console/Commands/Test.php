@@ -32,7 +32,10 @@ class Test extends Command
         $keyword = $this->argument('keyword');
 
         $item = Article::findOrFail(1);
-        $item->update(['description' => '北京时间10月10日晚，诺贝尔经济学奖得主揭晓。和去年一样，2022年的诺贝尔经济学奖依然是三人共享。']);
+        $item->update([
+            'keywords' => '诺贝尔经济学奖',
+            'description' => '北京时间10月10日晚，诺贝尔经济学奖得主揭晓。和去年一样，2022年的诺贝尔经济学奖依然是三人共享。',
+        ]);
 
         $this->info($keyword);
         return;
