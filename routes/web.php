@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', static function () {
-    $news = cache()->remember('home:list', now()->addMinutes(5), function () {
+    $news = cache()->remember('home', now()->addMinutes(5), function () {
         return Article::checked()
             ->orderByDesc('id')
             ->take(90)
