@@ -79,13 +79,15 @@ class BaiduAiCategoryJob implements ShouldQueue
                 if ($subItem) {
                     $content = strip_tags($subItem->content);
                     $content = trim($content);
-                    $content = preg_replace("/s+/", " ", $content);
+                    $content = preg_replace("[\r\n|\r|\t|\s]", " ", $content);
+                    $content = $this->deleteHtml($content);
                     $content = Str::limit($content, 1000);
                     Log::error('xxx', [$content]);
+
                     $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
                     $response = Http::asJson()->post($url, [
                         'title' => $this->article->title,
-                        'content' => $content,
+                        'content' => Str::limit($content, 1000),
                     ]);
                     $result = $response->object();
                     if (isset($result->error_code)) {
@@ -113,5 +115,17 @@ class BaiduAiCategoryJob implements ShouldQueue
             $this->article->checked = 0;
             $this->article->save();
         }
+    }
+
+    private function deleteHtml($str): string
+    {
+        $str = trim($str); //清除字符串两边的空格
+        $str = preg_replace("/\t/", "", $str); //使用正则表达式替换内容，如：空格，换行，并将替换为空。
+        $str = preg_replace("/\r\n/", "", $str);
+        $str = preg_replace("/\r/", "", $str);
+        $str = preg_replace("/\n/", "", $str);
+        $str = preg_replace("/ /", "", $str);
+        $str = preg_replace("/  /", "", $str);  //匹配html中的空格
+        return trim($str); // 返回字符串
     }
 }
