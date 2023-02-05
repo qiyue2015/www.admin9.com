@@ -194,7 +194,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_article'],
                 'balance' => 'auto',
-                'maxProcesses' => 50,
+                'maxProcesses' => 30,
                 'minProcesses' => 10,
                 'tries' => 1,
                 'timeout' => 120,

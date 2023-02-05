@@ -35,7 +35,7 @@ class InitMeiXiaoSanKeywords extends Command
         $bar = $this->output->createProgressBar($count);
         $star = 0;
         while ($star < $lastId) {
-            $list = $this->query()->where('id', '>', $star)->take(10)->get(['id', 'title']);
+            $list = $this->query()->where('id', '>', $star)->take(500)->get(['id', 'title']);
             $star = $list->last()->id;
             $bar->advance($list->count());
             collect($list)->each(function ($article) {
