@@ -85,9 +85,7 @@ class BaiduAiCategoryJob implements ShouldQueue
                         'content' => $content,
                     ]);
                     $result = $response->object();
-                    if (is_null($result)) {
-                        Log::debug($response->body());
-                    }
+                    Log::debug($response->body());
 
                     // 设置分类
                     $topic = collect($result->item->lv1_tag_list)->first();
