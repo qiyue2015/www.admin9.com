@@ -44,7 +44,7 @@ class BaiduAiDescriptionJob implements ShouldQueue
                 $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/news_summary?access_token=&charset=UTF-8&access_token='.$this->getToken();
                 $data = [
                     'title' => Str::limit($this->article->title, 40, ''),
-                    'content' => Str::limit($this->content, 2000),
+                    'content' => Str::limit($this->content, 1000),
                     'max_summary_len' => 150,
                 ];
                 $response = Http::asJson()->post($url, $data);
