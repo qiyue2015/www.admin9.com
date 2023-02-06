@@ -37,6 +37,8 @@ class BaiduAiExtractCommand extends Command
         $bar = $this->output->createProgressBar($list->count());
         collect($list)->each(function ($article) use ($bar) {
             $bar->advance();
+
+            // 副表取内容
             $subtable = 'articles_'.$article->id % 10;
             $item = DB::table($subtable)->where('id', $article->id)->first();
             if ($item && $item->content) {
@@ -50,12 +52,12 @@ class BaiduAiExtractCommand extends Command
                 }
 
                 // 处理摘要
-                if (in_array($article->status, [1, 4])) {
+                if (in_array($article->status, [0, 1, 3, 4])) {
                     BaiduAiDescriptionJob::dispatch($article, $content)->onQueue('just_for_description');
                 }
 
                 // 关键词提取
-                //if (in_array($article->status, [1, 3])) {
+                //if (in_array($article->status, [0, 1, 2, 3])) {
                 //    $this->info('处理关键词');
                 //}
             } else {
