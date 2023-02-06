@@ -21,34 +21,27 @@ class BaiduAiCategoryJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string $key = 'jcTPUIkefcCLgxQbF5DVz9By';
+    protected Article $article;
 
-    protected string $secret = '6Kdm7fbNEOAeGqOzqCBV2UuEtbyLLjna';
-
-    private Article $article;
+    protected string $content;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Article $article)
+    public function __construct(Article $article, string $content)
     {
         $this->article = $article;
+        $this->content = $content;
     }
 
     private function getToken()
     {
-        return Cache::remember('baidu-ai-token', now()->addDays(30), function () {
-            $url = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id='.$this->key.'&client_secret='.$this->secret;
+        return Cache::remember('baidu-ai-token', now()->addDays(30), static function () {
+            $url = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id='.config('baidu-ai.nlp.key').'&client_secret='.config('baidu-ai.nlp.secret');
             return Http::get($url)->json('access_token');
         });
-    }
-
-    private function subQuery(): \Illuminate\Database\Query\Builder
-    {
-        $subtable = 'articles_'.$this->article->id % 10;
-        return DB::table($subtable)->where('id', $this->article->id);
     }
 
     public function getCategory($name)
@@ -72,23 +65,17 @@ class BaiduAiCategoryJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // 取副表内容
-        $subItem = $this->subQuery()->first();
-        if ($this->article->title && $subItem) {
+        if ($this->article->title && $this->content) {
             try {
-                $content = strip_tags($subItem->content);
-                $content = trim($content);
-                $content = $this->deleteHtml($content);
-
                 $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/topic?charset=UTF-8&access_token='.$this->getToken();
                 $data = [
                     'title' => Str::limit($this->article->title, 40, ''),
-                    'content' => Str::limit($content, 3000),
+                    'content' => Str::limit($this->content, 3000),
                 ];
                 $response = Http::asJson()->post($url, $data);
                 $result = $response->object();
                 if (isset($result->error_code)) {
-                    Log::error($result->error_msg, $data);
+                    Log::error('[提取分类]'.$result->error_msg, $data);
                     throw new RuntimeException($response->body());
                 }
 
@@ -96,14 +83,19 @@ class BaiduAiCategoryJob implements ShouldQueue
                 $topic = collect($result->item->lv1_tag_list)->first();
                 $category = $this->getCategory($topic->tag);
                 $this->article->category_id = $category->id;
-                $this->article->save();
+                $this->article->increment('status', 1, [
+                    'category_id' => $category->id,
+                ]);
 
                 // 设置 TAGS
                 if ($result->item->lv2_tag_list) {
-                    $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                        return $val->tag;
-                    })->toArray();
-                    $this->subQuery()->update(['tags' => implode(',', $tags)]);
+                    $tags = collect($result->item->lv2_tag_list)
+                            ->map(function ($val) {
+                                return $val->tag;
+                            });
+                    DB::table('articles_'.($this->article->id % 10))->update([
+                        'tags' => implode(',', $tags->toArray()),
+                    ]);
                 }
             } catch (\Exception $exception) {
                 $this->fail($exception);
