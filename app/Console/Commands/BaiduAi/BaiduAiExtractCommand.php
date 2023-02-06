@@ -63,6 +63,6 @@ class BaiduAiExtractCommand extends Command
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
     {
-        return Article::query()->where('status', '<', 3);
+        return Article::query()->checked()->where('status', '<', 3);
     }
 }
