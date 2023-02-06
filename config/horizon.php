@@ -215,19 +215,6 @@ return [
                 'tries' => 1,
                 'timeout' => 120,
             ],
-            'just_for_train' => [
-                'connection' => 'redis',
-                'queue' => ['just_for_train'],
-                'balance' => 'auto',
-                'processes' => 1,
-                'tries' => 1,
-                'timeout' => 120,
-            ],
-            'just_for_dataset' => [
-                'connection' => 'redis',
-                'queue' => ['just_for_dataset'],
-                'processes' => 2,
-            ],
         ],
 
         'local' => [
@@ -238,8 +225,6 @@ return [
                     'just_for_article',
                     'just_for_category',
                     'just_for_description',
-                    'just_for_train',
-                    'just_for_dataset',
                 ],
                 'maxProcesses' => 10,
             ],
