@@ -49,18 +49,25 @@ class Article extends Model
     protected $guarded = [];
 
     /**
-     * 获取模型的可索引的数据。
-     *
+     * 获取模型的可索引的数据
      * @return array
      */
     public function toSearchableArray(): array
     {
-        $array = [];
-        $array['title'] = $this->title;
-        $array['description'] = $this->description;
-        $array['keywords'] = $this->keywords;
-        $array['category_id'] = $this->category_id;
-        return $array;
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'keywords' => $this->keywords,
+            'category' => [
+                'id' => $this->id,
+                'name' => $this->category->name,
+            ],
+        ];
+    }
+
+    public function searchable(): bool
+    {
+        return $this->checked === 1 && $this->category_id > 0;
     }
 
     public function category(): BelongsTo
