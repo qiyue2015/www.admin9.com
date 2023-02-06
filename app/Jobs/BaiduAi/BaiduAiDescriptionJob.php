@@ -59,8 +59,10 @@ class BaiduAiDescriptionJob implements ShouldQueue
                         throw new \RuntimeException($response->body());
                     }
                 } else {
+                    $pattern = '/^(第?)[一二三四五六七八九十0-9]+[，,、：:\s]/u';
+                    $description = preg_replace($pattern, '', $result->summary);
                     $this->article->increment('status', 2, [
-                        'description' => $result->summary,
+                        'description' => $description,
                     ]);
                 }
             } catch (\Exception $exception) {
