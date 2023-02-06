@@ -39,9 +39,9 @@ class BaiduAiExtractCommand extends Command
             $bar->advance();
             $subtable = 'articles_'.$article->id % 10;
             $item = DB::table($subtable)->where('id', $article->id)->first();
-            if ($item) {
+            if ($item && $item->content) {
                 // 清空html和多余空格换车
-                $string = str_replace([' ', '\t', '\r\n', '\r', '\n'], "", strip_tags($text));
+                $string = str_replace([' ', '\t', '\r\n', '\r', '\n'], "", strip_tags($item->content));
                 $content = trim($string);
 
                 // 处理分类
@@ -58,6 +58,8 @@ class BaiduAiExtractCommand extends Command
                 //if (in_array($article->status, [1, 3])) {
                 //    $this->info('处理关键词');
                 //}
+            } else {
+                $article->update(['checked' => false]);
             }
         });
     }
