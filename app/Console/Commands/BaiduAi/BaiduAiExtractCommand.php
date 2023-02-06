@@ -32,9 +32,6 @@ class BaiduAiExtractCommand extends Command
      */
     public function handle(): void
     {
-
-        Log::debug('baidu-ai:extract --limit=100');
-
         $limit = (int) $this->option('limit');
         $list = $this->query()->take($limit)->get();
         $bar = $this->output->createProgressBar($list->count());

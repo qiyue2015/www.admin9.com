@@ -18,8 +18,6 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        Log::debug('command schedule xxxxx');
-
         // 每分钟运行一次采集
         $schedule->command('spider:yebaike')
             ->everyMinute()
