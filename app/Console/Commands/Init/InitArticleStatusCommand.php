@@ -37,16 +37,13 @@ class InitArticleStatusCommand extends Command
         $star = 0;
         $lastId = Article::checked()->max('id');
         while ($star < $lastId) {
-            $list = Article::checked()
-                ->where('id', '>', $star)
-                ->where('status', '<', 3)
-                ->take(2000)
-                ->get();
-
+            $list = Article::checked()->where('id', '>', $star)->take(2000)->get();
             $bar->advance($list->count());
             $star = $list->last()->id;
 
-            $update = []; // 相同状态放到一个数组里
+            // 相同状态放到一个数组里
+            $update = [];
+
             foreach ($list as $row) {
                 $status = 0;
 
