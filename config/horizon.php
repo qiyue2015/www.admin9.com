@@ -199,17 +199,25 @@ return [
                 'tries' => 1,
                 'timeout' => 120,
             ],
-            'just_for_train' => [
+            'just_for_category' => [
                 'connection' => 'redis',
-                'queue' => ['just_for_train'],
+                'queue' => ['just_for_category'],
                 'balance' => 'auto',
                 'processes' => 1,
                 'tries' => 1,
                 'timeout' => 120,
             ],
-            'just_for_category' => [
+            'just_for_description' => [
                 'connection' => 'redis',
                 'queue' => ['just_for_category'],
+                'balance' => 'auto',
+                'processes' => 4,
+                'tries' => 1,
+                'timeout' => 120,
+            ],
+            'just_for_train' => [
+                'connection' => 'redis',
+                'queue' => ['just_for_train'],
                 'balance' => 'auto',
                 'processes' => 1,
                 'tries' => 1,
@@ -225,23 +233,15 @@ return [
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [
+                    'default',
+                    'just_for_article',
+                    'just_for_category',
+                    'just_for_description',
+                    'just_for_train',
+                    'just_for_dataset',
+                ],
                 'maxProcesses' => 10,
-            ],
-            'just_for_article' => [
-                'connection' => 'redis',
-                'queue' => ['just_for_article'],
-                'maxProcesses' => 80,
-            ],
-            'just_for_train' => [
-                'connection' => 'redis',
-                'queue' => ['just_for_train'],
-                'maxProcesses' => 50,
-            ],
-            'just_for_dataset' => [
-                'connection' => 'redis',
-                'queue' => ['just_for_dataset'],
-                'processes' => 2,
             ],
         ],
     ],
