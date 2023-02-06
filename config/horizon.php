@@ -209,7 +209,7 @@ return [
             ],
             'just_for_description' => [
                 'connection' => 'redis',
-                'queue' => ['just_for_category'],
+                'queue' => ['just_for_description'],
                 'balance' => 'auto',
                 'processes' => 4,
                 'tries' => 1,
