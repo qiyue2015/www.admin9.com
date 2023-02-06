@@ -3,9 +3,7 @@
 namespace App\Console\Commands\Init;
 
 use App\Models\Article;
-use App\Models\Dataset;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class InitArticleStatusCommand extends Command
 {
