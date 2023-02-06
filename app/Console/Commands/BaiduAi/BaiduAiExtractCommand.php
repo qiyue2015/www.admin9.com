@@ -7,6 +7,7 @@ use App\Jobs\BaiduAi\BaiduAiDescriptionJob;
 use App\Models\Article;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BaiduAiExtractCommand extends Command
 {
@@ -31,6 +32,9 @@ class BaiduAiExtractCommand extends Command
      */
     public function handle(): void
     {
+
+        Log::debug('baidu-ai:extract --limit=100');
+
         $limit = (int) $this->option('limit');
         $list = $this->query()->take($limit)->get();
         $bar = $this->output->createProgressBar($list->count());
