@@ -55,7 +55,7 @@ class InitArticleStatusCommand extends Command
                 // 有摘要
                 if ($row->description) {
                     $status += 2;
-                    $pattern = '/^(第?)[一二三四五六七八九十0-9]+[，,、：:\s]/u';
+                    $pattern = '/^(第?)[一二三四五六七八九十0-9]+[，,、：:.\s]/u';
                     if (preg_match($pattern, $row->description, $matches)) {
                         $description = preg_replace($pattern, '', $row->description);
                         $row->update(['description' => $description]);
