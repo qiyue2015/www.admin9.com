@@ -60,7 +60,6 @@ class InitArticleStatusCommand extends Command
                         $description = preg_replace($pattern, '', $row->description);
                         $row->update(['description' => $description]);
                     }
-                    continue;
                 }
 
                 // 有关键词
