@@ -56,6 +56,7 @@ class SpiderYeBaikeJob implements ShouldQueue
                 'keywords' => '',
                 'description' => '',
                 'checked' => true,
+                'status' => 0,
                 'cover_url' => $cover_url,
                 'source_name' => '',
                 'author_name' => '',
