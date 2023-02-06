@@ -50,13 +50,19 @@ class BaiduAiDescriptionJob implements ShouldQueue
                 $response = Http::asJson()->post($url, $data);
                 $result = $response->object();
                 if (isset($result->error_code)) {
-                    Log::error('[提取摘要]'.$result->error_msg, $data);
-                    throw new \RuntimeException($response->body());
+                    // token 过期
+                    if ($result->error_code === 110) {
+                        cache()->delete('baidu-ai-token');
+                        $this->release(10);
+                    } else {
+                        Log::error('[提取摘要]'.$result->error_msg, $data);
+                        throw new \RuntimeException($response->body());
+                    }
+                } else {
+                    $this->article->increment('status', 2, [
+                        'description' => $result->summary,
+                    ]);
                 }
-
-                $this->article->increment('status', 2, [
-                    'description' => $result->summary,
-                ]);
             } catch (\Exception $exception) {
                 $this->fail($exception);
             }
