@@ -48,6 +48,8 @@ class Article extends Model
 
     protected $guarded = [];
 
+    protected $with = ['category'];
+
     /**
      * 获取模型的可索引的数据
      * @return array
