@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
 
 class BaiduAiCategoryJob implements ShouldQueue
@@ -75,27 +76,33 @@ class BaiduAiCategoryJob implements ShouldQueue
                 $response = Http::asJson()->post($url, $data);
                 $result = $response->object();
                 if (isset($result->error_code)) {
-                    Log::error('[提取分类]'.$result->error_msg, $data);
-                    throw new RuntimeException($response->body());
-                }
+                    // token 过期
+                    if ($result->error_code === 110) {
+                        cache()->delete('baidu-ai-token');
+                        $this->release(10);
+                    } else {
+                        Log::error('[提取分类]'.$result->error_msg, $data);
+                        throw new RuntimeException($response->body());
+                    }
+                } else {
+                    // 设置分类
+                    $topic = collect($result->item->lv1_tag_list)->first();
+                    $category = $this->getCategory($topic->tag);
+                    $this->article->category_id = $category->id;
+                    $this->article->increment('status', 1, [
+                        'category_id' => $category->id,
+                    ]);
 
-                // 设置分类
-                $topic = collect($result->item->lv1_tag_list)->first();
-                $category = $this->getCategory($topic->tag);
-                $this->article->category_id = $category->id;
-                $this->article->increment('status', 1, [
-                    'category_id' => $category->id,
-                ]);
-
-                // 设置 TAGS
-                if ($result->item->lv2_tag_list) {
-                    $tags = collect($result->item->lv2_tag_list)
+                    // 设置 TAGS
+                    if ($result->item->lv2_tag_list) {
+                        $tags = collect($result->item->lv2_tag_list)
                             ->map(function ($val) {
                                 return $val->tag;
                             });
-                    DB::table('articles_'.($this->article->id % 10))->update([
-                        'tags' => implode(',', $tags->toArray()),
-                    ]);
+                        DB::table('articles_'.($this->article->id % 10))->update([
+                            'tags' => implode(',', $tags->toArray()),
+                        ]);
+                    }
                 }
             } catch (\Exception $exception) {
                 $this->fail($exception);
@@ -104,17 +111,5 @@ class BaiduAiCategoryJob implements ShouldQueue
             $this->article->checked = 0;
             $this->article->save();
         }
-    }
-
-    private function deleteHtml($str): string
-    {
-        $str = trim($str); //清除字符串两边的空格
-        $str = preg_replace("/\t/", "", $str); //使用正则表达式替换内容，如：空格，换行，并将替换为空。
-        $str = preg_replace("/\r\n/", "", $str);
-        $str = preg_replace("/\r/", "", $str);
-        $str = preg_replace("/\n/", "", $str);
-        $str = preg_replace("/ /", "", $str);
-        $str = preg_replace("/  /", "", $str);  //匹配html中的空格
-        return trim($str); // 返回字符串
     }
 }
