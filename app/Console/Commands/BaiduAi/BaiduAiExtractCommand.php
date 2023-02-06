@@ -40,9 +40,9 @@ class BaiduAiExtractCommand extends Command
             $subtable = 'articles_'.$article->id % 10;
             $item = DB::table($subtable)->where('id', $article->id)->first();
             if ($item) {
-                // 清空html和多作空格
-                $string = strip_tags($item->content);
-                $content = implode(PHP_EOL, array_filter(explode(PHP_EOL, $string)));
+                // 清空html和多余空格换车
+                $string = str_replace([' ', '\t', '\r\n', '\r', '\n'], "", strip_tags($text));
+                $content = trim($string);
 
                 // 处理分类
                 if ($article->category_id === 0 && $article->status === 0) {
