@@ -45,13 +45,11 @@ class BaiduAiExtractCommand extends Command
 
                 // 处理分类
                 if ($article->category_id === 0 && $article->status === 0) {
-                    $this->info('处理分类');
                     BaiduAiCategoryJob::dispatch($article, $content)->onQueue('just_for_category');
                 }
 
-                // 其次处理摘要
+                // 处理摘要
                 if (in_array($article->status, [1, 4])) {
-                    $this->info('处理摘要');
                     BaiduAiDescriptionJob::dispatch($article, $content)->onQueue('just_for_description');
                 }
 
@@ -59,8 +57,6 @@ class BaiduAiExtractCommand extends Command
                 //if (in_array($article->status, [1, 3])) {
                 //    $this->info('处理关键词');
                 //}
-            } else {
-                $this->error('xx');
             }
         });
     }
