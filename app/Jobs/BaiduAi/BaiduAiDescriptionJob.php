@@ -45,7 +45,7 @@ class BaiduAiDescriptionJob implements ShouldQueue
                 $data = [
                     'title' => Str::limit($this->article->title, 40, ''),
                     'content' => Str::limit($this->content, 1000),
-                    'max_summary_len' => 150,
+                    'max_summary_len' => 120,
                 ];
                 $response = Http::asJson()->post($url, $data);
                 $result = $response->object();
