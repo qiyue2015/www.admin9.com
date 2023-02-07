@@ -42,6 +42,7 @@ class BaiduAiExtractCommand extends Command
             // 副表取内容
             $subtable = 'articles_'.$article->id % 10;
             $item = DB::table($subtable)->where('id', $article->id)->first();
+
             if ($item && $item->content) {
                 // 清空html和多余空格换车
                 $string = str_replace([' ', '\t', '\r\n', '\r', '\n'], "", strip_tags($item->content));
@@ -65,11 +66,11 @@ class BaiduAiExtractCommand extends Command
                 $article->update(['checked' => false]);
             }
         });
+        dd($list->toArray());
     }
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
     {
-        return Article::where('checked', 0)
-            ->where('status', '<', 6);
+        return Article::where('status', '<', 6);
     }
 }
