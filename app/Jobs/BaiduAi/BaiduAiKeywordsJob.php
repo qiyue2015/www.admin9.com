@@ -55,7 +55,7 @@ class BaiduAiKeywordsJob implements ShouldQueue
                 'content' => $this->content,
             ]);
 
-        Log::info('kywords', $response->body());
+        Log::debug($response->body());
         $keywords = $response->json('data.newtext');
         if ($keywords) {
             $this->article->increment('status', 3, [
