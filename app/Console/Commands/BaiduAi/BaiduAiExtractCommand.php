@@ -35,6 +35,9 @@ class BaiduAiExtractCommand extends Command
         $limit = (int) $this->option('limit');
         $list = $this->query()->take($limit)->get();
         $bar = $this->output->createProgressBar($list->count());
+
+        $this->info('------处理分类、摘要、关键词 STAR------');
+
         collect($list)->each(function ($article) use ($bar) {
             $bar->advance();
 
@@ -48,11 +51,13 @@ class BaiduAiExtractCommand extends Command
 
                 // 处理分类
                 if ($article->category_id === 0 && $article->status === 0) {
+                    $this->info($article->title.' -'.$article->status.' - 处理分类');
                     BaiduAiCategoryJob::dispatch($article, $content)->onQueue('just_for_category');
                 }
 
                 // 处理摘要
                 if (in_array($article->status, [0, 1, 3, 4])) {
+                    $this->info($article->title.' -'.$article->status.' - 处理摘要');
                     BaiduAiDescriptionJob::dispatch($article, $content)->onQueue('just_for_description');
                 }
 
@@ -64,6 +69,8 @@ class BaiduAiExtractCommand extends Command
                 $article->update(['checked' => false]);
             }
         });
+
+        $this->info('------处理分类、摘要、关键词 END------');
     }
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
