@@ -48,8 +48,6 @@ class Article extends Model
 
     protected $guarded = [];
 
-    protected $with = ['category'];
-
     /**
      * 获取模型的可索引的数据
      * @return array
@@ -60,10 +58,6 @@ class Article extends Model
             'title' => $this->title,
             'description' => $this->description,
             'keywords' => $this->keywords,
-            'category' => [
-                'id' => $this->id,
-                'name' => $this->category->name,
-            ],
         ];
     }
 

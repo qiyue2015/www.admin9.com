@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Article;
-
 return [
 
     /*
@@ -135,9 +133,8 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY', null),
         'index-settings' => [
-            Article::class => [
-                'filterableAttributes' => ['id', 'title', 'keywords', 'description', 'category'],
-                'sortableAttributes' => ['created_at'],
+            'articles' => [
+                'filterableAttributes' => ['id', 'title', 'keywords', 'description', 'category_id'],
             ],
         ],
     ],
