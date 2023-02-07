@@ -48,7 +48,7 @@ class BaiduAiExtractCommand extends Command
                 $content = trim($string);
 
                 // 处理分类
-                if ($article->category_id === 0 && $article->status === 0) {
+                if (in_array($article->status, [0, 2, 3])) {
                     BaiduAiCategoryJob::dispatch($article, $content)->onQueue('just_for_category');
                 }
 
@@ -65,7 +65,6 @@ class BaiduAiExtractCommand extends Command
                 $article->update(['checked' => false]);
             }
         });
-        dd($list->toArray());
     }
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
