@@ -4,6 +4,7 @@ namespace App\Console\Commands\BaiduAi;
 
 use App\Jobs\BaiduAi\BaiduAiCategoryJob;
 use App\Jobs\BaiduAi\BaiduAiDescriptionJob;
+use App\Jobs\BaiduAi\BaiduAiKeywordsJob;
 use App\Models\Article;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class BaiduAiExtractCommand extends Command
     public function handle(): void
     {
         $limit = (int) $this->option('limit');
-        $list = $this->query()->take($limit)->get();
+        $list = $this->query()->take($limit)->orderBy('id', 'DESC')->get();
         $bar = $this->output->createProgressBar($list->count());
         collect($list)->each(function ($article) use ($bar) {
             $bar->advance();
@@ -57,9 +58,9 @@ class BaiduAiExtractCommand extends Command
                 }
 
                 // 关键词提取
-                //if (in_array($article->status, [0, 1, 2, 3])) {
-                //    $this->info('处理关键词');
-                //}
+                if (in_array($article->status, [0, 1, 2, 3])) {
+                    BaiduAiKeywordsJob::dispatch($article, $content)->onQueue('just_for_description');
+                }
             } else {
                 $article->update(['checked' => false]);
             }
