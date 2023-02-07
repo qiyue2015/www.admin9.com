@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class BaiduAiKeywordsJob implements ShouldQueue
 {
@@ -54,6 +55,7 @@ class BaiduAiKeywordsJob implements ShouldQueue
                 'content' => $this->content,
             ]);
 
+        Log::info('kywords', $response->body());
         $keywords = $response->json('data.newtext');
         if ($keywords) {
             $this->article->increment('status', 3, [

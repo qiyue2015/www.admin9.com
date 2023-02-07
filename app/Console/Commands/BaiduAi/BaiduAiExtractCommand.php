@@ -66,7 +66,6 @@ class BaiduAiExtractCommand extends Command
                 $article->update(['checked' => false]);
             }
         });
-        dd($list->toArray());
     }
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
