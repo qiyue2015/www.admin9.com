@@ -9,14 +9,15 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class BaiduAiKeywordsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Article $article;
     protected string $content;
 
     /**
@@ -24,9 +25,8 @@ class BaiduAiKeywordsJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Article $article, string $content)
+    public function __construct(string $content)
     {
-        $this->article = $article;
         $this->content = $content;
     }
 
@@ -37,23 +37,15 @@ class BaiduAiKeywordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $cookies = [
-            'user_device_id' => 'aeda85d0eaf14c07b227c916a0c95d3f',
-            'user_device_id_timestamp' => now()->timestamp,
-            'PHPSESSID' => 'oge5i0avrr1riecrv6jc5sejtq',
-            'uid' => 44776,
-            'token' => 'b794cbfb-045a-4ac4-be10-6f8cc7af4c8f',
+        $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/txt_keywords_extraction?access_token='.$this->getToken();
+        $data = [
+            'text' => Str::limit($this->content, 2000),
+            'num' => 3,
         ];
-
-        $url = 'https://www.meixiaosan.com/getkeywords.html';
-        $response = Http::withoutVerifying()
-            ->timeout(20)
-            ->withCookies($cookies, '.meixiaosan.com')
-            ->withHeaders(['x-requested-with' => 'XMLHttpRequest'])
-            ->post($url, [
-                'title' => $this->article->title,
-                'content' => $this->content,
-            ]);
+        $response = Http::asJson()->post($url, $data);
+        $result = $response->json();
+        echo Str::limit($this->content, 2000);
+        dd($result, $this->getToken());
 
         Log::debug($response->body());
         $keywords = $response->json('data.newtext');
@@ -62,5 +54,20 @@ class BaiduAiKeywordsJob implements ShouldQueue
                 'keywords' => $keywords,
             ]);
         }
+    }
+
+
+    /**
+     * 获取百度TOKEN
+     *
+     * @return mixed
+     */
+    private
+    function getToken(): mixed
+    {
+        return Cache::remember('baidu-ai-token', now()->addDays(30), static function () {
+            $url = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id='.config('baidu-ai.nlp.key').'&client_secret='.config('baidu-ai.nlp.secret');
+            return Http::get($url)->json('access_token');
+        });
     }
 }
