@@ -18,6 +18,7 @@ use Laravel\Scout\Searchable;
  * @property string $description 描述
  * @property int $view_num 点击量
  * @property int $checked 已审核
+ * @property int $status
  * @property string $cover_url 封面图片
  * @property string $source_name 来源
  * @property string $author_name 作者
@@ -37,6 +38,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereKeywords($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereSourceName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereViewNum($value)
