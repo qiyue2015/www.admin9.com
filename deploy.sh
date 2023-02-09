@@ -7,7 +7,6 @@ redEcho(){
 }
 
 deployProd(){
-  su - www
   source /etc/profile
 
   redEcho "开始部署"
