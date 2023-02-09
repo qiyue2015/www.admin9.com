@@ -95,13 +95,14 @@ class BaiduAiCategoryJob implements ShouldQueue
 
                     // 设置 TAGS
                     if ($result->item->lv2_tag_list) {
-                        $tags = collect($result->item->lv2_tag_list)
-                            ->map(function ($val) {
-                                return $val->tag;
-                            });
-                        DB::table('articles_'.($this->article->id % 10))->update([
-                            'tags' => implode(',', $tags->toArray()),
-                        ]);
+                        $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                            return $val->tag;
+                        });
+                        DB::table('articles_'.($this->article->id % 10))
+                            ->where('id', $this->article->id)
+                            ->update([
+                                'tags' => implode(',', $tags->toArray()),
+                            ]);
                     }
                 }
             } catch (\Exception $exception) {
