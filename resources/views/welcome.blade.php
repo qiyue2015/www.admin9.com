@@ -11,22 +11,10 @@
     @vite(['resources/sass/app.scss'])
 
 </head>
-<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
-    <div class="absolute z-20 top-0 inset-x-0 flex justify-center overflow-hidden pointer-events-none">
-        <div class="w-[108rem] flex-none flex justify-end">
-            <picture>
-                <source srcset="https://tailwindcss.com/_next/static/media/docs@30.8b9a76a2.avif" type="image/avif">
-                <img src="https://tailwindcss.com/_next/static/media/docs@tinypng.d9e4dcdc.png" alt="" class="w-[71.75rem] flex-none max-w-none dark:hidden" decoding="async">
-            </picture>
-            <picture>
-                <source srcset="https://tailwindcss.com/_next/static/media/docs-dark@30.1a9f8cbf.avif" type="image/avif">
-                <img src="https://tailwindcss.com/_next/static/media/docs-dark@tinypng.1bbe175e.png" alt="" class="w-[90rem] flex-none max-w-none hidden dark:block" decoding="async">
-            </picture>
-        </div>
-    </div>
+<body>
     <header>
         <div class="max-w-8xl mx-auto">
-            <div class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0 flex leading-8">
+            <div class="p-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 flex leading-8">
                 <h1><a href="/" rel="home">{{ config('app.name') }}</a></h1>
             </div>
         </div>
@@ -52,9 +40,9 @@
         <div id="main"></div>
     </div>
 
-    <footer class="text-sm">
+    <footer class="footer">
         <div class="container px-4 lg:px-8">
-            <div class="py-10 sm:flex justify-between text-slate-500 dark:border-slate-200/5">
+            <div class="py-6 sm:flex justify-between text-slate-500 dark:border-slate-200/5">
                 <div class="sm:flex">
                     <p>Copyright © 2022 西昌齐跃网络科技有限责任公司.</p>
                     <p class="sm:ml-4 sm:pl-4 sm:border-l sm:border-slate-200 dark:sm:border-slate-200/5">

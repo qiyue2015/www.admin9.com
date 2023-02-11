@@ -4,6 +4,7 @@
 
 @layer base {
   body {
+    @apply antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900;
     @apply pt-24;
   }
 
@@ -95,7 +96,7 @@
 
 
 .footer {
-  @apply py-10 mt-10 text-center;
+  @apply mt-10 text-sm text-center;
 }
 
 
