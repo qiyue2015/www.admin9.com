@@ -7,7 +7,6 @@
     <meta name="keywords" content="Admin9" />
     <meta name="description" content="Admin9 是集科技、生活、教育、美食、体育、旅游、健康等为一体的综合资讯门户网站，以满足广大网民日益增长的信息资讯生活需求为目的，旨在为用户提供最新、最热、最全的资讯新闻以及百科类专业问答。" />
     <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/sass/app.scss'])
 
 </head>
