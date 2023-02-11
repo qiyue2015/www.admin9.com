@@ -81,7 +81,7 @@ class ArticleController extends Controller
             return Article::whereCategoryId($article->category_id)
                 ->where('checked', true)
                 ->orderByDesc('id')
-                ->take(10)
+                ->take(20)
                 ->get();
         });
 

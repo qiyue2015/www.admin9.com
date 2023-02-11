@@ -48,7 +48,7 @@
 @if(count($recommendeds))
         <div class="pb-8">
             <div class="text-sky-500 dark:text-sky-400 mb-2">推荐阅读</div>
-            <ul class="list-disc list-inside">
+            <ul class="list-disc list-inside md:grid md:gap-4 md:grid-cols-2">
 @foreach($recommendeds as $row)
                 <li><a href="{{ $row->link() }}" target="_blank">{{ $row->title }}</a></li>
 @endforeach
