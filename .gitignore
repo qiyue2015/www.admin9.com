@@ -17,4 +17,5 @@ yarn-error.log
 composer.lock
 yarn.lock
 .cache
-public/.user.ini
+/public/.user.ini
+/public/index.html
