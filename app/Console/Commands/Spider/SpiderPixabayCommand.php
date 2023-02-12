@@ -34,7 +34,7 @@ class SpiderPixabayCommand extends Command
         ini_set('memory_limit', -1);
         $star = 0;
         $data = [];
-        while ($star < 10) {
+        while ($star < 60) {
             $star++;
             $data[] = [
                 'tags' => '',
