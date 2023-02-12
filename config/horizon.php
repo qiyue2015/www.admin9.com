@@ -219,7 +219,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_pixabay'],
                 'balance' => 'auto',
-                'processes' => 3,
+                'processes' => 2,
                 'tries' => 1,
                 'timeout' => 120,
             ],
