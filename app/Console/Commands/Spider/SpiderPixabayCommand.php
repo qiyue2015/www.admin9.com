@@ -32,28 +32,25 @@ class SpiderPixabayCommand extends Command
     public function handle(): void
     {
         ini_set('memory_limit', -1);
-        //$star = 0;
-        //$data = [];
-        //while ($star < 30) {
-        //    $star++;
-        //    $data[] = [
-        //        'tags' => '',
-        //        'status' => 0,
-        //        'result' => '',
-        //    ];
-        //}
-        //Photo::insert($data);
+        $star = 0;
+        $data = [];
+        while ($star < 30) {
+            $star++;
+            $data[] = [
+                'tags' => '',
+                'status' => 0,
+                'result' => '',
+            ];
+        }
+        Photo::insert($data);
 
         $url = 'https://pixabay.com/api/';
-        $lastId = Photo::where('status', false)->max('id');
-        $count = Photo::where('status', false)->count();
+        $list = Photo::where('status', false)->take(100)->get();
+        $count = $list->count();
         $bar = $this->output->createProgressBar($count);
-        $star = Photo::where('status', false)->min('id');
-        while ($star <= $lastId) {
+        collect($list)->each(function ($row) use ($star, $url, $bar) {
             $bar->advance();
-            $this->info($star);
-            SpiderPixabayJob::dispatch($url, $star)->onQueue('just_for_pixabay');
-            $star++;
-        }
+            SpiderPixabayJob::dispatch($url, $row->id)->onQueue('just_for_pixabay');
+        });
     }
 }
