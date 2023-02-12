@@ -32,17 +32,17 @@ class SpiderPixabayCommand extends Command
     public function handle(): void
     {
         ini_set('memory_limit', -1);
-        //$star = 0;
-        //$data = [];
-        //while ($star < 30) {
-        //    $star++;
-        //    $data[] = [
-        //        'tags' => '',
-        //        'status' => 0,
-        //        'result' => '',
-        //    ];
-        //}
-        //Photo::insert($data);
+        $star = 0;
+        $data = [];
+        while ($star < 50) {
+            $star++;
+            $data[] = [
+                'tags' => '',
+                'status' => 0,
+                'result' => '',
+            ];
+        }
+        Photo::insert($data);
 
         $url = 'https://pixabay.com/api/';
         $list = Photo::where('status', false)->take(1000)->get();
