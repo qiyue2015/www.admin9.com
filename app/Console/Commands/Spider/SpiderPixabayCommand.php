@@ -49,10 +49,10 @@ class SpiderPixabayCommand extends Command
         $count = Photo::where('status', false)->count();
         $bar = $this->output->createProgressBar($count);
         $star = Photo::where('status', false)->min('id');
-        while ($star < $lastId) {
-            $star++;
+        while ($star <= $lastId) {
             $bar->advance();
             SpiderPixabayJob::dispatch($url, $star)->onQueue('just_for_pixabay');
+            $star++;
         }
     }
 }
