@@ -37,9 +37,11 @@ class Photo extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $guarded = [];
 
     protected $casts = [
-        'images' => 'array',
+        'result' => 'array',
     ];
 }

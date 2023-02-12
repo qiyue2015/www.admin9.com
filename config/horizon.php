@@ -215,6 +215,14 @@ return [
                 'tries' => 1,
                 'timeout' => 120,
             ],
+            'just_for_pixabay' => [
+                'connection' => 'redis',
+                'queue' => ['just_for_pixabay'],
+                'balance' => 'auto',
+                'processes' => 3,
+                'tries' => 1,
+                'timeout' => 120,
+            ],
         ],
 
         'local' => [

@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands\Spider;
 
+use App\Jobs\Spider\SpiderPixabayJob;
 use App\Models\Photo;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
+use function Clue\StreamFilter\fun;
 
 class SpiderPixabayCommand extends Command
 {
@@ -29,22 +32,27 @@ class SpiderPixabayCommand extends Command
     public function handle(): void
     {
         ini_set('memory_limit', -1);
-        $lastId = 7783570;
-        $page_size = 2000;
         $star = 0;
-        $bar = $this->output->createProgressBar($lastId);
+        $data = [];
+        while ($star < 150) {
+            $star++;
+            $data[] = [
+                'tags' => '',
+                'status' => 0,
+                'result' => '',
+            ];
+        }
+        Photo::insert($data);
+
+        $url = 'https://pixabay.com/api/';
+        $lastId = Photo::where('status', false)->max('id');
+        $count = Photo::where('status', false)->count();
+        $bar = $this->output->createProgressBar($count);
+        $star = Photo::where('status', false)->min('id');
         while ($star < $lastId) {
             $star++;
-            $bar->advance($page_size);
-            $list = [];
-            for ($i = 0; $i < $page_size; $i++) {
-                $list[] = [
-                    'tags' => '',
-                    'status' => 0,
-                    'result' => '',
-                ];
-            }
-            Photo::insert($list);
+            $bar->advance();
+            SpiderPixabayJob::dispatch($url, $star)->onQueue('just_for_pixabay');
         }
     }
 }
