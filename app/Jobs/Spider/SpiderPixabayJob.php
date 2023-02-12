@@ -45,7 +45,7 @@ class SpiderPixabayJob implements ShouldQueue
         if ($response->json('hits')) {
             $result = $response->json('hits.0');
             Photo::where('id', $this->id)->update([
-                'status' => true,
+                'status' => 2,
                 'tags' => $result['tags'],
                 'result' => $response->json(),
             ]);

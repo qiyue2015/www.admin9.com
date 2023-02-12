@@ -49,6 +49,7 @@ class SpiderPixabayCommand extends Command
         $bar = $this->output->createProgressBar($list->count());
         collect($list)->each(function ($row) use ($url, $bar) {
             $bar->advance();
+            $row->update(['status' => 1]);
             SpiderPixabayJob::dispatch($url, $row->id)->onQueue('just_for_pixabay');
         });
     }
