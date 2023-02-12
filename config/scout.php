@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Article;
+use App\Models\Photo;
+
 return [
 
     /*
@@ -133,8 +136,13 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY', null),
         'index-settings' => [
-            'articles' => [
-                'filterableAttributes' => ['id', 'title', 'keywords', 'description'],
+            Article::class => [
+                //'displayedAttributes' => ['id', 'title', 'description'],
+                //'searchableAttributes' => ['title', 'keywords', 'description'],
+            ],
+            Photo::class => [
+                //'filterableAttributes' => ['id', 'image'],
+                //'displayedAttributes' => ['id', 'tags'],
             ],
         ],
     ],

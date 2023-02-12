@@ -63,7 +63,11 @@ class Article extends Model
         ];
     }
 
-    public function searchable(): bool
+    /**
+     * 确定模型信息是否可搜索
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
     {
         return $this->checked === 1 && $this->category_id > 0;
     }
