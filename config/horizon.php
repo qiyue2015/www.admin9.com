@@ -223,6 +223,14 @@ return [
                 'tries' => 1,
                 'timeout' => 120,
             ],
+            'just_for_max_processes' => [
+                'connection' => 'redis',
+                'queue' => ['just_for_max_processes'],
+                'balance' => 'auto',
+                'processes' => 50,
+                'tries' => 1,
+                'timeout' => 120,
+            ],
         ],
 
         'local' => [
@@ -234,8 +242,9 @@ return [
                     'just_for_category',
                     'just_for_description',
                     'just_for_pixabay',
+                    'just_for_max_processes',
                 ],
-                'maxProcesses' => 10,
+                'processes' => 20,
             ],
         ],
     ],
