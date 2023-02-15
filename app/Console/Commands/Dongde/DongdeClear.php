@@ -128,14 +128,16 @@ class DongdeClear extends Command
             $bar = $this->output->createProgressBar(count($files));
             collect($files)->each(function ($file) use ($bar) {
                 $bar->advance();
-                $content = Storage::get($file);
-                $content = json_decode($content);
-                collect($content->data->data)->each(function ($item) {
-                    $data = $this->formatParams($item);
-                    dispatch(static function () use ($data, $item) {
+
+                dispatch(static function () use ($file) {
+                    $content = Storage::get($file);
+                    $content = json_decode($content);
+                    collect($content->data->data)->each(function ($item) {
+                        $data = $this->formatParams($item);
                         Dongde::where('alias', $item->alias)->update($data);
-                    })->onQueue('just_for_max_processes');
-                });
+                    });
+                })->onQueue('just_for_max_processes');
+
             });
         });
     }
