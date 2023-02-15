@@ -34,7 +34,7 @@ class SpiderPixabayCommand extends Command
         ini_set('memory_limit', -1);
         $star = 0;
         $data = [];
-        while ($star < 120) {
+        while ($star < 100) {
             $star++;
             $data[] = [
                 'tags' => '',
@@ -45,7 +45,7 @@ class SpiderPixabayCommand extends Command
         Photo::insert($data);
 
         $url = 'https://pixabay.com/api/';
-        $list = Photo::where('status', false)->take(60)->get();
+        $list = Photo::where('status', false)->take(200)->get();
         $bar = $this->output->createProgressBar($list->count());
         collect($list)->each(function ($row) use ($url, $bar) {
             $bar->advance();
