@@ -30,8 +30,8 @@ class DongdeTags extends Command
     public function handle()
     {
         ini_set('memory_limit', -1);
-        $bar = $this->output->createProgressBar(100000);
-        for ($i = 100000; $i < 200000; $i++) {
+        $bar = $this->output->createProgressBar(199044);
+        for ($i = 1; $i <= 199044; $i++) {
             $bar->advance();
 
             // 队例执行
@@ -56,7 +56,7 @@ class DongdeTags extends Command
                     // 写入文件
                     Storage::put($path, $response->body());
                 }
-            });
+            })->onQueue('just_for_max_processes');
         }
     }
 }
