@@ -20,6 +20,15 @@ class DtimeLinks implements ShouldQueue
     protected string $urlHash;
 
     /**
+     * DtimeLinks
+     * @return array
+     */
+    public function tags(): array
+    {
+        return ['render', 'links:'.$this->path];
+    }
+
+    /**
      * Create a new job instance.
      *
      * @return void
