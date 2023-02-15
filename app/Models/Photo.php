@@ -11,6 +11,19 @@ use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Photo
+ *
+ * @property int $id
+ * @property string|null $tags 标签
+ * @property int $status 状态 0待处理 1已处理
+ * @property array $result 结果
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo whereResult($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Photo whereTags($value)
+ * @mixin \Eloquent
  */
 class Photo extends Model
 {
