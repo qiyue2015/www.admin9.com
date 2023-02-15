@@ -25,7 +25,7 @@ class DtimeLinks implements ShouldQueue
      */
     public function tags(): array
     {
-        return ['render', 'links:'.$this->path];
+        return ['links'];
     }
 
     /**
