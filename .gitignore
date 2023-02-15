@@ -19,4 +19,4 @@ yarn.lock
 .cache
 /public/.user.ini
 /public/index.html
-/public/vendor/telescope
+/public/vendor
