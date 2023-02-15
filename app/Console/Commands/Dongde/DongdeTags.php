@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Dongde;
 
+use App\Jobs\Dongde\DongdeTagsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -33,30 +34,7 @@ class DongdeTags extends Command
         $bar = $this->output->createProgressBar(199044);
         for ($i = 1; $i <= 199044; $i++) {
             $bar->advance();
-
-            // 队例执行
-            dispatch(static function () use ($i) {
-                for ($p = 1; $p <= 10; $p++) {
-                    $dir = (int) ceil($i / 10000);
-                    $filename = $i.'-'.$p.'.json';
-                    $path = 'dongde/tags/'.$dir.'/'.$filename;
-
-                    // 文件存在则跳出此次循环
-                    if (Storage::exists($path)) {
-                        continue;
-                    }
-
-                    // 通过远程获取
-                    $url = 'https://m.idongde.com/t/'.$i.'/page?page='.$p;
-                    $response = Http::get($url);
-                    if (!$response->json('data.data')) {
-                        break; // 空的跳出
-                    }
-
-                    // 写入文件
-                    Storage::put($path, $response->body());
-                }
-            })->onQueue('just_for_max_processes');
+            DongdeTagsJob::dispatch($i)->onQueue('just_for_max_processes');
         }
     }
 }
