@@ -38,8 +38,8 @@ deployProd(){
        redEcho '执行数据库迁移'
        php artisan migrate --force
 
-       redEcho 'horizon:publish'
-       php artisan horizon:publish
+#       redEcho 'horizon:publish'
+#       php artisan horizon:publish
 
        redEcho '重启队列'
        php artisan horizon:terminate
