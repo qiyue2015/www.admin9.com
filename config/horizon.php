@@ -227,7 +227,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['just_for_max_processes'],
                 'balance' => 'auto',
-                'processes' => 50,
+                'processes' => 30,
                 'tries' => 1,
                 'timeout' => 120,
             ],
