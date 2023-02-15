@@ -132,9 +132,43 @@ class DongdeClear extends Command
                 dispatch(static function () use ($file) {
                     $content = Storage::get($file);
                     $content = json_decode($content);
-                    collect($content->data->data)->each(function ($item) {
-                        $data = $this->formatParams($item);
-                        Dongde::where('alias', $item->alias)->update($data);
+                    collect($content->data->data)->each(function ($params) {
+
+                        $data = [
+                            'type' => $params->type,
+                            'status' => 2,
+                            'category_id' => $params->category_id,
+                            'category_name' => $params->category_name,
+                            'channel_id' => $params->channel_id,
+                            'title' => $params->title,
+                            'subtitle' => $params->subtitle,
+                            'search_title' => $params->search_title,
+                            'toutiao_title' => $params->toutiao_title,
+                            'sogou_title' => $params->sogou_title,
+                            'description' => $params->description,
+                            'cover' => $params->cover,
+                            'publish_at' => now()->parse($params->publish_time_name),
+                            'created_at' => now()->parse($params->create_time_name),
+                            'updated_at' => now()->parse($params->update_time_name),
+                            'user_id' => 0,
+                            'dongde_id' => $params->id,
+                        ];
+
+                        if ($params->keywords) {
+                            $keywords = collect($params->keywords)->map(function ($word) {
+                                return $word->name;
+                            });
+                            $data['keywords'] = $keywords->toArray();
+                        }
+
+                        if ($params->tags) {
+                            $tags = collect($params->tags)->map(function ($tag) {
+                                return $tag->name;
+                            });
+                            $data['tags'] = implode(',', $tags->toArray());
+                        }
+
+                        Dongde::where('alias', $params->alias)->update($data);
                     });
                 })->onQueue('just_for_max_processes');
 
