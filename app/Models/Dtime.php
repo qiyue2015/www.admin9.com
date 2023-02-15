@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Dtime whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Dtime whereUrlHash($value)
  * @mixin \Eloquent
+ * @property int $status
+ * @method static \Illuminate\Database\Eloquent\Builder|Dtime whereStatus($value)
  */
 class Dtime extends Model
 {
