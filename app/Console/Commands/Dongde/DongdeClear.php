@@ -5,7 +5,6 @@ namespace App\Console\Commands\Dongde;
 use App\Models\Dongde;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use function Clue\StreamFilter\fun;
 
 class DongdeClear extends Command
 {
@@ -101,7 +100,7 @@ class DongdeClear extends Command
     private function index()
     {
         $files = Storage::allFiles('dongde/index');
-        $this->info(PHP_EOL.'categories');
+        $this->info(PHP_EOL.'index');
         $bar = $this->output->createProgressBar(count($files));
         collect($files)->each(function ($file) use ($bar) {
             $bar->advance();
