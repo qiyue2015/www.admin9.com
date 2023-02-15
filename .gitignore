@@ -17,3 +17,5 @@ yarn-error.log
 composer.lock
 yarn.lock
 .cache
+index.html
+/public/vendor/telescope
