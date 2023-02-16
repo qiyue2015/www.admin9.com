@@ -99,7 +99,7 @@ class GenerateHtml extends Command
             }
             $xml .= "\n</urlset>";
 
-            Storage::put('sitemaps/'.$filename, $xml);
+            Storage::put('public/sitemaps/'.$filename, $xml);
 
             $i++;
             $star = $list->last()->id;
