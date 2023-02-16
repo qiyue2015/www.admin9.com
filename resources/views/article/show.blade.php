@@ -7,23 +7,10 @@
     <meta name="keywords" content="{{ $article->keyboard??'' }}" />
     <meta name="description" content="{{ $article->description ?? '' }}" />
     <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/sass/app.scss'])
 
 </head>
 <body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
-<div class="absolute z-20 top-0 inset-x-0 flex justify-center overflow-hidden pointer-events-none">
-    <div class="w-[108rem] flex-none flex justify-end">
-        <picture>
-            <source srcset="https://tailwindcss.com/_next/static/media/docs@30.8b9a76a2.avif" type="image/avif">
-            <img src="https://tailwindcss.com/_next/static/media/docs@tinypng.d9e4dcdc.png" alt="" class="w-[71.75rem] flex-none max-w-none dark:hidden" decoding="async">
-        </picture>
-        <picture>
-            <source srcset="https://tailwindcss.com/_next/static/media/docs-dark@30.1a9f8cbf.avif" type="image/avif">
-            <img src="https://tailwindcss.com/_next/static/media/docs-dark@tinypng.1bbe175e.png" alt="" class="w-[90rem] flex-none max-w-none hidden dark:block" decoding="async">
-        </picture>
-    </div>
-</div>
 <header>
     <div class="max-w-8xl mx-auto">
         <div class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0 flex leading-8">
