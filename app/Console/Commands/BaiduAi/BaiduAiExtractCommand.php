@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\BaiduAi;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Jobs\BaiduAi\BaiduAiCategoryJob;
 use App\Jobs\BaiduAi\BaiduAiDescriptionJob;
 use App\Models\Article;
@@ -47,14 +48,14 @@ class BaiduAiExtractCommand extends Command
                 $string = str_replace([' ', '\t', '\r\n', '\r', '\n'], "", strip_tags($item->content));
                 $content = trim($string);
 
-                // 处理分类
-                if ($article->category_id === 0 && $article->status === 0) {
-                    BaiduAiCategoryJob::dispatch($article, $content)->CustomQueue::CATEGORY_UPDATE_QUEUE;
+                // 处理分类(暂时当作TAGS)
+                if (!$article->tags) {
+                    BaiduAiCategoryJob::dispatch($article, $content)->onQueue(CustomQueue::CATEGORY_UPDATE_QUEUE);
                 }
 
                 // 处理摘要
-                if (in_array($article->status, [0, 1, 3, 4])) {
-                    BaiduAiDescriptionJob::dispatch($article, $content)->CustomQueue::DESCRIPTION_UPDATE_QUEUE;
+                if ($article->status < 3) {
+                    BaiduAiDescriptionJob::dispatch($article, $content)->onQueue(CustomQueue::DESCRIPTION_UPDATE_QUEUE);
                 }
 
                 // 关键词提取
@@ -69,6 +70,6 @@ class BaiduAiExtractCommand extends Command
 
     private function query(): Article|\Illuminate\Database\Eloquent\Builder
     {
-        return Article::query()->checked()->where('status', '<', 3);
+        return Article::query()->checked();
     }
 }

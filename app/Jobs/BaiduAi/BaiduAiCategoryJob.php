@@ -85,25 +85,34 @@ class BaiduAiCategoryJob implements ShouldQueue
                         throw new RuntimeException($response->body());
                     }
                 } else {
+                    $lv1 = collect($result->item->lv1_tag_list)->map(function ($val) {
+                        return $val->tag;
+                    });
+                    $lv2 = collect($result->item->lv2_tag_list)->map(function ($val) {
+                        return $val->tag;
+                    });
+                    $tags = implode(',', $lv1->toArray()).'|'.implode(',', $lv2->toArray());
+                    $this->article->update(['tags' => $tags]);
+       
                     // 设置分类
-                    $topic = collect($result->item->lv1_tag_list)->first();
-                    $category = $this->getCategory($topic->tag);
-                    $this->article->category_id = $category->id;
-                    $this->article->increment('status', 1, [
-                        'category_id' => $category->id,
-                    ]);
-
-                    // 设置 TAGS
-                    if ($result->item->lv2_tag_list) {
-                        $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
-                            return $val->tag;
-                        });
-                        DB::table('articles_'.($this->article->id % 10))
-                            ->where('id', $this->article->id)
-                            ->update([
-                                'tags' => implode(',', $tags->toArray()),
-                            ]);
-                    }
+                    //$topic = collect($result->item->lv1_tag_list)->first();
+                    //$category = $this->getCategory($topic->tag);
+                    //$this->article->category_id = $category->id;
+                    //$this->article->increment('status', 1, [
+                    //    'category_id' => $category->id,
+                    //]);
+                    //
+                    //// 设置 TAGS
+                    //if ($result->item->lv2_tag_list) {
+                    //    $tags = collect($result->item->lv2_tag_list)->map(function ($val) {
+                    //        return $val->tag;
+                    //    });
+                    //    DB::table('articles_'.($this->article->id % 10))
+                    //        ->where('id', $this->article->id)
+                    //        ->update([
+                    //            'tags' => implode(',', $tags->toArray()),
+                    //        ]);
+                    //}
                 }
             } catch (\Exception $exception) {
                 $this->fail($exception);

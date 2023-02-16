@@ -61,7 +61,8 @@ class BaiduAiDescriptionJob implements ShouldQueue
                 } else {
                     $pattern = '/^(第?)[一二三四五六七八九十0-9]+[，,、：:.\s]/u';
                     $description = preg_replace($pattern, '', $result->summary);
-                    $this->article->increment('status', 2, [
+                    $this->article->update([
+                        'status' => 3,
                         'description' => str($description)->limit(200),
                     ]);
                 }
