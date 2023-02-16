@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands\Spider;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Jobs\Spider\SpiderPixabayJob;
 use App\Models\Photo;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
-use function Clue\StreamFilter\fun;
 
 class SpiderPixabayCommand extends Command
 {
@@ -50,7 +49,7 @@ class SpiderPixabayCommand extends Command
         collect($list)->each(function ($row) use ($url, $bar) {
             $bar->advance();
             $row->update(['status' => 1]);
-            SpiderPixabayJob::dispatch($url, $row->id)->onQueue('just_for_pixabay');
+            SpiderPixabayJob::dispatch($url, $row->id)->onQueue(CustomQueue::PIXABAY_INCREMENT_QUEUE);
         });
     }
 }

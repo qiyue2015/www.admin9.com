@@ -40,7 +40,7 @@ class DtimeLinks extends Command
         $bar1 = $this->output->createProgressBar(count($urls));
         collect($urls)->each(function ($url) use ($bar1) {
             $bar1->advance();
-            \App\Jobs\Dtime\DtimeLinks::dispatch($url, true)->onQueue('just_for_max_processes');
+            \App\Jobs\Dtime\DtimeLinks::dispatch($url, true)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
         });
 
         // 数据库里的链接
@@ -64,7 +64,7 @@ class DtimeLinks extends Command
 
             collect($list)->each(function ($row) use ($bar) {
                 $bar->advance();
-                \App\Jobs\Dtime\DtimeLinks::dispatch($row->url, false)->onQueue('just_for_max_processes');
+                \App\Jobs\Dtime\DtimeLinks::dispatch($row->url, false)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             });
         }
     }

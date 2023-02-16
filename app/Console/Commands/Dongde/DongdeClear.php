@@ -92,7 +92,7 @@ class DongdeClear extends Command
                 $data = $this->formatParams($item);
                 dispatch(static function () use ($data, $item) {
                     Dongde::where('alias', $item->alias)->update($data);
-                })->onQueue('just_for_max_processes');
+                })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             });
         });
     }
@@ -111,7 +111,7 @@ class DongdeClear extends Command
                     $data = $this->formatParams($item);
                     dispatch(static function () use ($data, $item) {
                         Dongde::where('alias', $item->alias)->update($data);
-                    })->onQueue('just_for_max_processes');
+                    })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
                 }
             });
         });
@@ -170,7 +170,7 @@ class DongdeClear extends Command
 
                         Dongde::where('alias', $params->alias)->update($data);
                     });
-                })->onQueue('just_for_max_processes');
+                })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
 
             });
         });

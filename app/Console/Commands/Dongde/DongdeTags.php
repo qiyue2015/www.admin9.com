@@ -34,7 +34,7 @@ class DongdeTags extends Command
         $bar = $this->output->createProgressBar(100000);
         for ($i = 200000; $i <= 300000; $i++) {
             $bar->advance();
-            DongdeTagsJob::dispatch($i)->onQueue('just_for_max_processes');
+            DongdeTagsJob::dispatch($i)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
         }
     }
 }

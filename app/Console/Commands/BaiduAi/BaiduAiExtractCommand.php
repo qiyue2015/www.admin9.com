@@ -49,12 +49,12 @@ class BaiduAiExtractCommand extends Command
 
                 // 处理分类
                 if ($article->category_id === 0 && $article->status === 0) {
-                    BaiduAiCategoryJob::dispatch($article, $content)->onQueue('just_for_category');
+                    BaiduAiCategoryJob::dispatch($article, $content)->CustomQueue::CATEGORY_UPDATE_QUEUE;
                 }
 
                 // 处理摘要
                 if (in_array($article->status, [0, 1, 3, 4])) {
-                    BaiduAiDescriptionJob::dispatch($article, $content)->onQueue('just_for_description');
+                    BaiduAiDescriptionJob::dispatch($article, $content)->CustomQueue::DESCRIPTION_UPDATE_QUEUE;
                 }
 
                 // 关键词提取

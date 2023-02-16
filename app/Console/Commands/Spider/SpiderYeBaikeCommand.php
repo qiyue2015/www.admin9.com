@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Spider;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Exceptions\FakeUserAgent;
 use App\Jobs\Spider\SpiderYeBaikeJob;
 use Illuminate\Console\Command;
@@ -47,7 +48,7 @@ class SpiderYeBaikeCommand extends Command
                     if (!Cache::get($key)) {
                         Log::channel('spider')->info($link);
                         Cache::forever($key, $link);
-                        SpiderYeBaikeJob::dispatch($link)->onQueue('just_for_article');
+                        SpiderYeBaikeJob::dispatch($link)->onQueue(CustomQueue::ARCHIVE_INCREMENT_QUEUE);
                     }
                 }
             });

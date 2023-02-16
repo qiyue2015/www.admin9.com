@@ -40,7 +40,7 @@ class DongdeIndex extends Command
             $path = 'dongde/index/'.$dir.'/'.$star.'.json';
             // 如果文件不存在，就从 API 中获取数据并写入文件
             if (!Storage::exists($path)) {
-                DongdeIndexJob::dispatch($star, $path)->onQueue('just_for_max_processes');
+                DongdeIndexJob::dispatch($star, $path)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             }
             // 继续获取下一批数据
             $i++;
