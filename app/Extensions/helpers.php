@@ -56,4 +56,10 @@ if (!function_exists('getParentCategories')) {
         return $parentCategories;
     }
 }
-
+if (!function_exists('tags_slug')) {
+    function tags_slug($string): string
+    {
+        $string = \Overtrue\Pinyin\Pinyin::permalink($string);
+        return \Conner\Tagging\TaggingUtility::slug($string);
+    }
+}
