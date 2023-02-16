@@ -92,8 +92,10 @@ class BaiduAiCategoryJob implements ShouldQueue
                         return $val->tag;
                     });
                     $tags = implode(',', $lv1->toArray()).'|'.implode(',', $lv2->toArray());
-                    $this->article->update(['tags' => $tags]);
-       
+                    $this->article->increment('status', 1, [
+                        'tags' => $tags,
+                    ]);
+
                     // 设置分类
                     //$topic = collect($result->item->lv1_tag_list)->first();
                     //$category = $this->getCategory($topic->tag);
