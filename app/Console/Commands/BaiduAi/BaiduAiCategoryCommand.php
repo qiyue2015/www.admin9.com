@@ -15,7 +15,7 @@ class BaiduAiCategoryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'baidu-ai:category';
+    protected $signature = 'baidu-ai:category {--limit=9200 : 每次执行数量}';
 
     /**
      * The console command description.
@@ -31,7 +31,8 @@ class BaiduAiCategoryCommand extends Command
      */
     public function handle()
     {
-        $list = Article::checked()->where('status', 0)->take(9200)->get();
+        $limit = (int) $this->option('limit');
+        $list = Article::checked()->where('status', 0)->take($limit)->get();
         if ($list->isNotEmpty()) {
             $bar = $this->output->createProgressBar($list->count());
             collect($list)->each(function ($article) use ($bar) {
