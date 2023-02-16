@@ -95,7 +95,7 @@ class GenerateHtml extends Command
             foreach ($list as $row) {
                 $url = 'https://www.admin9.com'.$row->link();
                 $lastmod = now()->parse($row->created_at)->format('Y-m-d');
-                $xml .= "    <url>\n        <loc>{$url}</loc>\n        <lastmod>{$lastmod}</lastmod>\n    </url>";
+                $xml .= "    <url>\n        <loc>{$url}</loc>\n        <lastmod>{$lastmod}</lastmod>\n    </url>\n";
             }
             $xml .= "\n</urlset>";
 
