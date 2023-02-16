@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
 
         // 每分钟执行 34 条，每天共 48960 条
         // TODO：百度只有 5 万条免费额度
-        //$schedule->command('baidu-ai:extract --limit=34')->everyMinute()->withoutOverlapping();
+        $schedule->command('baidu-ai:extract --limit=34')->everyMinute()->withoutOverlapping();
     }
 
     /**
