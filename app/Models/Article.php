@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Conner\Tagging\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,7 +53,8 @@ use Laravel\Scout\Searchable;
  */
 class Article extends Model
 {
-    use HasFactory, Searchable, Taggable;
+    use HasFactory, Searchable;
+    use \Conner\Tagging\Taggable;
 
     protected $guarded = [];
 
