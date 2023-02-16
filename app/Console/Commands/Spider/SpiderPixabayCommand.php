@@ -22,7 +22,7 @@ class SpiderPixabayCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '通过 Pixabay 获取图片';
 
     /**
      * Execute the console command.
