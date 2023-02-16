@@ -10,10 +10,7 @@ return [
 
     // Value of are passed through this before save of tags
     //'normalizer' => '\Conner\Tagging\TaggingUtility::slug',
-    'normalizer' => function ($string) {
-        $string = Pinyin::permalink($string);
-        return TaggingUtility::slug($string);
-    },
+    'normalizer' => 'tags_slug',
 
     // Display value of tags are passed through (for front end display)
     'displayer' => '\Illuminate\Support\Str::title',
