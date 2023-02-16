@@ -4,14 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
+    {
+        Schema::dropIfExists('tags');
+        Schema::dropIfExists('tags_lists');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
@@ -22,15 +32,10 @@ return new class extends Migration
             $table->boolean('is_good')->default(0)->comment('是否推荐');
             $table->json('extend');
         });
-    }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('tags');
+        Schema::create('tags_lists', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 };
