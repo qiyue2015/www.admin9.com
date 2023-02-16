@@ -28,9 +28,9 @@ class Kernel extends ConsoleKernel
         // 每天早上 2 点到 6 点每 5 分钟执行脚本
         $schedule->command('article:delete-same')->between('2:00', '6:00')->everyFiveMinutes()->withoutOverlapping();
 
-        // 每分钟执行 34 条，每天共 48960 条
+        // 每分钟执行
         // TODO：百度只有 5 万条免费额度
-        $schedule->command('baidu-ai:extract --limit=34')->everyMinute()->withoutOverlapping();
+        $schedule->command('baidu-ai:extract --limit=10000')->between('23:59', '5:00')->everyTwoHours()->withoutOverlapping();
     }
 
     /**
