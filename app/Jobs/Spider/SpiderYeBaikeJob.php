@@ -53,6 +53,7 @@ class SpiderYeBaikeJob implements ShouldQueue
             $data = [
                 'category_id' => 0,
                 'title' => $title,
+                'tags' => '',
                 'keywords' => '',
                 'description' => '',
                 'checked' => true,
