@@ -97,7 +97,8 @@ class BaiduAiCategoryJob implements ShouldQueue
                     ]);
 
                     // 添加TAGS
-                    $this->article->tag($tags);
+                    $newsTags = array_merge($lv1->toArray(), $lv2->toArray());
+                    $this->article->tag(array_unique($newsTags));
 
                     // 设置分类
                     //$topic = collect($result->item->lv1_tag_list)->first();
