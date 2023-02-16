@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Conner\Tagging\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,11 +43,18 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereViewNum($value)
+ * @property array $tag_names
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tagged[] $tags
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Conner\Tagging\Model\Tagged> $tagged
+ * @property-read int|null $tagged_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Article withAllTags($tagNames)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article withAnyTag($tagNames)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article withoutTags($tagNames)
  * @mixin \Eloquent
  */
 class Article extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, Taggable;
 
     protected $guarded = [];
 

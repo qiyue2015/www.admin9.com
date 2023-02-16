@@ -16,7 +16,7 @@ use Conner\Tagging\Taggable;
  * @property string|null $keywords
  * @property string|null $description
  * @property string|null $cover
- * @property string|null $images
+ * @property array|null $images
  * @property int $view_num 点击量
  * @property int $is_publish
  * @property string $publish_at
@@ -45,10 +45,6 @@ use Conner\Tagging\Taggable;
  * @method static \Illuminate\Database\Eloquent\Builder|Archive withAllTags($tagNames)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive withAnyTag($tagNames)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive withoutTags($tagNames)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Conner\Tagging\Model\Tagged> $tagged
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Conner\Tagging\Model\Tagged> $tagged
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Conner\Tagging\Model\Tagged> $tagged
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Conner\Tagging\Model\Tagged> $tagged
  * @mixin \Eloquent
  */
 class Archive extends Model
