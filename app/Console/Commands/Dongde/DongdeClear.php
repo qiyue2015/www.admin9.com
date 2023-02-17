@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Dongde;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Models\Dongde;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
