@@ -31,9 +31,10 @@ class DongdeTags extends Command
     {
         ini_set('memory_limit', -1);
         $bar = $this->output->createProgressBar(500000);
-        for ($i = 500000; $i < 1000000; $i++) {
+        for ($i = 0; $i < 1000000; $i++) {
             $bar->advance();
-            DongdeTagsJob::dispatch($i)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
+            $j = $i + 1;
+            DongdeTagsJob::dispatch($j)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
         }
     }
 }
