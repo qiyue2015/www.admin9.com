@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 
 Route::post('webhook', function (Request $request) {
-    \Illuminate\Support\Facades\Log::info('Chat GPT', ['content' => $request->post('text')]);
+    \Illuminate\Support\Facades\Log::info('Chat GPT', ['content' => $request->post()]);
     return '操作成功';
 });
 
