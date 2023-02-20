@@ -35,10 +35,10 @@ class SpiderYeBaikeCommand extends Command
     {
         $url = 'https://m.yebaike.com/e/web/?type=rss2';
         $response = Http::withoutVerifying()->withUserAgent(FakeUserAgent::random())->get($url);
-        $this->comment('开始请求：'.$url);
 
-        Log::channel('spider')->error(' -------------- Start -------------- ');
-
+        //$this->comment('开始请求：'.$url);
+        //Log::channel('spider')->error(' -------------- Start -------------- ');
+        
         if (preg_match_all('/<link>(.*?)<\/link>/', $response->body(), $matches)) {
             $bar = $this->output->createProgressBar(count($matches[1]));
             collect($matches[1])->each(function ($link) use ($bar) {
@@ -46,7 +46,7 @@ class SpiderYeBaikeCommand extends Command
                 if (str()->contains($link, '.html')) {
                     $key = 'spider:'.md5($link);
                     if (!Cache::get($key)) {
-                        Log::channel('spider')->info($link);
+                        //Log::channel('spider')->info($link);
                         Cache::forever($key, $link);
                         SpiderYeBaikeJob::dispatch($link)->onQueue(CustomQueue::ARCHIVE_INCREMENT_QUEUE);
                     }
@@ -56,6 +56,6 @@ class SpiderYeBaikeCommand extends Command
             Log::channel('spider')->error('未获得相关内容', ['content' => $response->body()]);
         }
 
-        Log::channel('spider')->error(' -------------- End -------------- '.PHP_EOL);
+        //Log::channel('spider')->error(' -------------- End -------------- '.PHP_EOL);
     }
 }
