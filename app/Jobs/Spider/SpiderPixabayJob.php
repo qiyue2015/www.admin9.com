@@ -16,7 +16,13 @@ class SpiderPixabayJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected string $url;
+
     protected int $id;
+
+    public function tags(): array
+    {
+        return ['SpiderPixabayJob'];
+    }
 
     /**
      * Create a new job instance.

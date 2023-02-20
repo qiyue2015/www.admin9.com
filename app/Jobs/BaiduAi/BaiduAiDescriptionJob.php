@@ -32,6 +32,11 @@ class BaiduAiDescriptionJob implements ShouldQueue
         $this->content = $content;
     }
 
+    public function tags(): array
+    {
+        return ['BaiduAiDescriptionJob'];
+    }
+
     /**
      * Execute the job.
      *

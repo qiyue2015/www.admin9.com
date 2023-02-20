@@ -37,6 +37,11 @@ class BaiduAiCategoryJob implements ShouldQueue
         $this->content = $content;
     }
 
+    public function tags(): array
+    {
+        return ['BaiduAiCategoryJob'];
+    }
+
     private function getToken()
     {
         return Cache::remember('baidu-ai-token', now()->addDays(30), static function () {
