@@ -186,8 +186,6 @@ return [
                 'connection' => 'redis',
                 'queue' => ['default'],
                 'balance' => 'auto',
-                'maxProcesses' => 20,
-                'minProcesses' => 1,
                 'tries' => 1,
                 'timeout' => 60,
             ],
