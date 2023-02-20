@@ -14,7 +14,6 @@
         "laravel/horizon": "^5.14",
         "laravel/sanctum": "^3.0",
         "laravel/scout": "^9.8",
-        "laravel/telescope": "^4.13",
         "laravel/tinker": "^2.7",
         "meilisearch/meilisearch-php": "^1.0",
         "overtrue/pinyin": "^5.0",
@@ -32,6 +31,7 @@
         "laravel-lang/publisher": "^14.4",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
+        "laravel/telescope": "^4.13",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
@@ -70,7 +70,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {
