@@ -202,7 +202,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [CustomQueue::CATEGORY_UPDATE_QUEUE],
                 'balance' => 'auto',
-                'processes' => 1,
+                'processes' => 4,
                 'tries' => 1,
                 'timeout' => 30,
             ],
