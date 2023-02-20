@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.debug')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
-            $this->app->register(\VIACreative\SudoSu\ServiceProvider::class);
+            //$this->app->register(\VIACreative\SudoSu\ServiceProvider::class);
         }
     }
 
