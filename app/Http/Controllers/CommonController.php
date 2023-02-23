@@ -3,12 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archive;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class CommonController extends Controller
 {
+
+    public function index()
+    {
+        $category_id = 0;
+        return view('welcome', compact('category_id'));
+    }
+
+    public function search(Request $request)
+    {
+        $title = $request->get('keywrod');
+        $list = [];
+        $category_id = 0;
+        return view('archive.search', compact('category_id', 'title', 'list'));
+    }
+
     public function cover($date, $id)
     {
         $archive = Archive::find($id, ['id', 'title']);
