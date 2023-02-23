@@ -34,10 +34,8 @@
             </div>
     </div>
     <div class="hot-words">
-        {{--<span class="hot-word-search">热门搜索</span>--}}
-        @loop($category_id, 3, 'c', 1)
-        <a href="">{{ $row->title }}</a>
-        @endloop
+        <span class="hot-word-search">热门搜索</span>
+        <a href="">ChatGTP 数据是有限的吗</a> <a href="">电脑怎么截图</a> <a href="">支付宝小程序怎么编辑</a>
     </div>
 </div>
 

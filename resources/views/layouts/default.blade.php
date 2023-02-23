@@ -41,7 +41,7 @@
     <div class="right-side">
         <div class="block">
             <div class="side-photo mb-8">
-                <img src="http://pptv.cc/wp-content/uploads/2021/03/5.1-1.jpg" alt="">
+                <img src="/img/banner.jpg" alt="">
             </div>
             <div id="panel" class="panel">
                 <div class="panel-hd">
