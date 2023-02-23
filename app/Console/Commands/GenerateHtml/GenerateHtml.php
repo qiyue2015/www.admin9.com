@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\GenerateHtml;
 
+use App\Models\Archive;
 use App\Models\Article;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -45,8 +46,9 @@ class GenerateHtml extends Command
      */
     private function generateHome(): void
     {
-        $news = Article::checked()->orderByDesc('id')->take(90)->get();
-        $string = view('welcome', compact('news'));
+        $news = Archive::whereIsPublish(1)->orderByDesc('id')->take(90)->get();
+        $category_id = 0;
+        $string = view('welcome', compact('news', 'category_id'));
         $file = public_path('index.html');
         file_put_contents($file, $string);
     }
