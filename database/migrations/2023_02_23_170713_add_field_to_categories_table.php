@@ -19,8 +19,6 @@ return new class extends Migration {
             $table->unsignedInteger('num')->default(0)->change();
             $table->unsignedSmallInteger('is_show')->default(0)->change();
             $table->dropColumn('baike_classid');
-            $table->text('children')->nullable()->change();
-            $table->text('parents')->nullable()->change();
         });
     }
 
