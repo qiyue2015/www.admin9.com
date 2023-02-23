@@ -14,6 +14,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/scout": "^9.8",
         "laravel/tinker": "^2.7",
+        "meilisearch/meilisearch-php": "^1.0",
         "overtrue/pinyin": "^5.0",
         "predis/predis": "^2.0",
         "spatie/laravel-permission": "^5.6",
@@ -77,7 +78,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "dev",
