@@ -1,5 +1,6 @@
 <?php
 
+use App\Ace\Horizon\CustomQueue;
 use Illuminate\Support\Str;
 
 return [
@@ -181,10 +182,54 @@ return [
 
     'environments' => [
         'production' => [
-            'supervisor-1' => [
-                'maxProcesses' => 10,
-                'balanceMaxShift' => 1,
-                'balanceCooldown' => 3,
+            'default' => [
+                'connection' => 'redis',
+                'queue' => ['default'],
+                'balance' => 'auto',
+                'tries' => 1,
+                'timeout' => 60,
+            ],
+            'just_for_archive' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::ARCHIVE_INCREMENT_QUEUE],
+                'balance' => 'auto',
+                'maxProcesses' => 20,
+                'minProcesses' => 1,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
+            'just_for_category' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::CATEGORY_UPDATE_QUEUE],
+                'balance' => 'auto',
+                'processes' => 4,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
+            'just_for_description' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::DESCRIPTION_UPDATE_QUEUE],
+                'balance' => 'auto',
+                'processes' => 4,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
+            'just_for_pixabay' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::PIXABAY_INCREMENT_QUEUE],
+                'balance' => 'auto',
+                'processes' => 1,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
+            'just_for_large_processes' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::LARGE_PROCESSES_QUEUE],
+                'balance' => 'auto',
+                'maxProcesses' => 50,
+                'minProcesses' => 1,
+                'tries' => 1,
+                'timeout' => 30,
             ],
         ],
 
