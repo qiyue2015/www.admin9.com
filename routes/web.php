@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Route;
+use Intervention\Image\Facades\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// 生成封面图片
+Route::get('storage/file/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
+
+// 下载封面图片
+Route::get('storage/file/{date}/{filename}', [CommonController::class, 'download']);
