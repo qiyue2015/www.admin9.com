@@ -2,7 +2,7 @@ var m={exports:{}};(function(i,s){function c(){var t=document.querySelector("[da
 <div class="modal pb-72 md:pb-96">
     <div class="modal-box relative">
         <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">\u2715</label>
-        <h3 class="text-lg font-bold">\u66F4\u591A\u5206\u7C7B</h3>
+        <h3 class="text-lg font-bold">\u9891\u9053</h3>
         <div class="grid grid-cols-4 gap-4 mt-4">`+r+`</div>
     </div>
 </div>`);var t=$(".block"),e=t.offset().top;$(document).on("scroll",function(){var a=$(document).scrollTop();a>e?t.addClass("fix"):t.removeClass("fix")})});

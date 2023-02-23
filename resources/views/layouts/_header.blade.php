@@ -1,7 +1,7 @@
 <div class="navbar-wrap fixed-header">
     <div class="navbar">
         <div class="navbar-start">
-            <a class="btn btn-ghost normal-case text-xl text-primary" href="/" rel="home">{{ config('app.name') }}</a>
+            <a href="/" class="site-name" rel="home">{{ config('site.name') }}</a>
         </div>
         <div class="navbar-center">
             <ul class="menu menu-horizontal px-1">

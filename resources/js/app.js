@@ -46,7 +46,7 @@ $(function () {
         '<div class="modal pb-72 md:pb-96">\n' +
         '    <div class="modal-box relative">\n' +
         '        <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>\n' +
-        '        <h3 class="text-lg font-bold">更多分类</h3>\n' +
+        '        <h3 class="text-lg font-bold">频道</h3>\n' +
         '        <div class="grid grid-cols-4 gap-4 mt-4">' + links + '</div>\n' +
         '    </div>\n' +
         '</div>');
