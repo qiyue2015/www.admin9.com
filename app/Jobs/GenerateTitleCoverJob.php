@@ -36,7 +36,7 @@ class GenerateTitleCoverJob implements ShouldQueue
      */
     public function handle()
     {
-        $directory = 'public/files/'.now()->parse($this->archive->updated_at)->format('Ymd');
+        $directory = 'public/files/'.now()->parse($this->archive->created_at)->format('Ymd');
         $imageFilename = $directory.'/'.$this->archive->id.'-1.jpg';
 
         // 创建目录
