@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands\Horizon;
 
-use Arr;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Jobs\RetryFailedJob;
 
@@ -14,7 +16,7 @@ class HorizonRetryAll extends Command
      *
      * @var string
      */
-    protected $signature = 'horizon:retry-all';
+    protected $signature = 'horizon:retry-all {type?}';
 
     /**
      * The console command description.
@@ -33,15 +35,28 @@ class HorizonRetryAll extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): void
     {
         ini_set('memory_limit', '-1');
 
+        $type = $this->argument('type');
+
+        if ($type === 'table') {
+            $this->tableFailedJobs();
+        } else {
+            $this->horizonFailedJobs();
+        }
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function horizonFailedJobs(): void
+    {
         $afterIndex = -1;
-        /** @var JobRepository $jobs */
+
         $jobs = app(JobRepository::class);
         // key 太多的时候可能会造成阻塞
         //$this->info("共计 {$jobs->countFailed()} 个失败队列");
@@ -51,7 +66,7 @@ class HorizonRetryAll extends Command
         $failJobs = $jobs->getFailed($afterIndex);
         foreach ($failJobs as $failJob) {
             $lastRetriedBy = Arr::last(json_decode($failJob->retried_by, true));
-            if ($lastRetriedBy && 'completed' == $lastRetriedBy['status']) {
+            if ($lastRetriedBy && 'completed' === $lastRetriedBy['status']) {
                 continue;
             }
 
@@ -64,5 +79,16 @@ class HorizonRetryAll extends Command
             usleep(500000);
             goto retry;
         }
+    }
+
+    public function tableFailedJobs(): void
+    {
+        DB::table('failed_jobs')->orderBy('id', 'ASC')
+            ->chunk(100, function ($items) {
+                collect($items)->each(function ($row) {
+                    echo '.';
+                    Artisan::call('queue:retry '.$row->uuid);
+                });
+            });
     }
 }
