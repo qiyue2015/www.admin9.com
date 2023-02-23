@@ -17,7 +17,6 @@
     },
     "dependencies": {
         "daisyui": "^2.50.2",
-        "swiper": "^9.0.5",
         "theme-change": "^2.3.0"
     }
 }
