@@ -35,7 +35,9 @@
     </div>
     <div class="hot-words">
         <span class="hot-word-search">热门搜索</span>
-        <a href="">ChatGTP 数据是有限的吗</a> <a href="">电脑怎么截图</a> <a href="">支付宝小程序怎么编辑</a>
+        <a href="/view/1234802473.html">金盏菊怎样繁殖</a>
+        <a href="/view/44898633.html">桃花运是什么运</a>
+        <a href="/view/1093150395.html">根外追肥有什么特点</a>
     </div>
 </div>
 
