@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archive;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -11,13 +15,13 @@ use Intervention\Image\Facades\Image;
 class CommonController extends Controller
 {
 
-    public function index()
+    public function index(): Factory|View|Application
     {
         $category_id = 0;
         return view('welcome', compact('category_id'));
     }
 
-    public function search(Request $request)
+    public function search(Request $request): Factory|View|Application
     {
         $title = $request->get('keywrod');
         $list = [];
@@ -29,44 +33,43 @@ class CommonController extends Controller
     {
         $archive = Archive::find($id, ['id', 'title']);
 
-        $dir = 'public/files/'.$date;
-        Storage::makeDirectory($dir);
-        $path = Storage::path($dir);
-        $filename = $path.'/'.$id.'-1.jpg';
 
-        $text = str($archive->title)->limit(20, '');
+        $directory = 'public/files/'.now()->parse($archive->updated_at)->format('Ymd');
+        $imageFilename = $directory.'/'.$archive->id.'-1.jpg';
 
-        $filepath = storage_path('app/fonts/zcool-yangyu-W04.ttf');
+        // 创建目录
+        Storage::makeDirectory($directory);
 
-        $coverArr = Storage::files('cover');
-        $coverKey = array_rand($coverArr);
-        $coverFilename = $coverArr[$coverKey];
+        // 字体
+        $fontSize = getFontSize($archive->title);
+        $fontPath = resource_path('fonts/zcool-yangyu-W04.ttf');
+
+        // 目录下所有封面图片
+        $coverFiles = File::files(resource_path('cover'), ['png', 'jpg', 'jpeg']);
+
+        // 随机取得1个
+        $randomCoverIndex = array_rand($coverFiles);
+        $randomCoverFile = $coverFiles[$randomCoverIndex];
+
+        // 根据文件名里的关键字来决定文字使用颜色
         $color = '#000000';
-        if (str()->contains($coverFilename, 'white')) {
+        if (str()->contains($randomCoverFile->getBasename(), 'white')) {
             $color = '#FFFFFF';
-        }
-        if (str()->contains($coverFilename, 'tea')) {
+        } elseif (str()->contains($randomCoverFile->getBasename(), 'tea')) {
             $color = '#134e4a';
         }
 
-        $cover = storage_path('app/'.$coverFilename);
-
-        $img = Image::make($cover)
-            //->text($text, 400, 160, function ($font) use ($filepath) {
-            //    $font->file($filepath);
-            //    $font->color('#FFFFFF');
-            //    $font->size(48);
-            //    $font->align('center');
-            //    $font->valign('center');
-            //})
-            ->text($text, 400, 160, function ($font) use ($filepath, $color) {
-                $font->file($filepath);
-                $font->size(48);
+        // 最终生成图片的地址
+        $imageFilePath = Storage::path($imageFilename);
+        $img = Image::make($randomCoverFile->getPathname())
+            ->text($archive->title, 400, 160, function ($font) use ($fontSize, $fontPath, $color) {
+                $font->file($fontPath);
+                $font->size($fontSize);
                 $font->color($color);
                 $font->align('center');
                 $font->valign('center');
             })
-            ->save($filename);
+            ->save($imageFilePath);
 
         ob_end_clean();
 
