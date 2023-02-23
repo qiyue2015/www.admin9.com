@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 DEPLOY_OPTION=${1:-all}
-MASTER_PATH=/www/wwwroot/www.admin9.com
+
+MASTER_PATH=$(cd "$(dirname "$0")";pwd)
 
 redEcho(){
    echo -e "[ $1 ]"
