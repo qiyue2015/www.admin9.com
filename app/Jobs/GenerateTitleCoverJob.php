@@ -70,7 +70,6 @@ class GenerateTitleCoverJob implements ShouldQueue
                 $font->color($color);
                 $font->align('center');
                 $font->valign('center');
-                $font->cache(360); // 缓存字体文件分钟
             })
             ->save($imageFilePath);
     }
