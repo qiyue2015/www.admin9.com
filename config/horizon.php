@@ -226,7 +226,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [CustomQueue::LARGE_PROCESSES_QUEUE],
                 'balance' => 'auto',
-                'maxProcesses' => 50,
+                'maxProcesses' => 20,
                 'minProcesses' => 1,
                 'tries' => 1,
                 'timeout' => 30,
