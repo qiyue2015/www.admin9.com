@@ -114,3 +114,35 @@ if (!function_exists('for_show_loop')) {
         });
     }
 }
+
+if (!function_exists('getFontSize')) {
+    function getFontSize($string): int
+    {
+        // 先用正则表达式把所有中文替换为空格，就可以用strlen()统计总字数了，总字数就是中文字数与英文字数的总和。
+        $string = preg_replace('/[\x80-\xff]{1,3}/', ' ', $string, -1);
+
+        // 统计字符串长度
+        $length = mb_strlen($string);
+
+        // 最小字体大小
+        $minFontSize = 32;
+
+        // 最大字体大小
+        $maxFontSize = 50;
+
+        // 计算每个字符应该减少的字体大小
+        $delta = ($maxFontSize - $minFontSize) / (10 - 1);
+
+        // 计算字体大小
+        if ($length <= 10) {
+            $fontSize = $maxFontSize;
+        } else {
+            $fontSize = $maxFontSize - ($length - 10) * $delta;
+            if ($fontSize < $minFontSize) {
+                $fontSize = $minFontSize;
+            }
+        }
+
+        return round($fontSize);
+    }
+}
