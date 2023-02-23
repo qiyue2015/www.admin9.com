@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\ArticlesToArchives;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Jobs\Init\ArchiveCategoryJob;
 use App\Jobs\Init\ArchiveCoverJob;
 use App\Models\Archive;
@@ -47,7 +48,7 @@ class ArchiveCategory extends Command
             }
 
             collect($data)->each(function ($archive) {
-                ArchiveCategoryJob::dispatch($archive);
+                ArchiveCategoryJob::dispatch($archive)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             });
 
             $star = $data->last()->id;
