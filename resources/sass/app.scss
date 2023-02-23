@@ -76,10 +76,9 @@
 
 .page-content {
   @apply lg:flex overflow-hidden relative;
-  @apply pr-72;
 
   .left-side {
-    @apply lg:mr-8 w-[40rem];
+    @apply lg:mr-8  lg:w-[40rem];
   }
 
   .right-side {
