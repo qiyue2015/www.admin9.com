@@ -79,6 +79,9 @@
 
   .site-name {
     @apply text-primary text-2xl;
+    span {
+      @apply text-base-300 text-base-content;
+    }
   }
 }
 
