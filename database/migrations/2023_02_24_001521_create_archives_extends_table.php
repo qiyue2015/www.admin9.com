@@ -17,7 +17,8 @@ return new class extends Migration {
                 $table->comment('文档扩展表'.$i);
                 $table->unsignedBigInteger('id')->primary();
                 $table->mediumText('content')->nullable()->comment('内容');
-                $table->foreign(['id'])->references(['id'])->on('archives')->onDelete('CASCADE');
+
+                $table->foreign(['id'])->references(['id'])->on('archives')->onUpdate('NO ACTION')->onDelete('CASCADE');
             });
         });
     }

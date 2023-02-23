@@ -18,7 +18,8 @@ return new class extends Migration {
                 $table->unsignedBigInteger('id')->primary();
                 $table->string('tags')->comment('标签信息');
                 $table->mediumText('content')->nullable()->comment('内容');
-                $table->foreign(['id'])->references(['id'])->on('articles')->onDelete('CASCADE');
+
+                $table->foreign(['id'])->references(['id'])->on('articles')->onUpdate('NO ACTION')->onDelete('CASCADE');
             });
         });
     }
