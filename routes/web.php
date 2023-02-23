@@ -25,7 +25,7 @@ Route::get('search', [CommonController::class, 'search'])->name('search');
 Route::get('{slug}', [ArchiveController::class, 'index'])->where(['slug' => '[a-z]+'])->name('archive.index');
 
 // 详情
-Route::get('a/{id}.html', [ArchiveController::class, 'show'])->where(['id' => '[0-9]+'])->name('archive.show');
+Route::get('view/{id}.html', [ArchiveController::class, 'show'])->where(['id' => '[0-9]+'])->name('archive.show');
 
 // 生成封面图片
 Route::get('storage/files/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
