@@ -15,7 +15,10 @@ var a='<label for="my-modal" class="btn btn-sm">\u4E3E\u62A5</label>',l=`<input 
                 <input type="radio" name="type" value="3" class="radio"/> \u5783\u573E\u5E7F\u544A\u4FE1\u606F
             </label>
             <label class="radio-list__item">
-                <input type="radio" name="type" value="4" class="radio"/> \u540D\u8A89\u53CA\u77E5\u8BC6\u4EA7\u6743\u4FB5\u6743
+                <input type="radio" name="type" value="4" class="radio"/> \u77E5\u8BC6\u4EA7\u6743\u4FB5\u6743
+            </label>
+            <label class="radio-list__item">
+                <input type="radio" name="type" value="4" class="radio"/> \u540D\u8A89\u4FB5\u6743
             </label>
         </div>
         <div class="report-desc">

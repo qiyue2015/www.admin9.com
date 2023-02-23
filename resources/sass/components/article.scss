@@ -48,3 +48,23 @@
     }
   }
 }
+
+
+.archive {
+  h1 {
+    @apply text-xl md:text-3xl font-bold mb-2;
+  }
+
+  .bar-wrap {
+    @apply mb-4;
+  }
+
+  .content {
+    @apply text-lg mb-4;
+    p {
+      @apply leading-loose mb-2;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+  }
+}

@@ -18,7 +18,10 @@ var modalTpl = '<input type="checkbox" id="my-modal" class="modal-toggle"/>\n' +
     '                <input type="radio" name="type" value="3" class="radio"/> 垃圾广告信息\n' +
     '            </label>\n' +
     '            <label class="radio-list__item">\n' +
-    '                <input type="radio" name="type" value="4" class="radio"/> 名誉及知识产权侵权\n' +
+    '                <input type="radio" name="type" value="4" class="radio"/> 知识产权侵权\n' +
+    '            </label>\n' +
+    '            <label class="radio-list__item">\n' +
+    '                <input type="radio" name="type" value="4" class="radio"/> 名誉侵权\n' +
     '            </label>\n' +
     '        </div>\n' +
     '        <div class="report-desc">\n' +
