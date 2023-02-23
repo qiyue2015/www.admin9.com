@@ -46,7 +46,7 @@ class GenerateHtml extends Command
      */
     private function generateHome(): void
     {
-        $news = Archive::whereIsPublish(1)->orderByDesc('id')->take(90)->get();
+        $news = Archive::published()->orderByDesc('publish_at')->take(60)->get();
         $category_id = 0;
         $string = view('welcome', compact('news', 'category_id'));
         $file = public_path('index.html');

@@ -58,6 +58,7 @@ use Jenssegers\Optimus\Optimus;
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereViewNum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Archive published()
  * @mixin \Eloquent
  */
 class Archive extends Model
@@ -99,6 +100,11 @@ class Archive extends Model
     public function getTagsAttribute($value): array
     {
         return array_filter(explode(',', $value));
+    }
+
+    public function scopePublished($query): void
+    {
+        $query->where('is_publish', true);
     }
 
     /**
