@@ -56,10 +56,61 @@ if (!function_exists('getParentCategories')) {
         return $parentCategories;
     }
 }
-if (!function_exists('tags_slug')) {
-    function tags_slug($string): string
+
+if (!function_exists('TaggingSlug')) {
+    function TaggingSlug($string): string
     {
         $string = \Overtrue\Pinyin\Pinyin::permalink($string);
         return \Conner\Tagging\TaggingUtility::slug($string);
+    }
+}
+
+if (!function_exists('for_show_sub_class')) {
+    /**
+     * 循环栏目导航标签.
+     * @param  int  $categoryId
+     * @param  int  $line
+     * @return mixed
+     */
+    function for_show_sub_class(int $categoryId = 0, int $line = 10): mixed
+    {
+        $key = Str::snake(__FUNCTION__.'_'.implode('_', func_get_args()));
+        return cache()->rememberForever($key, function () use ($line, $categoryId) {
+            return \App\Models\Category::query()
+                ->where('parent_id', $categoryId)
+                ->orderBy('sort')
+                ->take($line)
+                ->get(['id', 'parent_id', 'name', 'alias', 'slug']);
+        });
+    }
+}
+
+if (!function_exists('for_show_loop')) {
+    /**
+     * 灵动标签
+     * @param $categoryId
+     * @param  int  $line
+     * @param $type
+     * @param  int  $has_cover
+     * @return mixed
+     */
+    function for_show_loop($categoryId, int $line = 10, $type = null, int $has_cover = 0): mixed
+    {
+        $key = Str::snake(__FUNCTION__.'_'.implode('_', func_get_args()));
+        return cache()->remember($key, now()->addMinutes(30), function () use ($line, $has_cover, $categoryId, $type) {
+            return \App\Models\Archive::query()
+                ->when($categoryId, function ($query) use ($categoryId) {
+                    return $query->where('category_id', $categoryId);
+                })
+                ->when($has_cover, function ($query) {
+                    return $query->where('has_cover', true);
+                })
+                ->when($type, function ($query) use ($type) { // 栏目最新
+                    return $query->where('flag', $type);
+                })
+                ->orderBy('publish_at', 'DESC')
+                ->take($line)
+                ->get();
+        });
     }
 }

@@ -151,7 +151,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 10240,
 
     /*
     |--------------------------------------------------------------------------
@@ -191,7 +191,7 @@ return [
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'maxProcesses' => 30,
+                'processes' => 20,
             ],
         ],
     ],

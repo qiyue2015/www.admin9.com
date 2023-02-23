@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Route;
+use Intervention\Image\Facades\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CommonController::class, 'index'])->name('app.home');
+
+// 搜索
+Route::get('search', [CommonController::class, 'search'])->name('search');
+
+// 例表
+Route::get('{slug}', [ArchiveController::class, 'index'])->where(['slug' => '[a-z]+'])->name('archive.index');
+
+// 详情
+Route::get('a/{id}.html', [ArchiveController::class, 'show'])->where(['id' => '[0-9]+'])->name('archive.show');
+
+// 生成封面图片
+Route::get('storage/file/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
+
+// 下载封面图片
+Route::get('storage/file/{date}/{filename}', [CommonController::class, 'download']);
