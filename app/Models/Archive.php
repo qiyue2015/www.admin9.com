@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Jenssegers\Optimus\Optimus;
 
 /**
  * App\Models\Archive
@@ -106,7 +107,8 @@ class Archive extends Model
      */
     public function link(array $params = []): string
     {
-        $params = array_merge(['id' => $this->id], $params);
+        $encode_id = app(Optimus::class)->encode($this->id);
+        $params = array_merge(['id' => $encode_id], $params);
         return route('archive.show', $params, false);
     }
 

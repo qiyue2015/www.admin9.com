@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Archive;
 use App\Models\Category;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Jenssegers\Optimus\Optimus;
 
 class ArchiveController extends Controller
 {
@@ -14,8 +18,14 @@ class ArchiveController extends Controller
         return view('welcome', compact('category', 'category_id'));
     }
 
-    public function show($id)
+    /**
+     * @param $id
+     * @param  Optimus  $optimus
+     * @return Application|Factory|View
+     */
+    public function show($id, Optimus $optimus): View|Factory|Application
     {
+        $id = $optimus->decode($id);
         $archive = cache()->remember('archives:'.$id, now()->addMinutes(60), function () use ($id) {
             return Archive::find($id);
         });
