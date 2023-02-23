@@ -43,18 +43,18 @@
             <div class="side-photo mb-8">
                 <img src="/img/banner.jpg" alt="">
             </div>
-            <div id="panel" class="panel">
+            <div class="panel">
                 <div class="panel-hd">
                     <span class="title">排行榜</span>
                 </div>
                 <div class="panel-bd">
                     <ul class="rank-list">
-@loop($category_id, 10, 'c', 1)
+    @loop($category_id, 10, 'c', 1)
                         <li class="item">
                             <span class="rank-index">{{ $loop->iteration }}</span>
                             <a href="{{ $row->link() }}" target="_blank" title="{{ $row->title }}">{{ $row->title }}</a>
                         </li>
-@endloop
+    @endloop
                     </ul>
                 </div>
             </div>
@@ -68,6 +68,5 @@
 @yield('scripts')
 
 @vite('resources/js/app.js')
-
 </body>
 </html>

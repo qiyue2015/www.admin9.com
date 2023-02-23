@@ -4,7 +4,7 @@
     "src": "resources/sass/iconfont/iconfont.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app.ca9a15fc.js",
+    "file": "assets/app.452b059f.js",
     "src": "resources/js/app.js",
     "isEntry": true
   },
@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app.9595f410.css",
+    "file": "assets/app.60ecc9bc.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

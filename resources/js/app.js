@@ -50,4 +50,15 @@ $(function () {
         '        <div class="grid grid-cols-4 gap-4 mt-4">' + links + '</div>\n' +
         '    </div>\n' +
         '</div>');
+
+    var navBar = $('.block');
+    var navToTop = navBar.offset().top;
+    $(document).on('scroll', function () {
+        var scrollDistance = $(document).scrollTop();
+        if (scrollDistance > navToTop) {
+            navBar.addClass("fix");
+        } else {
+            navBar.removeClass("fix");
+        }
+    })
 })

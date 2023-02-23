@@ -76,9 +76,10 @@
 
 .page-content {
   @apply lg:flex overflow-hidden relative;
+  @apply pr-72;
 
   .left-side {
-    @apply lg:mr-8;
+    @apply lg:mr-8 w-[40rem];
   }
 
   .right-side {
@@ -192,4 +193,12 @@
       @apply w-full textarea-bordered;
     }
   }
+}
+
+.block > .side-photo {
+  @apply w-72;
+}
+
+.fix {
+  @apply fixed top-20;
 }
