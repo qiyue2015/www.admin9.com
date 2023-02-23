@@ -23,7 +23,8 @@
     @apply outline-none;
   }
 
-  input[type="text"], input[type="password"], input[type="button"], input[type="submit"], input[type="reset"], input[type="search"], botton, bottom {
+  input[type="text"], input[type="password"], input[type="button"], input[type="submit"],
+  input[type="reset"], input[type="search"], botton, bottom {
     -webkit-appearance: none;
   }
 
@@ -34,7 +35,6 @@
 
   .container {
     @apply overflow-hidden px-4 sm:px-6 md:px-8;
-    //@apply lg:max-w-4xl xl:max-w-6xl;
   }
 
   .middle-align {

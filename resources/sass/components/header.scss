@@ -7,7 +7,7 @@
   @apply flex w-full h-16;
 
   .navbar {
-    @apply lg:max-w-6xl mx-auto;
+    @apply mx-4;
 
     .menu li {
       @apply mx-2;
@@ -31,8 +31,8 @@
   }
 
   .banner-title {
-    @apply relative text-xl text-left;
-    @apply pt-16 md:pt-20 mx-auto mb-4 whitespace-nowrap;
+    @apply relative text-xl md:text-3xl text-left;
+    @apply pt-16 md:pt-24 mx-auto mb-4 whitespace-nowrap;
     transition: color .3s;
     font-weight: 700;
 
