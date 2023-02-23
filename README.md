@@ -13,3 +13,19 @@
 - [laravel 9 中文文档](https://learnku.com/docs/laravel/9.x)
 - [Laravel 英文文档](https://laravel.com/docs/9.x)
 - [Laravel 速查表](https://learnku.com/docs/laravel-cheatsheet/9.x)
+
+## 模板标签
+### 循环栏目导航标签
+```
+@listshowclass(0, 8)
+    <a href="{{ $row->link() }}">{{ $row->name }}</a>
+@endlistshowclass
+```
+
+### 灵动标签
+```
+@loop($category_id, 30, 'c', 1)
+    <a href="{{ $row->link() }}">{{ $row->title }}</a>
+@endloop
+```
+
