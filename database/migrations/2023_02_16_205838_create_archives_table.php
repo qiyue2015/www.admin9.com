@@ -19,10 +19,10 @@ return new class extends Migration {
             $table->set('flag', ['c', 'h', 'p', 'f', 's', 'j', 'a', 'b'])->nullable();
             $table->char('subtitle', 100)->nullable();
             $table->char('search_title', 100)->nullable();
-            $table->char('keywords', 30)->nullable();
+            $table->char('keywords', 50)->nullable();
             $table->string('description')->nullable();
             $table->string('cover')->nullable();
-            $table->char('tags', 30)->nullable();
+            $table->string('tags')->nullable();
             $table->boolean('has_cover')->index()->default(0)->comment('是否有封面');
             $table->text('images')->nullable();
             $table->unsignedBigInteger('view_num')->default(0)->comment('点击量');
