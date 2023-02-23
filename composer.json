@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "appstract/laravel-opcache": "*",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7.2",
         "jenssegers/optimus": "^1.1",
