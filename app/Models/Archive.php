@@ -109,7 +109,7 @@ class Archive extends Model
     {
         $encode_id = app(Optimus::class)->encode($this->id);
         $params = array_merge(['id' => $encode_id], $params);
-        return route('article.show', $params, false);
+        return route('archive.show', $params, false);
     }
 
     public function extend(): HasOne
