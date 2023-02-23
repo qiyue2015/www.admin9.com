@@ -72,5 +72,10 @@ class GenerateTitleCoverJob implements ShouldQueue
                 $font->valign('center');
             })
             ->save($imageFilePath);
+
+        $this->archive->update([
+            'cover' => $imageFilename,
+            'has_cover' => true,
+        ]);
     }
 }
