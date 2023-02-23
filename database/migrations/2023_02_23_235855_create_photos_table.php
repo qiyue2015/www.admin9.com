@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('channels', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('name', 20)->unique()->comment('名称');
-            $table->smallInteger('sort')->default(0)->comment('排序');
+        Schema::create('photos', function (Blueprint $table) {
+            $table->comment('');
+            $table->bigIncrements('id');
+            $table->string('tags', 100)->nullable()->comment('标签');
+            $table->boolean('status')->index()->comment('状态 0待处理 1已处理');
+            $table->text('result')->comment('结果');
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channels');
+        Schema::dropIfExists('photos');
     }
 };

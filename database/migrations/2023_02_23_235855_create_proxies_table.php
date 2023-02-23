@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('proxies', function (Blueprint $table) {
+            $table->comment('');
             $table->increments('id');
             $table->string('address')->comment('代理地址');
             $table->boolean('status')->default(true)->comment('可用状态');

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,11 +13,11 @@ return new class extends Migration
     public function up()
     {
         collect(range(0, 9))->each(function ($i) {
-            Schema::create('archives_extend_'.$i, function (Blueprint $table) {
+            Schema::create('archives_extend_'.$i, function (Blueprint $table) use ($i) {
+                $table->comment('文档扩展表'.$i);
                 $table->unsignedBigInteger('id')->primary();
                 $table->mediumText('content')->nullable()->comment('内容');
-                // 关联
-                $table->foreign('id')->references('id')->on('archives')->onDelete('cascade');
+                $table->foreign(['id'])->references(['id'])->on('archives')->onDelete('CASCADE');
             });
         });
     }

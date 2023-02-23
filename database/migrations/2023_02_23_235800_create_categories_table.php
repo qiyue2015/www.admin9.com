@@ -14,10 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
+            $table->comment('');
             $table->smallIncrements('id');
-            $table->unsignedSmallInteger('parent_id')->index()->default(0)->comment('父ID');
-            $table->string('name', 20)->index()->comment('名称');
+            $table->unsignedSmallInteger('parent_id')->default(0)->index()->comment('父ID');
+            $table->char('name', 10)->index()->comment('名称');
+            $table->char('alias', 10)->nullable()->index()->comment('alias');
+            $table->char('slug', 10)->nullable()->index();
             $table->smallInteger('sort')->default(0)->comment('排序');
+            $table->unsignedInteger('num')->default(0)->comment('分类信息数量');
+            $table->unsignedSmallInteger('is_show')->default(0)->index()->comment('导航展示 1展示');
         });
     }
 

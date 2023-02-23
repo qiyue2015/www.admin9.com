@@ -13,11 +13,12 @@ return new class extends Migration {
     public function up()
     {
         collect(range(0, 9))->each(function ($i) {
-            Schema::create('articles_'.$i, function (Blueprint $table) {
+            Schema::create('articles_'.$i, function (Blueprint $table) use ($i) {
+                $table->comment('文章扩展表'.$i);
                 $table->unsignedBigInteger('id')->primary();
+                $table->string('tags')->comment('标签信息');
                 $table->mediumText('content')->nullable()->comment('内容');
-                // 关联
-                $table->foreign('id')->references('id')->on('articles')->onDelete('cascade');
+                $table->foreign(['id'])->references(['id'])->on('articles')->onDelete('CASCADE');
             });
         });
     }
