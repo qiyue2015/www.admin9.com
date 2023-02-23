@@ -1,16 +1,20 @@
 {
+  "resources/sass/iconfont/iconfont.ttf": {
+    "file": "assets/iconfont.0a6c8cc6.ttf",
+    "src": "resources/sass/iconfont/iconfont.ttf"
+  },
   "resources/js/app.js": {
-    "file": "assets/app.97dfcd5f.js",
+    "file": "assets/app.ca9a15fc.js",
     "src": "resources/js/app.js",
     "isEntry": true
   },
-  "resources/js/link.js": {
-    "file": "assets/link.465c2910.js",
-    "src": "resources/js/link.js",
+  "resources/js/view.js": {
+    "file": "assets/view.38ff31f8.js",
+    "src": "resources/js/view.js",
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app.4edef6b6.css",
+    "file": "assets/app.9595f410.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

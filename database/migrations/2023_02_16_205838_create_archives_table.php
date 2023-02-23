@@ -31,7 +31,7 @@ return new class extends Migration {
             $table->boolean('is_html')->index()->default(0)->comment('生成 PC html');
             $table->boolean('is_wap_html')->index()->default(0)->comment('生成 WAP html');
             $table->boolean('is_sitemap')->index()->default(0)->comment('生成');
-            $table->char('baidu_id', 32)->index();
+            $table->char('baidu_id', 32)->index()->nullable();
             $table->timestamps();
 
             $table->index(['category_id', 'has_cover', 'is_publish', 'flag', 'publish_at'], 'main_index');

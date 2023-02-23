@@ -86,16 +86,16 @@ class Archive extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function getCoverAttribute($value)
+    public function getCoverAttribute($value): string
     {
         if ($value) {
             return '/storage'.$value;
         }
 
-        return '/storage/file/'.now()->format('Ymd/').$this->attributes['id'].'-1.jpg';
+        return '/storage/files/'.now()->format('Ymd/').$this->attributes['id'].'-1.jpg';
     }
 
-    public function getTagsAttribute($value)
+    public function getTagsAttribute($value): array
     {
         return array_filter(explode(',', $value));
     }

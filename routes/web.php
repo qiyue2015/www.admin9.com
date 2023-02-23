@@ -28,7 +28,7 @@ Route::get('{slug}', [ArchiveController::class, 'index'])->where(['slug' => '[a-
 Route::get('a/{id}.html', [ArchiveController::class, 'show'])->where(['id' => '[0-9]+'])->name('archive.show');
 
 // 生成封面图片
-Route::get('storage/file/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
+Route::get('storage/files/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
 
 // 下载封面图片
-Route::get('storage/file/{date}/{filename}', [CommonController::class, 'download']);
+Route::get('storage/files/{date}/{filename}', [CommonController::class, 'download']);

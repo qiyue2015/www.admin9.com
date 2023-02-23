@@ -29,7 +29,7 @@ class CommonController extends Controller
     {
         $archive = Archive::find($id, ['id', 'title']);
 
-        $dir = 'public/file/'.$date;
+        $dir = 'public/files/'.$date;
         Storage::makeDirectory($dir);
         $path = Storage::path($dir);
         $filename = $path.'/'.$id.'-1.jpg';
@@ -38,9 +38,18 @@ class CommonController extends Controller
 
         $filepath = storage_path('app/fonts/zcool-yangyu-W04.ttf');
 
-        $covers = Storage::files('covers');
-        $coverKey = array_rand($covers);
-        $cover = storage_path('app/'.$covers[$coverKey]);
+        $coverArr = Storage::files('cover');
+        $coverKey = array_rand($coverArr);
+        $coverFilename = $coverArr[$coverKey];
+        $color = '#000000';
+        if (str()->contains($coverFilename, 'white')) {
+            $color = '#FFFFFF';
+        }
+        if (str()->contains($coverFilename, 'tea')) {
+            $color = '#134e4a';
+        }
+
+        $cover = storage_path('app/'.$coverFilename);
 
         $img = Image::make($cover)
             //->text($text, 400, 160, function ($font) use ($filepath) {
@@ -50,9 +59,10 @@ class CommonController extends Controller
             //    $font->align('center');
             //    $font->valign('center');
             //})
-            ->text($text, 400, 160, function ($font) use ($filepath) {
+            ->text($text, 400, 160, function ($font) use ($filepath, $color) {
                 $font->file($filepath);
                 $font->size(48);
+                $font->color($color);
                 $font->align('center');
                 $font->valign('center');
             })

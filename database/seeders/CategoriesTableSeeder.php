@@ -41,6 +41,7 @@ class CategoriesTableSeeder extends Seeder
             }
         }
 
+        Category::truncate();
         Category::insert($data);
     }
 }
