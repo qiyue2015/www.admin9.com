@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Tap\TapService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        (new TapService())->make();
     }
 }

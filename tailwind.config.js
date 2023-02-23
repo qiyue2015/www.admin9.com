@@ -1,23 +1,30 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./resources/**/*.blade.php",
-    "./resources/**/*.js",
-  ],
-  theme: {
-    fontFamily: {
-      sans: ['PingFangSC-Regular', 'Helvetica Neue', 'Microsoft Yahei', '微软雅黑']
+    content: [
+        // './storage/framework/views/*.php',
+        './resources/views/*.blade.php',
+        './resources/views/**/*.blade.php',
+        './resources/**/*.js',
+    ],
+    darkMode: 'media',
+    theme: {
+        screens: {
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
+        },
+        fontFamily: {
+            sans: ['Microsoft Yahei', 'Avenir', 'Segoe UI', 'Hiragino Sans GB', 'STHeiti', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', 'sans-serif']
+        },
+        container: {
+            center: true
+        },
+        extend: {},
     },
-    screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
+    plugins: [
+        require("daisyui")
+    ],
+    daisyui: {
+        themes: ["winter", "night"],
     },
-    container: {
-      center: true,
-    },
-    extend: {},
-  },
-  plugins: [],
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Ace\Horizon\CustomQueue;
 use Illuminate\Support\Str;
 
 return [
@@ -152,7 +151,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 10240,
 
     /*
     |--------------------------------------------------------------------------
@@ -166,14 +165,14 @@ return [
     */
 
     'defaults' => [
-        'default' => [
+        'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
             'maxProcesses' => 1,
             'maxTime' => 0,
             'maxJobs' => 0,
-            'memory' => 2048,
+            'memory' => 128,
             'tries' => 1,
             'timeout' => 60,
             'nice' => 0,
@@ -182,73 +181,17 @@ return [
 
     'environments' => [
         'production' => [
-            'default' => [
-                'connection' => 'redis',
-                'queue' => ['default'],
-                'balance' => 'auto',
-                'tries' => 1,
-                'timeout' => 60,
-            ],
-            'just_for_archive' => [
-                'connection' => 'redis',
-                'queue' => [CustomQueue::ARCHIVE_INCREMENT_QUEUE],
-                'balance' => 'auto',
-                'maxProcesses' => 20,
-                'minProcesses' => 1,
-                'tries' => 1,
-                'timeout' => 30,
-            ],
-            'just_for_category' => [
-                'connection' => 'redis',
-                'queue' => [CustomQueue::CATEGORY_UPDATE_QUEUE],
-                'balance' => 'auto',
-                'processes' => 4,
-                'tries' => 1,
-                'timeout' => 30,
-            ],
-            'just_for_description' => [
-                'connection' => 'redis',
-                'queue' => [CustomQueue::DESCRIPTION_UPDATE_QUEUE],
-                'balance' => 'auto',
-                'processes' => 4,
-                'tries' => 1,
-                'timeout' => 30,
-            ],
-            'just_for_pixabay' => [
-                'connection' => 'redis',
-                'queue' => [CustomQueue::PIXABAY_INCREMENT_QUEUE],
-                'balance' => 'auto',
-                'processes' => 1,
-                'tries' => 1,
-                'timeout' => 30,
-            ],
-            'just_for_large_processes' => [
-                'connection' => 'redis',
-                'queue' => [CustomQueue::LARGE_PROCESSES_QUEUE],
-                'balance' => 'auto',
-                'maxProcesses' => 50,
-                'minProcesses' => 1,
-                'tries' => 1,
-                'timeout' => 30,
+            'supervisor-1' => [
+                'maxProcesses' => 10,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
             ],
         ],
 
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'queue' => [
-                    'default',
-                    CustomQueue::ARCHIVE_INCREMENT_QUEUE,
-                    CustomQueue::CATEGORY_UPDATE_QUEUE,
-                    CustomQueue::DESCRIPTION_UPDATE_QUEUE,
-                    CustomQueue::PIXABAY_INCREMENT_QUEUE,
-                    CustomQueue::LARGE_PROCESSES_QUEUE,
-                ],
-                'maxProcesses' => 100,
-                'minProcesses' => 10,
-                'tries' => 1,
-                'timeout' => 1800,
-                'memory' => 2048,
+                'processes' => 20,
             ],
         ],
     ],

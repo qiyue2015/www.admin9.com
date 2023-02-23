@@ -1,8 +1,9 @@
 .footer {
-  @apply relative overflow-hidden mt-4 py-4 bg-gray-100 border-t;
-  @apply text-sm text-gray-600 text-center;
+  @apply text-xs p-4 mt-10 bg-base-300 text-base-content;
 
-  .copyrights p {
-    @apply my-4;
+  .email-link {
+    @apply text-primary;
+    unicode-bidi: bidi-override;
+    direction: rtl;
   }
 }

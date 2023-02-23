@@ -4,185 +4,192 @@
 
 @layer base {
   body {
-    @apply antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900;
-    @apply pt-24;
+    @apply bg-base-100 text-base-content;
+    padding-bottom: env(safe-area-inset-bottom);
+    font-family: Source Sans Pro, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+    word-spacing: 1px;
+    word-wrap: break-word;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+  h1, h2, h3, h4 {
+    @apply text-lg font-normal;
+  }
+
+  input, button, select, textarea {
+    @apply outline-none;
+  }
+
+  input[type="text"], input[type="password"], input[type="button"], input[type="submit"], input[type="reset"], input[type="search"], botton, bottom {
+    -webkit-appearance: none;
+  }
+
+  input[type="radio"] {
+    vertical-align: middle;
+    margin-top: -4px;
+  }
+
+  .container {
+    @apply overflow-hidden px-4 sm:px-6 md:px-8;
+    //@apply lg:max-w-4xl xl:max-w-6xl;
+  }
+
+  .middle-align {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
   @font-face {
-    font-family: "仓耳渔阳体 W05";
-    font-weight: 400;
-    src: url("//at.alicdn.com/wf/webfont/RQ1EXEQl7KXm/Zw_muBz-UF5u6C3EZeyJo.woff2") format("woff2"),
-    url("//at.alicdn.com/wf/webfont/RQ1EXEQl7KXm/vF3QozcBwbVoNLUaa79q2.woff") format("woff");
-    font-display: swap;
+    font-family: "iconfont"; /* Project id  */
+    src: url('iconfont/iconfont.ttf?t=1677090382194') format('truetype');
   }
 
-  a {
-    &:hover {
-      @apply text-sky-500;
-    }
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-gengduo:before {
+    content: "\e667";
+  }
+
+  .icon-close:before {
+    content: "\e69e";
+  }
+
+  .icon-search:before {
+    content: "\e63c";
   }
 }
 
 @layer components {
   @import './components/header';
+  @import './components/article';
+  @import './components/footer';
 }
 
-.box {
-  ~ .box {
-    @apply mt-10;
+.page-content {
+  @apply lg:flex overflow-hidden relative;
+
+  .left-side {
+    @apply lg:mr-8;
   }
 
-  .hd {
-    @apply flex mb-4 text-xl text-sky-500 font-semibold dark:text-sky-400;
-  }
-
-  .bd {
-    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3;
+  .right-side {
+    @apply hidden lg:block;
+    @apply w-72;
   }
 }
 
-.list {
-  .item {
-    @apply p-4 bg-white dark:bg-gray-800 rounded-md overflow-hidden shadow;
-    //@apply rounded-md bg-white p-4 overflow-hidden;
-    //border: 1px solid #e4ecf3;
-    //box-shadow: 1px 2px 3px #f2f6f8;
-    @apply transition ease-in-out hover:-translate-y-1;
+.panel {
+  @apply display w-72;
+  &-hd {
+    @apply flex mb-2 pb-3 border-b;
+    .title, .title a {
+      @apply text-inherit flex-1 text-xl font-normal;
+    }
+  }
 
-    .logo {
-      height: 40px;
-      position: relative;
-      font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      padding: 0 0.1rem;
+  &-bd {
+    a {
+      @apply text-base-content;
 
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        vertical-align: middle;
-        @apply inline-block mr-2;
+      &:hover {
+        @apply text-primary;
       }
     }
+  }
+}
 
-    .desc {
-      @apply truncate text-gray-500 text-sm;
-      padding-top: 10px;
-      height: 35px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+.rank-list {
+  .item {
+    @apply whitespace-nowrap overflow-ellipsis overflow-hidden my-3;
+    transition: .3s;
+
+    &:nth-child(-n+3) .rank-index {
+      @apply bg-accent text-white;
+    }
+
+    .rank-index {
+      @apply text-xs bg-base-300;
+      height: 18px;
+      width: 18px;
+      line-height: 18px;
+      border-radius: 4px;
+      display: inline-block;
+      text-align: center;
+      margin-right: 6px
     }
   }
 }
 
-.list {
-  li {
-    @apply whitespace-nowrap leading-8 text-ellipsis flex;
-    a {
-      @apply flex-1 inline-block overflow-hidden text-ellipsis;
-    }
+.tags a {
+  @apply badge badge-sm badge-outline;
 
-    span {
-      @apply text-gray-400 ml-4;
-    }
+  ~ a {
+    @apply ml-2;
   }
 }
 
+.archive {
+  h1 {
+    @apply text-3xl font-bold mb-2;
+  }
 
-.footer {
-  @apply mt-10 text-sm text-center;
-}
-
-
-.article-content {
-  @apply text-lg leading-8 tracking-wide text-justify;
-
-  p {
+  .bar-wrap {
     @apply mb-4;
   }
 
-  img {
-    max-width: 100%;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .art_img_mini {
-    text-align: center;
-
-    .art_img_tit {
-      @apply text-base py-4;
+  .content {
+    @apply text-lg mb-4;
+    p {
+      @apply leading-loose mb-2;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
   }
 }
 
-.detail-container {
-  @apply max-w-5xl mx-auto flex;
 
-  .main {
-    @apply flex-1;
+.tips {
+  @apply flex items-center;
+  .tags, .report {
+    @apply inline-flex w-1/2 justify-start;
   }
 
-  .sidebar {
-    @apply hidden lg:block w-64 ml-10;
-
-    .box .bd {
-      @apply grid grid-cols-1 gap-0 sm:grid-cols-1 md:grid-cols-1;
-    }
+  .tags {
+    @apply justify-start;
   }
 
-  h1 {
-    @apply text-2xl leading-normal font-bold;
+  .report {
+    @apply justify-end;
   }
 }
 
-.entry-page {
-  @apply flex-none md:flex mb-8 overflow-hidden;
-  @apply md:gap-4 md:grid-cols-1;
+.report-msg {
+  @apply alert alert-info shadow-lg mt-8;
+}
 
-  .entry-page-next, .entry-page-prev {
-    @apply w-full mb-4 float-none text-white rounded overflow-hidden;
-    @apply relative pt-10 px-4 pb-3;
+.report-modal {
+  @apply modal;
 
-    &::before {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, .5);
-      content: "";
+  .radio-list {
+    @apply grid grid-cols-2 gap-4;
+  }
+
+  .report-desc {
+    p {
+      @apply text-xs my-4;
     }
 
-    a {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      color: #fff;
-      font-size: 16px;
-
-      span {
-        @apply block pt-3 px-4 pb-0 overflow-hidden;
-        height: 50px;
-        line-height: 20px;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-      }
-    }
-
-    .entry-page-info {
-      @apply relative text-sm overflow-hidden text-xs;
+    textarea {
+      @apply w-full textarea-bordered;
     }
   }
 }
