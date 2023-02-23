@@ -20,7 +20,7 @@
     </div>
 
     <div class="article-list mt-8">
-        @loop($category_id, 36, 'c', 1)
+        @loop($category_id, 10, 'c', 1)
         <div class="article-item">
             <a href="{{ $row->link() }}" class="article-img bg-indigo-300 rounded">
                 <img src="{{ $row->cover }}" alt="{{ $row->title }}" class="object-cover rounded"/>
