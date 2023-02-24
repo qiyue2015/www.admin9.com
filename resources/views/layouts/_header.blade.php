@@ -26,7 +26,9 @@
 </div>
 
 <div class="banner-wrapper">
-    <div class="banner-title" onclick="window.location.href='/view/43818690.html'">兔哥百科 招募知识达人</div>
+    <div class="banner-title">
+        <a href="/view/1524992613.html" target="_blank">兔哥百科 招募知识达人</a>
+    </div>
     <div class="search-group">
         <div class="middle-align search-btn">
             <span class="iconfont icon-search"></span>
