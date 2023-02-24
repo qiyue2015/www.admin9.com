@@ -10,7 +10,7 @@
 @endif
 @section('content')
     <div class="article-list">
-@loop($category_id, 50)
+@loop($category_id, 300)
         <div class="article-item">
             <a href="{{ $row->link() }}" class="article-img">
                 <img src="{{ $row->cover }}" alt="{{ $row->title }}" class="object-cover rounded"/>
