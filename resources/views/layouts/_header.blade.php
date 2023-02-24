@@ -27,7 +27,7 @@
 
 <div class="banner-wrapper">
     <div class="banner-title">
-        <a href="/view/1524992613.html" target="_blank">兔哥百科 招募知识达人</a>
+        <a href="/view/806828457.html" target="_blank">兔哥百科 招募知识达人</a>
     </div>
     <div class="search-group">
         <div class="middle-align search-btn">
