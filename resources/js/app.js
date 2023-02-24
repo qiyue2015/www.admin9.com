@@ -29,7 +29,7 @@ $(function () {
     $('input.search-input').keypress(function (e) {
         var keyword = $(this).val()
         if (e.keyCode === 13 && keyword) {
-            var formTpl = '<form id="search-form" action="/search" method="get"><input type="text" name="keyword" value="' + keyword + '"><input class="submit" type="submit" value="搜索"></form>';
+            var formTpl = '<form id="search-form" target="_blank" action="https://www.baidu.com/s" method="get"><input name="si" value="tuge.net" style="display: none;"><input name="ct" value="2097152" style="display: none;"><input type="text" name="wd" value="' + keyword + '"><input class="submit" type="submit" value="搜索"></form>';
             $('body').append(formTpl);
             $('#search-form .submit').click()
         }
