@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', $archive->title.'-'.config('site.sitename'))
+@section('title', $archive->title.'-'.config('site.name'))
 @section('keywords', $archive->keywords)
 @section('description', $archive->description)
 @section('content')
@@ -20,7 +20,7 @@
     </div>
 
     <div class="article-list mt-8">
-        @loop($category_id, 10, 'c', 1)
+@loop($category_id, 10, 'c', 1)
         <div class="article-item">
             <a href="{{ $row->link() }}" class="article-img bg-indigo-300 rounded">
                 <img src="{{ $row->cover }}" alt="{{ $row->title }}" class="object-cover rounded"/>
@@ -28,15 +28,15 @@
             <div class="article-text">
                 <h2><a href="{{ $row->link() }}" title="{{ $row->title }}">{{ $row->title }}</a></h2>
                 <div class="explain">{{ $row->description }}</div>
-                @if($row->tags)
+@if($row->tags)
                     <div class="tags">
                         @foreach($row->tags as $tag)<a href="#">{{ $tag }}</a>@endforeach
 
                     </div>
-                @endif
+@endif
             </div>
         </div>
-        @endloop
+@endloop
     </div>
 @endsection
 

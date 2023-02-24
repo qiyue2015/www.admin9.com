@@ -25,13 +25,13 @@
 <div class="banner-wrapper">
     <div class="banner-title">知识达人招募</div>
     <div class="search-group">
-            <div class="middle-align search-btn">
-                <span class="iconfont icon-search"></span>
-            </div>
-            <input class="search-input" type="text" placeholder="搜索一下，用好奇心驱动世界" autocomplete="off">
-            <div class="clear-btn middle-align">
-                <span class="iconfont icon-close"></span>
-            </div>
+        <div class="middle-align search-btn">
+            <span class="iconfont icon-search"></span>
+        </div>
+        <input class="search-input" type="text" placeholder="搜索一下，用好奇心驱动世界" autocomplete="off">
+        <div class="clear-btn middle-align">
+            <span class="iconfont icon-close"></span>
+        </div>
     </div>
     <div class="hot-words">
         <span class="hot-word-search">热门搜索</span>

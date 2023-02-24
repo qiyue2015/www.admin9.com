@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>@yield('title')</title>
-    <meta name="keywords" content="@yield('keywords', config('app.name'))"/>
+    <meta name="keywords" content="@yield('keywords', config('site.name'))"/>
     <meta name="description" content="@yield('description')"/>
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
@@ -49,12 +49,12 @@
                 </div>
                 <div class="panel-bd">
                     <ul class="rank-list">
-    @loop($category_id, 10, 'c', 1)
+@loop($category_id, 10, 'c', 1)
                         <li class="item">
                             <span class="rank-index">{{ $loop->iteration }}</span>
                             <a href="{{ $row->link() }}" target="_blank" title="{{ $row->title }}">{{ $row->title }}</a>
                         </li>
-    @endloop
+@endloop
                     </ul>
                 </div>
             </div>
