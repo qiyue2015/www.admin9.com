@@ -1,7 +1,7 @@
 <div class="navbar-wrap fixed-header">
     <div class="navbar">
         <div class="navbar-start">
-            <a href="/" class="site-name" rel="home" title="{{ config('site.name') }}">HaoQi<span>.net</span></a>
+            <a href="/" class="site-name" rel="home" title="{{ config('site.name') }}">{{ config('site.name') }}</span></a>
         </div>
         <div class="navbar-center">
             <ul class="menu menu-horizontal px-1">
