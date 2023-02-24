@@ -1,10 +1,10 @@
 {
   "resources/sass/iconfont/iconfont.ttf": {
-    "file": "assets/iconfont.0a6c8cc6.ttf",
+    "file": "assets/iconfont.7e0ac3cc.ttf",
     "src": "resources/sass/iconfont/iconfont.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app.5e2c2ba9.js",
+    "file": "assets/app.9bea7c13.js",
     "src": "resources/js/app.js",
     "isEntry": true
   },
@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app.67ab83c9.css",
+    "file": "assets/app.d8511943.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

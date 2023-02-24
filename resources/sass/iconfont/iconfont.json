@@ -6,25 +6,32 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "876776",
-      "name": "更多",
-      "font_class": "gengduo",
-      "unicode": "e667",
-      "unicode_decimal": 58983
+      "icon_id": "5013",
+      "name": "列表",
+      "font_class": "liebiao",
+      "unicode": "343a",
+      "unicode_decimal": 13370
     },
     {
-      "icon_id": "8106245",
-      "name": "close",
-      "font_class": "close",
-      "unicode": "e69e",
-      "unicode_decimal": 59038
+      "icon_id": "629357",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e651",
+      "unicode_decimal": 58961
     },
     {
-      "icon_id": "8776842",
-      "name": "search",
-      "font_class": "icon-test",
-      "unicode": "e63c",
-      "unicode_decimal": 58940
+      "icon_id": "2674473",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "24470270",
+      "name": "像素_兔子",
+      "font_class": "xiangsu_tuzi",
+      "unicode": "ed20",
+      "unicode_decimal": 60704
     }
   ]
 }

@@ -52,38 +52,16 @@
     vertical-align: middle;
   }
 
-  @font-face {
-    font-family: "iconfont"; /* Project id  */
-    src: url('iconfont/iconfont.ttf?t=1677090382194') format('truetype');
-  }
-
-  .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .icon-gengduo:before {
-    content: "\e667";
-  }
-
-  .icon-close:before {
-    content: "\e69e";
-  }
-
-  .icon-search:before {
-    content: "\e63c";
-  }
 
   .site-name {
-    @apply text-primary text-2xl;
+    @apply text-primary text-lg;
     span {
       @apply text-base-300 text-base-content;
     }
   }
 }
+
+@import 'iconfont/iconfont.css';
 
 @layer components {
   @import './components/header';

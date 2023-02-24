@@ -31,7 +31,7 @@
   }
 
   .banner-title {
-    @apply relative text-xl md:text-3xl text-left;
+    @apply relative text-xl md:text-3xl text-center;
     @apply pt-16 md:pt-24 mx-auto mb-4 whitespace-nowrap;
     transition: color .3s;
     font-weight: 700;
