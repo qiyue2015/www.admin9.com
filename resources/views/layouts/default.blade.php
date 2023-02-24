@@ -49,7 +49,7 @@
                 </div>
                 <div class="panel-bd">
                     <ul class="rank-list">
-@loop($category_id, 10, 'c', 1)
+@loop($category_id, 8, 'c', 1)
                         <li class="item">
                             <span class="rank-index">{{ $loop->iteration }}</span>
                             <a href="{{ $row->link() }}" target="_blank" title="{{ $row->title }}">{{ $row->title }}</a>
