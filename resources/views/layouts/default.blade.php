@@ -41,7 +41,7 @@
     <div class="right-side">
         <div class="block">
             <div class="side-photo mb-8">
-                <img src="/img/banner.jpg" alt="">
+                <img src="/img/banner.jpg?m=1" alt="">
             </div>
             <div class="panel">
                 <div class="panel-hd">
