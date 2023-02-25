@@ -33,13 +33,13 @@ class InitArchiveCover extends Command
     {
         ini_set('memory_limit', -1);
 
-        $count = Archive::whereHasCover(0)->count();
+        $count = Archive::checked()->whereHasCover(0)->count();
         $bar = $this->output->createProgressBar($count);
 
         $star = 0;
-        $lastId = Archive::whereHasCover(0)->max('id');
+        $lastId = Archive::checked()->whereHasCover(0)->max('id');
         while ($star < $lastId) {
-            $list = Archive::whereHasCover(0)
+            $list = Archive::checked()->whereHasCover(0)
                 ->where('id', '>', $star)
                 ->take(500)
                 ->get(['id', 'title']);
