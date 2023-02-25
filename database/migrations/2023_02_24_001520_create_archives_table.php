@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -28,12 +27,13 @@ return new class extends Migration
             $table->boolean('has_cover')->default(false)->index()->comment('是否有封面');
             $table->text('images')->nullable();
             $table->unsignedBigInteger('view_num')->default(0)->comment('点击量');
+            $table->boolean('checked')->default(false)->index();
             $table->boolean('is_publish')->default(false);
             $table->timestamp('publish_at')->nullable();
             $table->boolean('is_html')->default(false)->index()->comment('生成 PC html');
             $table->boolean('is_wap_html')->default(false)->index()->comment('生成 WAP html');
             $table->boolean('is_sitemap')->default(false)->index()->comment('生成');
-            $table->char('baidu_id', 32)->nullable()->index();
+            $table->char('task_id', 32)->nullable()->index();
             $table->timestamps();
 
             $table->index(['category_id', 'has_cover', 'is_publish', 'flag', 'publish_at'], 'main_index');
