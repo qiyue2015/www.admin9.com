@@ -99,7 +99,7 @@ if (!function_exists('for_show_loop')) {
         $key = Str::snake(__FUNCTION__.'_'.implode('_', func_get_args()));
         return cache()->remember($key, now()->addMinutes(30), function () use ($line, $has_cover, $categoryId, $type) {
             return \App\Models\Archive::published()
-                ->when($categoryId, function ($query) use ($categoryId) {
+                ->when($categoryId !== 0, function ($query) use ($categoryId) {
                     return $query->where('category_id', $categoryId);
                 })
                 ->when($has_cover, function ($query) {
