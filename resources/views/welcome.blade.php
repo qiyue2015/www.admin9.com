@@ -12,9 +12,11 @@
     <div class="article-list">
 @loop($category_id, 30)
         <div class="article-item">
+@if($row->has_cover)
             <a href="{{ $row->link() }}" class="article-img">
                 <img src="{{ $row->cover }}" alt="{{ $row->title }}" class="object-cover rounded"/>
             </a>
+@endif
             <div class="article-text">
                 <h2><a href="{{ $row->link() }}" title="{{ $row->title }}">{{ $row->title }}</a></h2>
                 <div class="explain">{{ $row->description }}</div>
