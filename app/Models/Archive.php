@@ -59,6 +59,11 @@ use Jenssegers\Optimus\Optimus;
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereViewNum($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive published()
+ * @property int $checked
+ * @property string|null $task_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Archive checked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Archive whereChecked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Archive whereTaskId($value)
  * @mixin \Eloquent
  */
 class Archive extends Model
@@ -100,6 +105,11 @@ class Archive extends Model
     public function getTagsAttribute($value): array
     {
         return array_filter(explode(',', $value));
+    }
+
+    public function scopeChecked($query): void
+    {
+        $query->where('checked', true);
     }
 
     public function scopePublished($query): void

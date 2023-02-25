@@ -238,6 +238,14 @@ return [
                 'connection' => 'redis',
                 'processes' => 20,
             ],
+            'just_for_clueai' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::CLUEAI_API_QUEUE],
+                'balance' => 'auto',
+                'processes' => 1,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
         ],
     ],
 ];

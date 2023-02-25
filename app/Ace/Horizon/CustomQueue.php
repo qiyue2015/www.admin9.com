@@ -28,4 +28,10 @@ class CustomQueue
      * 大规模进程 queue.
      */
     public const LARGE_PROCESSES_QUEUE = 'large_processes';
+
+    /**
+     * 元语生成答案 queue.
+     */
+    public const CLUEAI_API_QUEUE = 'clueai_api';
+
 }
