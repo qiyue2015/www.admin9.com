@@ -9,7 +9,7 @@
         <div class="navbar-center">
             <ul class="menu menu-horizontal px-1">
                 <li><a href="/" target="_self" data-tab-id="0" @if($category_id===0) class="active"@endif>推荐</a></li>
-@listshowclass(0, 12)
+@listshowclass(0, 10)
                 <li><a href="{{ $row->link() }}/" target="_self" data-tab-id="{{$row->id}}" @if($category_id===$row->id) class="active"@endif>{{ $row->name }}</a></li>
 @endlistshowclass
             </ul>
