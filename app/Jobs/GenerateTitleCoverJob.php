@@ -74,7 +74,7 @@ class GenerateTitleCoverJob implements ShouldQueue
             ->save($imageFilePath);
 
         $this->archive->update([
-            'cover' => str_replace('public/', '', $imageFilename),
+            'cover' => str_replace('public/', '/', $imageFilename),
             'has_cover' => true,
         ]);
     }
