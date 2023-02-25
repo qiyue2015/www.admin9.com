@@ -33,6 +33,7 @@ class InitLongTailWordPack extends Command
      */
     public function handle()
     {
+        ini_set('memory_limit', -1);
         $url = $this->argument('url');
         $pathInfo = pathinfo($url);
         $path = 'word-packs/'.$pathInfo['basename'];
@@ -47,8 +48,9 @@ class InitLongTailWordPack extends Command
                 $list = explode(PHP_EOL, $content);
                 $count = count($list);
                 $bar = $this->output->createProgressBar($count);
-                // 每次 500 条
-                collect($list)->chunk(500)->each(function ($rows) use ($bar) {
+
+                // 每次 200 条
+                collect($list)->chunk(200)->each(function ($rows) use ($bar) {
                     $bar->advance($rows->count());
                     $data = [];
                     foreach ($rows as $val) {
@@ -58,6 +60,9 @@ class InitLongTailWordPack extends Command
                             'category_id' => $category->id,
                             'title' => $row[2],
                             'tags' => $row[3].($row[4] !== 'NULL' ? ','.$row[4] : ''),
+                            'task_id' => $row[0],
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                     Archive::insert($data);
