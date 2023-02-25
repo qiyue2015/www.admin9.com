@@ -18,8 +18,8 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->unsignedSmallInteger('parent_id')->default(0)->index()->comment('父ID');
             $table->char('name', 10)->index()->comment('名称');
-            $table->char('alias', 20)->nullable()->index()->comment('alias');
-            $table->char('slug', 10)->nullable()->index();
+            $table->char('alias', 10)->nullable()->index()->comment('alias');
+            $table->char('slug', 20)->nullable()->index();
             $table->smallInteger('sort')->default(0)->comment('排序');
             $table->unsignedInteger('num')->default(0)->comment('分类信息数量');
             $table->unsignedSmallInteger('is_show')->default(0)->index()->comment('导航展示 1展示');
