@@ -31,11 +31,12 @@ class GenerateAnswersCommand extends Command
      */
     public function handle()
     {
-        Category::where('id', '>', 1)->get()->each(function ($category) {
+        Category::all()->each(function ($category) {
             $this->error($category->name);
-            Archive::whereCategoryId($category->id)->take(20)->each(function ($archive) {
+            $list = Archive::whereCategoryId($category->id)->take(10)->get();
+            foreach ($list as $archive) {
                 ClueAiGenerateAnswerJob::dispatch($archive)->onQueue(CustomQueue::CLUEAI_API_QUEUE);
-            });
+            })
         });
         //$count = Archive::where('checked', 0)->count();
         //$lastId = Archive::where('checked', 0)->max('id');
