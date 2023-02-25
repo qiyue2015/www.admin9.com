@@ -36,7 +36,7 @@ class GenerateAnswersCommand extends Command
             $list = Archive::whereCategoryId($category->id)->take(10)->get();
             foreach ($list as $archive) {
                 ClueAiGenerateAnswerJob::dispatch($archive)->onQueue(CustomQueue::CLUEAI_API_QUEUE);
-            })
+            }
         });
         //$count = Archive::where('checked', 0)->count();
         //$lastId = Archive::where('checked', 0)->max('id');
