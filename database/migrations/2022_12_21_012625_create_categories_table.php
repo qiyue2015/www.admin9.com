@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->unsignedSmallInteger('parent_id')->index()->default(0)->comment('父ID');
             $table->char('name', 10)->comment('名称')->index();
             $table->char('alias', 10)->comment('alias')->nullable('')->index();
-            $table->char('slug', 10)->nullable()->index();
+            $table->char('slug', 20)->nullable()->index();
             $table->smallInteger('sort')->default(0)->comment('排序');
             $table->unsignedTinyInteger('is_last')->default(0)->comment('0非终极栏目 1终极栏目');
             $table->unsignedTinyInteger('is_list')->default(0)->comment('0封面模式 1列表模式');
