@@ -33,7 +33,7 @@ class GenerateAnswersCommand extends Command
     {
         Category::all()->each(function ($category) {
             $this->error($category->name);
-            $list = Archive::whereCategoryId($category->id)->take(10)->get();
+            $list = Archive::whereCategoryId($category->id)->take(50)->get();
             foreach ($list as $archive) {
                 ClueAiGenerateAnswerJob::dispatch($archive)->onQueue(CustomQueue::CLUEAI_API_QUEUE);
             }
