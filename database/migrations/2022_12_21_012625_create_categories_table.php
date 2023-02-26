@@ -21,8 +21,8 @@ return new class extends Migration {
             $table->smallInteger('sort')->default(0)->comment('排序');
             $table->unsignedTinyInteger('is_last')->default(0)->comment('0非终极栏目 1终极栏目');
             $table->unsignedTinyInteger('is_list')->default(0)->comment('0封面模式 1列表模式');
-            //$table->text('children')->nullable()->default('')->comment('子栏目ID集合');
-            //$table->text('parents')->nullable()->default('')->comment('父栏目ID集合');
+            $table->text('children')->nullable()->comment('子栏目ID集合');
+            $table->text('parents')->nullable()->comment('父栏目ID集合');
         });
     }
 
