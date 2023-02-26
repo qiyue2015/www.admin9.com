@@ -8,7 +8,9 @@
         <h1>{{ $archive->title }}</h1>
         <div class="bar-wrap">
             <span class="time">{{ $archive->publish_at }}</span>
+@if($archive->user)
             <span class="user">{{ $archive->user->name }}</span>
+@endif
         </div>
         <div class="content">{!! $archive->extend->content !!}</div>
         <div class="tips">
