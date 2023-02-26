@@ -93,8 +93,22 @@ class Archive extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getPublishAtAttribute($value): string
+    {
+        return now()->parse($value)->format('Y-m-d');
+    }
+
     public function getCoverAttribute($value): string
     {
+        if (str()->contains($value, 'https') || str()->contains($value, 'http')) {
+            return $value;
+        }
+
         if ($value) {
             return '/storage'.$value;
         }

@@ -15,7 +15,7 @@ class ArchiveController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         $category_id = $category->id;
-        return view('welcome', compact('category', 'category_id'));
+        return view('archive.category', compact('category', 'category_id'));
     }
 
     /**

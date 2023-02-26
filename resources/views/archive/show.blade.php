@@ -8,6 +8,7 @@
         <h1>{{ $archive->title }}</h1>
         <div class="bar-wrap">
             <span class="time">{{ $archive->publish_at }}</span>
+            <span class="user">{{ $archive->user->name }}</span>
         </div>
         <div class="content">{!! $archive->extend->content !!}</div>
         <div class="tips">
