@@ -1,5 +1,35 @@
 <?php
 
+if (!function_exists('cache_increment')) {
+    /**
+     * @param $key
+     * @param  int  $increment
+     * @param $ttl
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    function cache_increment($key, int $increment = 1, $ttl = null)
+    {
+        if (Cache::has($key)) {
+            Cache::increment($key, $increment);
+        } else {
+            Cache::set($key, 1, $ttl);
+        }
+    }
+}
+
+if (!function_exists('redis_cache')) {
+    /**
+     * Return redis object with cache driver.
+     *
+     * @return \Illuminate\Redis\Connections\Connection|\Redis
+     */
+    function redis_cache()
+    {
+        return \Illuminate\Support\Facades\Redis::connection('cache');
+    }
+}
+
 if (!function_exists('getParentCategories')) {
     /**
      * 获取某一分类的所有子分类.
@@ -57,14 +87,6 @@ if (!function_exists('getParentCategories')) {
     }
 }
 
-if (!function_exists('TaggingSlug')) {
-    function TaggingSlug($string): string
-    {
-        $string = \Overtrue\Pinyin\Pinyin::permalink($string);
-        return \Conner\Tagging\TaggingUtility::slug($string);
-    }
-}
-
 if (!function_exists('for_show_sub_class')) {
     /**
      * 循环栏目导航标签.
@@ -78,6 +100,7 @@ if (!function_exists('for_show_sub_class')) {
         return cache()->rememberForever($key, function () use ($line, $categoryId) {
             return \App\Models\Category::query()
                 ->where('parent_id', $categoryId)
+                ->where('is_show', 1)
                 ->orderBy('sort')
                 ->take($line)
                 ->get(['id', 'parent_id', 'name', 'alias', 'slug']);
