@@ -38,16 +38,19 @@ class ClueAiGenerateAnswerJob implements ShouldQueue
         $url = 'https://www.modelfun.cn/modelfun/api/serving_api';
         $response = Http::timeout(30)
             ->withHeaders([
-                'Model-name' => 'clueai-large',
                 'Api-key' => 'BEARER '.$this->key,
+                'Request-Source' => 'python-sdk',
+                'Model-name' => 'clueai-large',
             ])
             ->asJson()
             ->post($url, [
                 'task_type' => 'generate',
-                'model_name' => 'ChatYuan-large',
+                'model_name' => 'clueai-large',
                 'input_data' => ["问答：\n问题：{$this->archive->title}：\n答案："],
+                'generate_config' => [
+                    'do_sample' => true,
+                ],
             ]);
-
         $results = $response->json('result');
         $content = '';
         foreach ($results as $result) {
@@ -59,7 +62,7 @@ class ClueAiGenerateAnswerJob implements ShouldQueue
         ]);
         $this->archive->extend()->create([
             'id' => $this->archive->id,
-            'content' => $content,
+            'content' => '<p>'.$content.'</p>',
         ]);
     }
 }
