@@ -27,6 +27,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereSort($value)
+ * @property int $num 分类信息数量
+ * @property int $is_show 导航展示 1展示
+ * @property array|null $children 子栏目ID集合
+ * @property array|null $parents 父栏目ID集合
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereChildren($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereIsShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereNum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereParents($value)
  * @mixin \Eloquent
  */
 class Category extends Model

@@ -50,6 +50,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Article withAllTags($tagNames)
  * @method static \Illuminate\Database\Eloquent\Builder|Article withAnyTag($tagNames)
  * @method static \Illuminate\Database\Eloquent\Builder|Article withoutTags($tagNames)
+ * @method static \Illuminate\Database\Eloquent\Builder|Article whereTags($value)
  * @mixin \Eloquent
  */
 class Article extends Model
