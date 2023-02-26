@@ -34,4 +34,9 @@ class CustomQueue
      */
     public const CLUEAI_API_QUEUE = 'clueai_api';
 
+
+    /**
+     * 头条问吧.
+     */
+    public const SPIDER_TOUTIAO_WENBA_QUEUE = 'spider_toutiao_wenba';
 }

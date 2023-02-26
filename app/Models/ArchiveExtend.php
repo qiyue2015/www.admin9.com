@@ -17,4 +17,13 @@ class ArchiveExtend extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'display' => 'json',
+    ];
 }

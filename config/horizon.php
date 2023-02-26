@@ -166,7 +166,7 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'default' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
@@ -234,7 +234,13 @@ return [
             'just_for_clueai' => [
                 'connection' => 'redis',
                 'queue' => [CustomQueue::CLUEAI_API_QUEUE],
-                'balance' => 'auto',
+                'processes' => 1,
+                'tries' => 1,
+                'timeout' => 30,
+            ],
+            'just_for_toutiao_wenba' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE],
                 'processes' => 1,
                 'tries' => 1,
                 'timeout' => 30,
@@ -244,15 +250,28 @@ return [
         'local' => [
             'default' => [
                 'connection' => 'redis',
-                'processes' => 20,
+                'queue' => [
+                    'default',
+                    CustomQueue::ARCHIVE_INCREMENT_QUEUE,
+                    CustomQueue::CATEGORY_UPDATE_QUEUE,
+                    CustomQueue::DESCRIPTION_UPDATE_QUEUE,
+                    CustomQueue::PIXABAY_INCREMENT_QUEUE,
+                    CustomQueue::LARGE_PROCESSES_QUEUE,
+                ],
+                'balance' => 'auto',
+                'maxProcesses' => 50,
+                'tries' => 1,
+                'timeout' => 30,
             ],
             'just_for_clueai' => [
                 'connection' => 'redis',
                 'queue' => [CustomQueue::CLUEAI_API_QUEUE],
-                'balance' => 'auto',
                 'processes' => 1,
-                'tries' => 1,
-                'timeout' => 30,
+            ],
+            'just_for_toutiao_wenba' => [
+                'connection' => 'redis',
+                'queue' => [CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE],
+                'processes' => 1,
             ],
         ],
     ],
