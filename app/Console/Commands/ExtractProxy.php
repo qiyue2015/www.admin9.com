@@ -50,9 +50,10 @@ class ExtractProxy extends Command
 
         try {
             // 25分钟至03小时
-            $url = "http://webapi.http.zhimacangku.com/getip?num={$proxyNum}&type=2&pro=0&city=0&yys=0&port=1&time=2&ts=1&ys=1&cs=1&lb=1&sb=0&pb=45&mr=3&regions=";
+            //$url = "http://webapi.http.zhimacangku.com/getip?num={$proxyNum}&type=2&pro=0&city=0&yys=0&port=1&time=2&ts=1&ys=1&cs=1&lb=1&sb=0&pb=45&mr=3&regions=";
             //$url = "http://http.tiqu.letecs.com/getip3?num={$proxyNum}&type=2&pro=0&city=0&yys=0&port=1&time=3&ts=1&ys=1&cs=1&lb=1&sb=0&pb=45&mr=3&regions=&gm=4";
             //$url = "http://http.tiqu.letecs.com/getip3?num={$proxyNum}&type=2&pro=0&city=0&yys=0&port=1&time=3&ts=1&ys=1&cs=1&lb=1&sb=0&pb=4&mr=1&regions=&gm=4";
+            $url = 'http://http.tiqu.letecs.com/getip3?num={$proxyNum}&type=2&pro=0&city=0&yys=0&port=1&pack=296610&ts=1&ys=1&cs=1&lb=1&sb=0&pb=4&mr=1&regions=&gm=4';
             $response = Http::get($url)->object();
             if ($response->code === 0) {
                 collect($response->data)->each(function ($row) {

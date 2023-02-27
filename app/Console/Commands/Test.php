@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Archive;
 use App\Models\Category;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class Test extends Command
 {
@@ -26,24 +27,23 @@ class Test extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle()
     {
-        $list = Category::where('num', '>', 0)->get()->toArray();
-        collect($list)->each(function ($category) {
-            $this->comment($category['name']);
-            $list = Archive::whereCategoryId($category['id'])->limit(200)->get(['id', 'title'])->toArray();
-            $homeRandomKey = array_rand($list);
-            $homeId = $list[$homeRandomKey]['id'];
-            Archive::whereId($homeId)->update(['flag' => 'c']);
-
-            $ids = [];
-            $categoryRandomKeys = array_rand($list, 10);
-            foreach ($categoryRandomKeys as $val) {
-                $ids[] = $list[$val]['id'];
-            }
-            Archive::whereIn('id', $ids)->update(['flag' => 'h']);
-        });
-
+        $url = 'https://search5-search-lq.toutiaoapi.com/s/search_wenda/api/related_questions';
+        $query = [
+            'version_code' => '9.1.9',
+            'app_name' => 'news_article',
+            'app_version' => '9.1.9',
+            'carrier_region' => 'CN',
+            'device_id' => '31494770398360'.random_int(10, 99),
+            'device_platform' => 'iphone',
+            'enable_miaozhen_page' => 1,
+            'enter_from' => 'search_result',
+            'keyword' => '什么人打架抽什么烟',
+        ];
+        $response = Http::getWithProxy($url, $query);
+        dd($response->body());
     }
 }
