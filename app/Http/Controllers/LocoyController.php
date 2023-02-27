@@ -29,35 +29,37 @@ class LocoyController extends Controller
     {
         \Log::debug('火车头发布', $request->post());
         $data = $request->validate([
-            'locoy' => 'required|string',
-            'Category' => 'required|string',
+            'CateID' => 'required|string',
             'Title' => 'required|string',
             'Content' => 'required|string',
-            //'task_id' => 'required|string',
+            'TpTaskId' => 'required|string',
         ]);
 
-        if ($data['locoy'] !== 'abcdefg') {
-            return $this->fail('密钥不正确');
-        }
+        $categories = [
+            13 => 11, // 金融
+            12 => 4, // 娱乐
+            11 => 5, // 教育
+            10 => 1, // 问答
+            9 => 10, // 汽车
+            8 => 8, // 游戏
+            7 => 1, // 图文
+            6 => 5, // 知识
+            5 => 19, // 人物
+            4 => 7, // 美食
+            3 => 15, // 旅游
+            2 => 7, // 生活
+        ];
+        $CateID = (int) $data['CateID'];
+        $categoryId = $categories[$CateID];
 
-
-        $category = Category::where('alias', $data['Category'])->first();
-        if (is_null($category)) {
-            $category = Category::create([
-                'name' => $data['Category'],
-                'alias' => $data['Category'],
-                'slug' => Pinyin::permalink($data['Category'], ''),
-            ]);
-        }
-
-        DB::transaction(function () use ($category, $data) {
+        DB::transaction(function () use ($categoryId, $data) {
             $user_id = random_int(10, 100);
             $archive = Archive::create([
-                'category_id' => $category->id,
+                'category_id' => $categoryId,
                 'user_id' => $user_id,
                 'title' => $data['Title'],
                 'search_title' => $data['Title'],
-                //'task_id' => $data['task_id'],
+                'task_id' => $data['TpTaskId'],
             ]);
             $archive->extend()->create([
                 'content' => $data['Content'],
