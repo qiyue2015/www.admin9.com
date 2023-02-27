@@ -51,7 +51,7 @@ class Test extends Command
             }
 
             foreach ($list as $task) {
-                TaskTouTiaoPublishJob::dispatch($task);
+                TaskTouTiaoPublishJob::dispatch($task)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
             }
 
             $star = $list->last()->id;
