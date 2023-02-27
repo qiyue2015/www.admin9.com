@@ -11,8 +11,6 @@ class LocoyController extends Controller
     public function index(Request $request)
     {
         $list = Archive::where('checked', false)
-            ->where('is_html', true)
-            ->where('is_wap_html', true)
             ->orderBy('id', 'DESC')
             ->limit(100)
             ->get();
