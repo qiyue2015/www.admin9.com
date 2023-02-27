@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('spider:yebaike')->everyMinute()->withoutOverlapping();
         //$schedule->command('spider:pixabay')->everyMinute()->withoutOverlapping();
         //$schedule->command('extract:proxy')->everyMinute()->withoutOverlapping();
-        $schedule->command('spider:toutiao-wenba')->everyMinute()->withoutOverlapping();
+        $schedule->command('spider:toutiao-wenba')->everySixHours()->withoutOverlapping();
 
         // 每天早上 2 点到 6 点每 5 分钟执行脚本
         //$schedule->command('article:delete-same')->between('2:00', '6:00')->everyFiveMinutes()->withoutOverlapping();
