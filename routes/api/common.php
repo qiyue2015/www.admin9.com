@@ -10,6 +10,8 @@ Route::post('webhook', function (Request $request) {
     return '操作成功';
 });
 
+Route::post('locoy', [\App\Http\Controllers\LocoyController::class, 'store']);
+
 Route::controller(AuthController::class)->prefix('auth')->group(function (Router $router): void {
     $router->post('login', 'login')->name('login');
     $router->post('logout', 'logout')->name('logout')->middleware('auth:sanctum');
