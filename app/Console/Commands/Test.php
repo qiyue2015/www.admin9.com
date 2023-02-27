@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Archive;
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -23,6 +24,11 @@ class Test extends Command
      */
     protected $description = 'Command description';
 
+    private function query(): \Illuminate\Database\Eloquent\Builder|Archive
+    {
+        return Archive::where('checked', 0)->where('task_id', '!==', null);
+    }
+
     /**
      * Execute the console command.
      *
@@ -31,20 +37,26 @@ class Test extends Command
      */
     public function handle()
     {
-        $url = 'https://search5-search-lq.toutiaoapi.com/s/search_wenda/api/related_questions';
-        $query = [
-            'version_code' => '9.1.9',
-            'app_name' => 'news_article',
-            'app_version' => '9.1.9',
-            'carrier_region' => 'CN',
-            'device_id' => '31494770398360'.random_int(10, 99),
-            'device_platform' => 'iphone',
-            'enable_miaozhen_page' => 1,
-            'enter_from' => 'search_result',
-            'keyword' => '什么人打架抽什么烟',
-        ];
+        $lastId = $this->query()->max('id');
+        $count = $this->query()->count();
+        $bar = $this->output->createProgressBar($count);
+        $star = 0;
+        while ($star < $lastId) {
+            $list = $this->query()->where('id', '>', $star)->limit(100)->get();
+            if ($list->isEmpty()) {
+                break;
+            }
 
-        $response = Http::getWithProxy($url, $query);
-        dd($response, $response->body());
+            foreach ($list as $archive) {
+                dispatch(static function () use ($archive) {
+                    Task::where('hash', $archive->task_id)->update([
+                        'contents' => $archive->extend()->content,
+                    ]);
+                });
+            }
+
+            $star = $list->last()->id;
+            $bar->advance($list->count());
+        }
     }
 }
