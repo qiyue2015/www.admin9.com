@@ -10,10 +10,10 @@ class LocoyController extends Controller
 {
     public function index(Request $request)
     {
-        $list = Archive::where('checked', false)
+        $list = Archive::select(['id', 'title', 'description'])
+            ->where('checked', false)
             ->orderBy('id', 'DESC')
-            ->limit(100)
-            ->get();
+            ->simplePaginate(10);
         return view('locoy.locoy', compact('list'));
     }
 

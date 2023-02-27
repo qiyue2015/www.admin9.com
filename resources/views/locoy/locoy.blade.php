@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="max-w-6xl mx-auto">
-    <table class="table-fixed">
+    <table class="table-fixed mt-8">
         <thead>
         <tr>
             <th class="w-12">ID</th>
@@ -28,6 +28,7 @@
         @endforeach
         </tbody>
     </table>
+    <div class="m-10">{{ $list->links() }}</div>
 </div>
 </body>
 </html>
