@@ -7,13 +7,27 @@
     @vite(['resources/sass/app.scss'])
 </head>
 <body>
-<div class="container pt-4">
-    <dl>
-@foreach($list as $row)
-        <dt>（{{$row->id}}）<a href="{{$row->link()}}" target="_blank">{{$row->title}}</a></dt>
-        <dd class="mb-8">{{$row->description}}</dd>
-@endforeach
-    </dl>
+<div class="max-w-6xl mx-auto">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <th class="w-12">ID</th>
+            <th>TITLE</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($list as $row)
+            <tr>
+                <td class="text-center">{{$row->id}}</td>
+                <td class="py-4"><a href="{{$row->link()}}" class="link link-secondary" target="_blank">{{$row->title}}</a></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{$row->description}}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
