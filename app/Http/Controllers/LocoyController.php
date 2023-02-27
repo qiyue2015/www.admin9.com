@@ -6,7 +6,6 @@ use App\Models\Archive;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Overtrue\Pinyin\Pinyin;
 
 class LocoyController extends Controller
@@ -28,7 +27,7 @@ class LocoyController extends Controller
      */
     public function store(Request $request)
     {
-        Log::channel('locoyPost')->info('火车头发布', $request->post());
+        \Log::debug('火车头发布', $request->post());
         $data = $request->validate([
             'locoy' => 'required|string',
             'Category' => 'required|string',
