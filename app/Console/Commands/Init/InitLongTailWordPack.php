@@ -4,9 +4,11 @@ namespace App\Console\Commands\Init;
 
 use App\Models\Archive;
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Laravel\Horizon\Tags;
 use Overtrue\Pinyin\Pinyin;
 use Storage;
 
@@ -53,37 +55,22 @@ class InitLongTailWordPack extends Command
                     $data = [];
                     foreach ($rows as $val) {
                         $row = explode("\t", $val);
-                        $category = $this->getCategory($row[3]);
                         $data[] = [
-                            'category_id' => $category->id,
+                            'hash' => $row[0],
                             'title' => $row[2],
                             'tags' => $row[3].($row[4] !== 'NULL' ? ','.$row[4] : ''),
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
-                    Archive::insert($data);
+                    Task::insert($data);
                 });
             } catch (\Exception $exception) {
-                Log::channel('download-word-pack')->error($exception->getMessage());
+                Log::channel('word-pack')->error($exception->getMessage());
             }
         }
     }
 
-    public function getCategory($string)
-    {
-        if ($string) {
-            $key = 'category:'.md5($string);
-            return cache()->remember($key, now()->addHour(), function () use ($string) {
-                $category = Category::whereAlias('name', $string)->first();
-                if ($category) {
-                    return $category;
-                }
-                $slug = Pinyin::permalink($string, '');
-                return Category::firstOrCreate(['alias' => $string], ['name' => $string, 'slug' => $slug]);
-            });
-        }
-
-        return $this->getCategory('其它');
-    }
 
     /**
      * 下载词包
@@ -100,7 +87,7 @@ class InitLongTailWordPack extends Command
 
             return Http::get($url)->body();
         } catch (\Exception $exception) {
-            Log::channel('download-word-pack')->error($exception->getMessage());
+            Log::channel('word-pack')->error($exception->getMessage());
         }
     }
 }
