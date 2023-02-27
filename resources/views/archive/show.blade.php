@@ -13,7 +13,7 @@
 @endif
         </div>
         <div class="content">
-@if($archive->user)
+@if($archive->extend->content)
             {!! $archive->extend->content !!}
 @endif
         </div>
