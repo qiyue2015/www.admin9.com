@@ -27,7 +27,7 @@ class Test extends Command
 
     private function query(): \Illuminate\Database\Eloquent\Builder|Archive
     {
-        return Archive::where('checked', 0);
+        return Task::where('run_num', 0);
     }
 
     /**
@@ -48,13 +48,14 @@ class Test extends Command
                 break;
             }
 
-            foreach ($list as $archive) {
-                dispatch(static function () use ($archive) {
-                    Task::where('hash', $archive->task_id)->update([
-                        'contents' => $archive->extend->display,
-                    ]);
-                })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
+            $ids = [];
+            foreach ($list as $row) {
+                if ($row->contents) {
+                    $ids[] = $row->id;
+                }
             }
+
+            Task::whereIn('id', $ids)->update(['run_num' => 1, 'run_time' => now()->addDay()->timestamp]);
 
             $star = $list->last()->id;
             $bar->advance($list->count());
