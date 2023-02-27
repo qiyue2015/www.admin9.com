@@ -25,13 +25,8 @@ class LocoyController extends Controller
      */
     public function store(Request $request)
     {
-        //$locoy = $request->get('locoy', '');
-        //if (!$locoy) {
-        //    $this->fail('KEY不能为空')
-        //}
-        //\Log::debug('火车头发布', $request->get('locoy'));
+        \Log::debug('火车头发布', $request->get('locoy'));
 
-        //https://www.dtime.com/?locoy=5603195
         $data = $request->validate([
             'CateID' => 'required|string',
             'Title' => 'required|string',
