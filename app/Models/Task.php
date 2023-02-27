@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereTags($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereUpdatedAt($value)
+ * @property string $hash 唯一HASH
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereHash($value)
  * @mixin \Eloquent
  */
 class Task extends Model
@@ -36,4 +38,13 @@ class Task extends Model
     protected $guarded = [];
 
     protected $table = 'task_entries';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'contents' => 'json',
+    ];
 }
