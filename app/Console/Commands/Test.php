@@ -26,7 +26,7 @@ class Test extends Command
 
     private function query(): \Illuminate\Database\Eloquent\Builder|Archive
     {
-        return Archive::where('checked', 0)->where('task_id', '!==', null);
+        return Archive::where('checked', 0);
     }
 
     /**
