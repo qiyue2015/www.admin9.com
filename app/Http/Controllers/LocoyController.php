@@ -6,6 +6,7 @@ use App\Models\Archive;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Overtrue\Pinyin\Pinyin;
 
 class LocoyController extends Controller
 {
@@ -40,6 +41,13 @@ class LocoyController extends Controller
 
 
         $category = Category::where('alias', $data['Category'])->firstOrFail();
+        if (is_null($category)) {
+            $category = Category::create([
+                'name' => $data['Category'],
+                'alias' => $data['Category'],
+                'slug' => Pinyin::permalink($data['Category'], ''),
+            ]);
+        }
 
         DB::transaction(function () use ($category, $data) {
             $user_id = random_int(10, 100);
