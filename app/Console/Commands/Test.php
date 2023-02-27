@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Ace\Horizon\CustomQueue;
 use App\Models\Archive;
 use App\Models\Category;
 use App\Models\Task;
@@ -52,7 +53,7 @@ class Test extends Command
                     Task::where('hash', $archive->task_id)->update([
                         'contents' => $archive->extend->content,
                     ]);
-                });
+                })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             }
 
             $star = $list->last()->id;
