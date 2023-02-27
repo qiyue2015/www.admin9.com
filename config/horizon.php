@@ -243,7 +243,7 @@ return [
                 'queue' => [CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE],
                 'processes' => 10,
                 'tries' => 1,
-                'timeout' => 30,
+                'timeout' => 20,
             ],
         ],
 
