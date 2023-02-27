@@ -31,13 +31,12 @@ class SpiderTouTiaoWenBaCommand extends Command
     public function handle()
     {
         // 每分钟处理 30 条
-        $list = Archive::where('is_html', 0)->limit(30)->get();
+        $list = Archive::where('is_html', 0)->limit(60)->get();
         if ($list->isNotEmpty()) {
             $bar = $this->output->createProgressBar($list->count());
             collect($list)->each(function ($archive) use ($bar) {
                 $bar->advance();
                 SpiderTouTiaoWenBaJob::dispatch($archive)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
-                sleep(1);
             });
         }
         //$lastId = Archive::max('id');
