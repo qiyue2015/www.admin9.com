@@ -27,7 +27,7 @@ class Test extends Command
 
     private function query(): \Illuminate\Database\Eloquent\Builder|Archive
     {
-        return Task::where('run_num', 0);
+        return Task::where('run_num', '>', 0);
     }
 
     /**
@@ -48,14 +48,14 @@ class Test extends Command
                 break;
             }
 
-            $ids = [];
             foreach ($list as $row) {
-                if ($row->contents) {
-                    $ids[] = $row->id;
-                }
+                $this->info($row->title);
+                $contents = collect($row->contents)->map(function ($val) {
+                    unset($val['large_image_url'], $val['has_image'], $val['show_tag_list'], $val['image_list']);
+                    return $val;
+                })->toArray();
+                $row->update(['contents' => $contents]);
             }
-
-            Task::whereIn('id', $ids)->update(['run_num' => 1, 'run_time' => now()->addDay()->timestamp]);
 
             $star = $list->last()->id;
             $bar->advance($list->count());
