@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archive;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Overtrue\Pinyin\Pinyin;
 
 class LocoyController extends Controller
 {
@@ -27,7 +25,13 @@ class LocoyController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::debug('火车头发布', $request->post());
+        //$locoy = $request->get('locoy', '');
+        //if (!$locoy) {
+        //    $this->fail('KEY不能为空')
+        //}
+        //\Log::debug('火车头发布', $request->get('locoy'));
+
+        //https://www.dtime.com/?locoy=5603195
         $data = $request->validate([
             'CateID' => 'required|string',
             'Title' => 'required|string',
