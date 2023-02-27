@@ -31,6 +31,7 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -40,15 +41,15 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
             'app_name' => 'news_article',
             'app_version' => '9.1.9',
             'carrier_region' => 'CN',
-            'device_id' => '3149477039836078',
+            'device_id' => '31494770398360'.random_int(10, 99),
             'device_platform' => 'iphone',
             'enable_miaozhen_page' => 1,
             'enter_from' => 'search_result',
             'keyword' => $this->archive->title,
         ];
-        $response = Http::getWithProxy($url, $query);
+        $response = Http::get($url, $query);
         $maps = collect($response->json('data'))->filter(function ($row) {
-            return isset($row['display_type_self']); // 只需要问答的内容
+            return isset($row['display_type_self'], $row['display']); // 只需要问答的内容
         });
 
         $list = collect($maps)->map(function ($row) {
@@ -68,7 +69,11 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
         })->toArray();
         if ($list) {
             $this->archive->update(['is_html' => true, 'is_wap_html' => true]);
-            $this->archive->extend()->updateOrCreate(['display' => array_values($list)], ['id' => $this->archive->id]);
+            if (!$this->archive->extend()->exists()) {
+                $this->archive->extend()->create(['display' => array_values($list), 'id' => $this->archive->id]);
+            } else {
+                $this->archive->extend()->update(['display' => array_values($list)]);
+            }
         } else {
             $this->archive->update(['is_html' => true]);
         }
