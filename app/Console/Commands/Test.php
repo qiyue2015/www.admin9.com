@@ -50,7 +50,7 @@ class Test extends Command
             foreach ($list as $archive) {
                 dispatch(static function () use ($archive) {
                     Task::where('hash', $archive->task_id)->update([
-                        'contents' => $archive->extend()->content,
+                        'contents' => $archive->extend->content,
                     ]);
                 });
             }
