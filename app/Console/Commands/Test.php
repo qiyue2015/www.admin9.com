@@ -50,13 +50,12 @@ class Test extends Command
 
             foreach ($list as $row) {
                 $contents = collect($row->contents)->map(function ($row) {
-                    $publish_time = (now()->parse($row['publish_time'])->timestamp) - random_int(6, 360);
+                    $publish_time = (now()->parse($row['datetime'])->timestamp) - random_int(300, 720);
                     return [
-                        'source' => $row['source'],
-                        'datetime' => $row['datetime'],
-                        'publish_time' => now()->parse($publish_time)->format('Y-m-d H:i:s'),
                         'title' => $row['title'],
                         'summary' => $row['summary'],
+                        'publish_time' => now()->parse($publish_time)->format('Y-m-d H:i:s'),
+                        'source' => $row['source'],
                         'item_id' => $row['item_id'],
                         'url' => $row['url'],
                     ];
