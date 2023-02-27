@@ -31,7 +31,7 @@ class ExtractProxy extends Command
 
     public function handle(): void
     {
-        $proxyNum = 5;
+        $proxyNum = 3;
 
         $this->comment('Check available proxy...');
 
