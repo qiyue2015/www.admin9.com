@@ -31,7 +31,7 @@ class SpiderTouTiaoWenBaCommand extends Command
     public function handle()
     {
         // 每分钟处理 30 条
-        $list = Archive::where('is_html', 0)->limit(60)->get();
+        $list = Archive::where('is_html', 0)->limit(10)->get();
         if ($list->isNotEmpty()) {
             $bar = $this->output->createProgressBar($list->count());
             collect($list)->each(function ($archive) use ($bar) {
