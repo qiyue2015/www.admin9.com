@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SpiderTouTiaoWenBaJob implements ShouldQueue
 {
@@ -48,6 +49,11 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
             'keyword' => $this->archive->title,
         ];
         $response = Http::getWithProxy($url, $query);
+
+        if (!$response->json('data')) {
+            Log::channel('spider')->debug('代理采集', $response->json());
+        }
+
         $maps = collect($response->json('data'))->filter(function ($row) {
             return isset($row['display_type_self'], $row['display']); // 只需要问答的内容
         });
