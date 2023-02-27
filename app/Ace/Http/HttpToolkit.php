@@ -53,8 +53,14 @@ class HttpToolkit
                 // 记录使用量
                 cache_increment(Proxy::generateQueueDailyApplyKey($proxy), 1, now()->endOfDay());
 
+                $headers = [
+                    'x-requested-with' => 'XMLHttpRequest',
+                    'CLIENT-IP' => $proxy,
+                    'X-FORWARDED-FOR' => $proxy,
+                ];
                 return Http::timeout($timeout)
                     ->withoutVerifying()
+                    ->withHeaders($headers)
                     ->withOptions(['proxy' => $proxy])
                     ->withHeaders(['User-Agent' => FakeUserAgent::random()])
                     ->get($url, $query);

@@ -43,7 +43,8 @@ class Test extends Command
             'enter_from' => 'search_result',
             'keyword' => '什么人打架抽什么烟',
         ];
+
         $response = Http::getWithProxy($url, $query);
-        dd($response->body());
+        dd($response, $response->body());
     }
 }
