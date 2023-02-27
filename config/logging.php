@@ -125,6 +125,13 @@ return [
             'days' => 14,
         ],
 
+        'word-pack' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/word-pack.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+
         'spider' => [
             'driver' => 'daily',
             'path' => storage_path('logs/spider.log'),
