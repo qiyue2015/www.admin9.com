@@ -49,10 +49,17 @@ class Test extends Command
             }
 
             foreach ($list as $row) {
-                $this->info($row->title);
-                $contents = collect($row->contents)->map(function ($val) {
-                    unset($val['large_image_url'], $val['has_image'], $val['show_tag_list'], $val['image_list']);
-                    return $val;
+                $contents = collect($row->contents)->map(function ($row) {
+                    $publish_time = (now()->parse($row['publish_time'])->timestamp) - random_int(6, 360);
+                    return [
+                        'source' => $row['source'],
+                        'datetime' => $row['datetime'],
+                        'publish_time' => now()->parse($publish_time)->format('Y-m-d H:i:s'),
+                        'title' => $row['title'],
+                        'summary' => $row['summary'],
+                        'item_id' => $row['item_id'],
+                        'url' => $row['url'],
+                    ];
                 })->toArray();
                 $row->update(['contents' => $contents]);
             }
