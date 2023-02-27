@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands\Init;
 
-use App\Models\Archive;
-use App\Models\Category;
-use App\Models\Task;
+use App\Ace\Horizon\CustomQueue;
+use App\Jobs\Init\InitLongTailWordPackJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Laravel\Horizon\Tags;
-use Overtrue\Pinyin\Pinyin;
 use Storage;
 
 class InitLongTailWordPack extends Command
@@ -30,10 +27,9 @@ class InitLongTailWordPack extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $url = $this->argument('url');
         $pathInfo = pathinfo($url);
@@ -43,37 +39,25 @@ class InitLongTailWordPack extends Command
         } elseif ($pathInfo['extension'] !== 'txt') {
             $this->error('只支持 txt 文本: '.$url);
         } else {
-            try {
-                $content = $this->downloadWordPack($url, $path);
-                $content = trim($content);
-                $list = explode(PHP_EOL, $content);
-                $count = count($list);
-                $bar = $this->output->createProgressBar($count);
-                // 每次 500 条
-                collect($list)->chunk(500)->each(function ($rows) use ($bar) {
-                    $bar->advance($rows->count());
-                    $data = [];
-                    foreach ($rows as $val) {
-                        $row = explode("\t", $val);
-                        $data[] = [
-                            'hash' => $row[0],
-                            'title' => $row[2],
-                            'tags' => $row[3].($row[4] !== 'NULL' ? ','.$row[4] : ''),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ];
-                    }
-                    Task::insert($data);
-                });
-            } catch (\Exception $exception) {
-                Log::channel('word-pack')->error($exception->getMessage());
-            }
+            $content = $this->downloadWordPack($url, $path);
+            $content = trim($content);
+            $list = explode(PHP_EOL, $content);
+            $count = count($list);
+            $bar = $this->output->createProgressBar($count);
+            // 每次 500 条
+            collect($list)->chunk(500)->each(function ($rows) use ($bar) {
+                $bar->advance($rows->count());
+                foreach ($rows as $val) {
+                    InitLongTailWordPackJob::dispatch($val)->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
+                }
+            });
         }
     }
 
 
     /**
      * 下载词包
+     * 
      * @param $url
      * @param $path
      * @return string
