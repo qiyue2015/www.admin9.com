@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
         // 每分钟运行一次采集
         //$schedule->command('spider:yebaike')->everyMinute()->withoutOverlapping();
         //$schedule->command('spider:pixabay')->everyMinute()->withoutOverlapping();
-        $schedule->command('extract:proxy')->everyMinute()->withoutOverlapping();
+        //$schedule->command('extract:proxy')->everyMinute()->withoutOverlapping();
         $schedule->command('spider:toutiao-wenba')->everyMinute()->withoutOverlapping();
 
         // 每天早上 2 点到 6 点每 5 分钟执行脚本
