@@ -27,10 +27,10 @@ class ArchiveController extends Controller
     {
         $id = $optimus->decode($id);
         $archive = cache()->remember('archives:'.$id, now()->addMinutes(60), function () use ($id) {
-            return Archive::find($id);
+            return Archive::findOrFail($id);
         });
-        $category = $archive->category;
-        $category_id = $category->id;
+        $category = $archive->category ?? null;
+        $category_id = $category ? $category->id : 0;
         return view('archive.show', compact('archive', 'category', 'category_id'));
     }
 }
