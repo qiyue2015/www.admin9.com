@@ -33,7 +33,7 @@ class LocoyController extends Controller
             'Category' => 'required|string',
             'Title' => 'required|string',
             'Content' => 'required|string',
-            'task_id' => 'required|string',
+            //'task_id' => 'required|string',
         ]);
 
         if ($data['locoy'] !== 'abcdefg') {
@@ -57,7 +57,7 @@ class LocoyController extends Controller
                 'user_id' => $user_id,
                 'title' => $data['Title'],
                 'search_title' => $data['Title'],
-                'task_id' => $data['task_id'],
+                //'task_id' => $data['task_id'],
             ]);
             $archive->extend()->create([
                 'content' => $data['Content'],
