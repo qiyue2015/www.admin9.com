@@ -63,7 +63,7 @@ class TaskTouTiaoListJob implements ShouldQueue
                     'summary' => $row['display']['summary']['text'],
                     'item_id' => $row['item_id'],
                     'source' => $row['source'],
-                    'url' => $row['url'],
+                    'url' => $row['url'] ?? '',
                 ];
             })->toArray();
 
