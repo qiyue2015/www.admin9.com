@@ -51,7 +51,7 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
         $response = Http::getWithProxy($url, $query);
 
         if (!$response->json('data')) {
-            Log::channel('spider')->debug('代理采集', $response->json());
+            Log::channel('spider')->debug($response->body());
         }
 
         $maps = collect($response->json('data'))->filter(function ($row) {
