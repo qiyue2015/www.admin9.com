@@ -12,7 +12,11 @@
             <span class="user">{{ $archive->user->name }}</span>
 @endif
         </div>
-        <div class="content">{!! $archive->extend->content !!}</div>
+        <div class="content">
+@if($archive->user)
+            {!! $archive->extend->content !!}
+@endif
+        </div>
         <div class="tips">
             <div class="tags">
                 @foreach($archive->tags as $tag)<a href="#">{{ $tag }}</a>@endforeach
