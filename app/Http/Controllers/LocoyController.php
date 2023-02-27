@@ -42,7 +42,7 @@ class LocoyController extends Controller
         }
 
 
-        $category = Category::where('alias', $data['Category'])->firstOrFail();
+        $category = Category::where('alias', $data['Category'])->first();
         if (is_null($category)) {
             $category = Category::create([
                 'name' => $data['Category'],
