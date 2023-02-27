@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Ace\Horizon\CustomQueue;
+use App\Jobs\Task\TaskTouTiaoPublishJob;
 use App\Models\Archive;
 use App\Models\Category;
 use App\Models\Task;
+use App\Repositories\TaskRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -48,17 +50,8 @@ class Test extends Command
                 break;
             }
 
-            foreach ($list as $row) {
-                $contents = collect($row->contents)->map(function ($row) {
-                    return [
-                        'title' => $row['title'],
-                        'summary' => $row['summary'],
-                        'source' => $row['source'],
-                        'item_id' => $row['item_id'],
-                        'url' => $row['url'],
-                    ];
-                })->toArray();
-                $row->update(['contents' => $contents]);
+            foreach ($list as $task) {
+                TaskTouTiaoPublishJob::dispatch($task);
             }
 
             $star = $list->last()->id;
