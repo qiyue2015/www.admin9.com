@@ -70,6 +70,7 @@ class ExtractProxy extends Command
                 throw new RuntimeException($response->msg);
             }
         } catch (Throwable $throwable) {
+            $this->error($throwable->getMessage());
             Log::warning('代理获取失败', ['content' => $throwable->getMessage()]);
         }
     }
