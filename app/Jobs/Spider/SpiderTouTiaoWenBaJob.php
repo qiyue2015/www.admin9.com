@@ -47,7 +47,7 @@ class SpiderTouTiaoWenBaJob implements ShouldQueue
             'enter_from' => 'search_result',
             'keyword' => $this->archive->title,
         ];
-        $response = Http::get($url, $query);
+        $response = Http::getWithProxy($url, $query);
         $maps = collect($response->json('data'))->filter(function ($row) {
             return isset($row['display_type_self'], $row['display']); // 只需要问答的内容
         });
