@@ -241,7 +241,7 @@ return [
             'just_for_toutiao_wenba' => [
                 'connection' => 'redis',
                 'queue' => [CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE],
-                'processes' => 4,
+                'processes' => 10,
                 'tries' => 1,
                 'timeout' => 30,
             ],
