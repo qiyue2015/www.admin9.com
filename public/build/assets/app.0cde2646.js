@@ -5,4 +5,4 @@ var m={exports:{}};(function(i,d){function c(){var t=document.querySelector("[da
         <h3 class="text-lg font-bold">\u9891\u9053</h3>
         <div class="grid grid-cols-4 gap-4 mt-4">`+r+`</div>
     </div>
-</div>`);var t=$(".block"),e=t.offset().top;$(document).on("scroll",function(){var a=$(document).scrollTop();a>e?t.addClass("fix"):t.removeClass("fix")})});
+</div>`);var t=$(".right-side>section>.rank"),e=t.offset().top;$(document).on("scroll",function(){var a=$(document).scrollTop();a>e?t.addClass("fix"):t.removeClass("fix")})});

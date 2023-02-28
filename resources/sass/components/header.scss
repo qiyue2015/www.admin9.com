@@ -1,9 +1,9 @@
 .fixed-header {
-  @apply fixed top-0 left-0 z-50;
+  @apply sticky top-0 z-30;
 }
 
 .navbar-wrap {
-  @apply bg-base-300 text-base-content;
+  @apply bg-base-300 text-base-content bg-opacity-90 backdrop-blur transition-all duration-100;
   @apply flex w-full h-16;
 
   .navbar {
@@ -22,7 +22,7 @@
 }
 
 .banner-wrapper {
-  @apply h-44 md:h-64 px-6;
+  @apply px-6 py-10;
   @apply relative w-full text-center cursor-pointer;
   @apply bg-base-300 text-base-content;
 
@@ -32,7 +32,7 @@
 
   .banner-title {
     @apply relative text-xl md:text-3xl text-center;
-    @apply pt-16 md:pt-24 mx-auto mb-4 whitespace-nowrap;
+    @apply mx-auto mb-4 whitespace-nowrap;
     transition: color .3s;
     font-weight: 700;
 

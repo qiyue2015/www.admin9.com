@@ -51,7 +51,7 @@ $(function () {
         '    </div>\n' +
         '</div>');
 
-    var navBar = $('.block');
+    var navBar = $('.right-side>section>.rank');
     var navToTop = navBar.offset().top;
     $(document).on('scroll', function () {
         var scrollDistance = $(document).scrollTop();

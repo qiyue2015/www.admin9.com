@@ -78,8 +78,7 @@
   }
 
   .right-side {
-    @apply hidden lg:block;
-    @apply w-72;
+    @apply w-72 hidden lg:block;
   }
 }
 
