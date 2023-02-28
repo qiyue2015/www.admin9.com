@@ -37,6 +37,7 @@ class TaskTouTiaoCommand extends Command
             $bar = $this->output->createProgressBar($list->count());
             collect($list)->each(function ($task) use ($bar) {
                 $this->info($task->id.' - '.$task->title);
+                $task->increment('run_num', 1, ['run_time' => now()->timestamp]);
                 TaskTouTiaoListJob::dispatch($task)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
                 $bar->advance();
             });

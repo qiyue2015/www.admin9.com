@@ -37,8 +37,6 @@ class TaskTouTiaoListJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->task->increment('run_num', 1, ['run_time' => now()->timestamp]);
-
         $query = [
             'version_code' => '9.1.9',
             'app_name' => 'news_article',
