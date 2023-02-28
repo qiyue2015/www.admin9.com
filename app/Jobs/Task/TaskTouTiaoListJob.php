@@ -70,7 +70,7 @@ class TaskTouTiaoListJob implements ShouldQueue
             if ($list) {
                 $list = array_values($list);
                 $this->task->update(['contents' => $list]);
-                //TaskTouTiaoPublishJob::dispatch($this->task);
+                TaskTouTiaoPublishJob::dispatch($this->task);
             }
         }
     }
