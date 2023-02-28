@@ -27,7 +27,7 @@
 {{-- Header --}}
     @include('layouts._header')
 
-@if (Route::is(['app.home']))
+@if (Route::is(['app.home', '*.index']))
     <div class="banner-wrapper">
         <div class="banner-title">
             <a href="/view/806828457.html" target="_blank">兔哥百科 招募知识达人</a>

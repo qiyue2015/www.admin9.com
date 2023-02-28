@@ -47,6 +47,6 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('script')
     @vite('resources/js/view.js')
-@endsection
+@endpush
