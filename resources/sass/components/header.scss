@@ -3,7 +3,7 @@
 }
 
 .navbar-wrap {
-  @apply bg-base-300 text-base-content bg-opacity-90 backdrop-blur transition-all duration-100;
+  @apply bg-base-200 text-base-content backdrop-blur transition-all duration-100;
   @apply flex w-full h-16;
 
   .navbar {
@@ -13,18 +13,15 @@
       @apply mx-2;
       a {
         @apply py-1;
-        &:hover {
-          @apply text-base-content;
-        }
       }
     }
   }
 }
 
 .banner-wrapper {
-  @apply px-6 py-10;
+  @apply px-6 py-8 md:py-10;
   @apply relative w-full text-center cursor-pointer;
-  @apply bg-base-300 text-base-content;
+  @apply bg-base-200 text-base-content;
 
   .banner-title, .search-group, .hot-words {
     @apply mx-auto md:w-3/4 lg:w-[50rem];
@@ -46,19 +43,6 @@
 
     .search-btn {
       @apply cursor-pointer absolute left-0 top-0;
-    }
-  }
-
-  .hot-words {
-    @apply hidden md:block h-11 mx-auto mt-4 overflow-hidden;
-    @apply text-sm text-left;
-
-    a {
-      @apply text-base-content mr-2;
-
-      &:hover {
-        @apply text-primary;
-      }
     }
   }
 }
