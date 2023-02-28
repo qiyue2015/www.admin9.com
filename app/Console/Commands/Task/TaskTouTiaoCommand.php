@@ -30,7 +30,7 @@ class TaskTouTiaoCommand extends Command
      */
     public function handle(): void
     {
-        $list = Task::where('run_time', '<', now()->timestamp)->limit(60)->get(['id', 'title']);
+        $list = Task::where('run_time', '<', now()->timestamp)->limit(60)->get(['id', 'title', 'run_time']);
         if ($list->isEmpty()) {
             $this->info('无可执行数据.');
         } else {
