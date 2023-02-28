@@ -66,8 +66,12 @@ class TaskTouTiaoListJob implements ShouldQueue
             })->toArray();
 
             if ($list) {
-                $list = array_values($list);
-                $this->task->update(['contents' => $list]);
+                $this->task->increment('run_num', 1, [
+                    'run_time' => now()->addDay()->timestamp,
+                    'contents' => array_values($list),
+                ]);
+
+                // 发布内容
                 TaskTouTiaoPublishJob::dispatch($this->task);
             }
         }
