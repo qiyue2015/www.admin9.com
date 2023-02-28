@@ -1,5 +1,7 @@
 @extends('layouts.default')
-@section('title', $category->name.'-'.config('site.name'))
+
+@section('title', $category->name)
+
 @section('content')
     <div class="article-list">
 @loop($category_id, 30)
@@ -11,10 +13,7 @@
                 <h2><a href="{{ $row->link() }}" title="{{ $row->title }}">{{ $row->title }}</a></h2>
                 <div class="explain">{{ $row->description }}</div>
 @if($row->tags)
-                <div class="tags">
-                    @foreach($row->tags as $tag)<a href="#">{{ $tag }}</a>@endforeach
-
-                </div>
+                <div class="tags">@foreach($row->tags as $tag)<a href="#">{{ $tag }}</a>@endforeach</div>
 @endif
             </div>
         </div>

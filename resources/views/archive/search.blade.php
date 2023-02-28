@@ -1,5 +1,6 @@
 @extends('layouts.default')
-@section('title', $title.'-'.config('site.name'))
+
+@section('title', $title)
 
 @section('content')
     <div class="article-list min-h-96"></div>

@@ -1,34 +1,23 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="winter">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Locoy</title>
-    @vite(['resources/sass/app.scss'])
-</head>
-<body>
-<div class="max-w-6xl mx-auto">
-    <table class="table-fixed mt-8">
-        <thead>
-        <tr>
-            <th class="w-12">ID</th>
-            <th>TITLE</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($list as $row)
-            <tr>
-                <td class="text-center">{{$row->id}}</td>
-                <td class="py-4"><a href="{{$row->link()}}" class="link link-secondary" target="_blank">{{$row->title}}</a></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>{{$row->description}}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+@extends('layouts.default')
+
+@section('title', 'Locoy')
+
+@section('content')
+    <div class="article-list">
+@foreach($list as $row)
+        <div class="article-item">
+            <a href="{{ $row->link() }}" class="article-img">
+                <img src="{{ $row->cover }}" alt="{{ $row->title }}" class="object-cover rounded"/>
+            </a>
+            <div class="article-text">
+                <h2><a href="{{ $row->link() }}" title="{{ $row->title }}">{{ $row->title }}</a></h2>
+                <div class="explain">{{ $row->description }}</div>
+                @if($row->tags)
+                    <div class="tags">@foreach($row->tags as $tag)<a href="#">{{ $tag }}</a>@endforeach</div>
+                @endif
+            </div>
+        </div>
+@endforeach
+    </div>
     <div class="m-10">{{ $list->links() }}</div>
-</div>
-</body>
-</html>
+@endsection

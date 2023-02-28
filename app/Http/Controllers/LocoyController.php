@@ -13,8 +13,9 @@ class LocoyController extends Controller
         $list = Archive::select(['id', 'title', 'description'])
             ->where('checked', false)
             ->orderBy('id', 'DESC')
-            ->simplePaginate(10);
-        return view('locoy.locoy', compact('list'));
+            ->simplePaginate(20);
+        $category_id = 0;
+        return view('locoy.locoy', compact('category_id', 'list'));
     }
 
     /**
