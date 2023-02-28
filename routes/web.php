@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\LocoyController;
 use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 
@@ -27,7 +28,8 @@ Route::get('{slug}', [ArchiveController::class, 'index'])->where(['slug' => '[a-
 // 详情
 Route::get('view/{id}.html', [ArchiveController::class, 'show'])->where(['id' => '[0-9]+'])->name('archive.show');
 
-Route::get('locoy/archives', [\App\Http\Controllers\LocoyController::class, 'index'])->name('archive.index');
+Route::get('locoy/archives', [LocoyController::class, 'index'])->name('archive.index');
+
 // 生成封面图片
 //Route::get('storage/files/{date}/{id}-1.jpg', [CommonController::class, 'cover']);
 
