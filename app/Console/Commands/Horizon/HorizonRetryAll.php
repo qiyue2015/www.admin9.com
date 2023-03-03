@@ -87,7 +87,11 @@ class HorizonRetryAll extends Command
             ->chunk(100, function ($items) {
                 collect($items)->each(function ($row) {
                     echo '.';
-                    Artisan::call('queue:retry '.$row->uuid);
+                    try {
+                        Artisan::call('queue:retry '.$row->uuid);
+                    } catch (\Exception $exception) {
+                        $this->error($exception->getMessage());
+                    }
                 });
             });
     }
