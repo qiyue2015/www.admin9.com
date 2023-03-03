@@ -90,7 +90,7 @@ class HorizonRetryAll extends Command
                     try {
                         Artisan::call('queue:retry '.$row->uuid);
                     } catch (\Exception $exception) {
-                        $row->delete();
+                        DB::table('failed_jobs')->where('id', $row->id)->delete();
                         $this->error($exception->getMessage());
                     }
                 });
