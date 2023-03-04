@@ -87,7 +87,7 @@ trait ApiResponseTrait
                 'page' => $paginator->currentPage(), // 当前页数
                 'pagesize' => $paginator->perPage(), // 当前条数
                 'has_more' => $paginator->hasMorePages(),
-                //'total_count' => $paginator->total(), // 数据总量
+                'total_count' => $paginator->total(), // 数据总量
                 //'total_page' => $paginator->lastPage(), // 总页数
             ],
         ];
