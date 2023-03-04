@@ -39,7 +39,9 @@ class ArchiveResource extends JsonResource
             'cover' => $this->cover,
             'checked' => $this->checked,
             'is_publish' => $this->is_publish,
-            'publish_at' => $this->publish_at,
+            'publish_at' => now()->parse($this->publish_at)->format('Y-m-d H:i:s'),
+            'created_at' => now()->parse($this->created_at)->format('Y-m-d H:i:s'),
+            'updated_at' => now()->parse($this->updated_at)->format('Y-m-d H:i:s'),
             'category' => $category,
             'user' => $user,
         ];
