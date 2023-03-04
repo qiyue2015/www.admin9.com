@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ArchiveCollection;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\ArchiveDetailResource;
 use App\Models\Archive;
 use Illuminate\Http\Request;
 
@@ -17,10 +16,10 @@ class ArchiveController extends Controller
             ->when($request->get('is_publish'), function ($query) use ($request) {
                 $query->where('is_publish', $request->get('is_publish'));
             })
-            ->when($request->get('checked'), function ($query) use ($request) {
-                $query->where('checked', $request->get('checked'));
+            ->when((int) $request->get('checked') === 0, function ($query) {
+                $query->where('checked', 0);
             })
-            ->orderBy('id', 'DESC')
+            ->orderBy('id', 'ASC')
             ->paginate(20);
 
         return $this->successPaginate(new ArchiveCollection($list));
@@ -47,7 +46,7 @@ class ArchiveController extends Controller
      */
     public function show(Archive $archive)
     {
-        return $this->success($archive);
+        return $this->success(new ArchiveDetailResource($archive));
     }
 
     /**
@@ -58,8 +57,20 @@ class ArchiveController extends Controller
      */
     public function update(Request $request, Archive $archive)
     {
-        $data = $request->all(['title']);
+        $data = $request->all(['title', 'description', 'category_id', 'cover']);
+        $content = $request->input('content');
+        $data['checked'] = 1;
         $archive->update($data);
+        if ($archive->extend()->exists()) {
+            $archive->extend()->update(['content' => $content]);
+        } else {
+            $archive->extend()->create(['content' => $content]);
+        }
+
+        $archive->next = Archive::where('id', '>', $archive->id)
+            ->where('checked', 0)
+            ->first(['id', 'title']);
+
         return $this->success($archive);
     }
 
