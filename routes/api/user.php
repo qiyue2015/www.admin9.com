@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use Illuminate\Routing\Router;
 
 Route::controller(UserController::class)->middleware(['auth:sanctum'])->group(function (Router $router) {
     $router->get('users', 'index')->middleware('abilities:user.index');

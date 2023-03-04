@@ -6,7 +6,7 @@ class ResponseEnum
 {
     /*----------------------------------------2XX---------------------------------------------------*/
     // 表示服务器成功地接受了客户端请求
-    public const HTTP_SUCCESS = [200, '操作成功'];
+    public const HTTP_SUCCESS = [0, '操作成功'];
     public const HTTP_ERROR = [416, '操作失败'];
     public const HTTP_ACTION_COUNT_ERROR = [417, '操作频繁'];
 
