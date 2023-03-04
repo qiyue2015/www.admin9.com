@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryAddRequest;
+use App\Http\Resources\CategoryCollection;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +18,7 @@ class CategoryController extends Controller
     public function index(): JsonResponse
     {
         $list = Category::orderBy('sort')->get();
-        return $this->success($list);
+        return $this->success(new CategoryCollection($list));
     }
 
     /**
@@ -35,7 +37,9 @@ class CategoryController extends Controller
             if ($parent->is_last) {
                 return $this->fail('父栏目不能是终极栏目');
             }
-            $params['parents'] = [...$parent->parents, ...[$parent->id]];
+            if ($parent->parents) {
+                $params['parents'] = [...$parent->parents, ...[$parent->id]];
+            }
         }
 
         $category = Category::create($params);
@@ -43,17 +47,20 @@ class CategoryController extends Controller
         if ($category->parent_id) {
             // 修改父栏目的子栏目
             $parent = Category::findOrFail($category->parent_id);
-            $parent->children = [...$parent->children, ...[$category->id]];
-            $parent->save();
-
-            // 更改父类别的父栏目的子栏目
-            Category::whereIn('id', $parent->parents)->each(function ($super) use ($category) {
-                $super->children = [...$super->children, ...[$category->id]];
-                $super->save();
-            });
+            if ($parent->children) {
+                $parent->children = [...$parent->children, ...[$category->id]];
+                $parent->save();
+                if ($parent->parents) {
+                    // 更改父类别的父栏目的子栏目
+                    Category::whereIn('id', $parent->parents)->each(function ($super) use ($category) {
+                        $super->children = [...$super->children, ...[$category->id]];
+                        $super->save();
+                    });
+                }
+            }
         }
 
-        return $this->success($category);
+        return $this->success();
     }
 
     /**
@@ -117,7 +124,7 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy(Category $category)
     {
