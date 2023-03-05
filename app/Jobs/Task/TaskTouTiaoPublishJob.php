@@ -51,7 +51,7 @@ class TaskTouTiaoPublishJob implements ShouldQueue
                 $row['percent'] = $percent;
                 return $row;
             })->filter(function ($row) {
-                return $row['percent'] > 80; // 取出大于80分的
+                return $row['percent'] > 50; // 取出大于80分的
             })->sortByDesc(function ($row) {
                 return $row['percent']; // 倒叙排一下
             })->first();
