@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\LocoyController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [CommonController::class, 'index'])->name('app.home');
+Route::get('/', [PageController::class, 'index'])->name('app.home');
 
 // 搜索
-Route::get('search', [CommonController::class, 'search'])->name('search');
+Route::get('search', [PageController::class, 'search'])->name('search');
 
 // 例表
 Route::get('{slug}', [ArchiveController::class, 'index'])->where(['slug' => '[a-z]+'])->name('archive.index');
