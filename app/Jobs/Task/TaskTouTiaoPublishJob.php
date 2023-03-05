@@ -88,7 +88,7 @@ class TaskTouTiaoPublishJob implements ShouldQueue
                         ]);
 
                         // 关闭任务
-                        $this->task->update(['status' => 1]);
+                        $this->task->update(['status' => 0]);
                     });
                 } else {
                     Log::channel('spider')->info('正则提取【TaskTouTiaoPublishJob】', ['content' => $response->body()]);
