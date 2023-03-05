@@ -40,6 +40,7 @@ class Test extends Command
      */
     public function handle()
     {
+        // test chat GPT
         $lastId = $this->query()->max('id');
         $count = $this->query()->count();
         $bar = $this->output->createProgressBar($count);
