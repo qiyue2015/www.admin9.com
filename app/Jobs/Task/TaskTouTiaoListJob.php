@@ -51,8 +51,9 @@ class TaskTouTiaoListJob implements ShouldQueue
 
         $response = Http::getWithProxy($this->url, $query);
         if ($response->json('data')) {
+            // 筛选问答的内容
             $maps = collect($response->json('data'))->filter(function ($row) {
-                return isset($row['display_type_self'], $row['display']); // 只需要问答的内容
+                return isset($row['display_type_self'], $row['display']);
             });
 
             $list = collect($maps)->map(function ($row) {
@@ -63,13 +64,15 @@ class TaskTouTiaoListJob implements ShouldQueue
                     'source' => $row['source'],
                     'url' => $row['url'] ?? '',
                 ];
-            })->toArray();
+            });
 
-            if ($list) {
-                $this->task->increment('run_num', 1, [
-                    'run_time' => now()->addDay()->timestamp,
-                    'contents' => array_values($list),
-                ]);
+            if ($list->isNotEmpty()) {
+                // 增加执行次数 和最后运行时间
+                $this->task->increment('run_num', 1, ['run_time' => now()->addDay()->timestamp]);
+
+                // 写入日志备用
+                $list = array_values($list->toArray());
+                setTaskLog($this->task->hash, $list);
 
                 // 发布内容
                 TaskTouTiaoPublishJob::dispatch($this->task);

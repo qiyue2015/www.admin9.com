@@ -13,19 +13,19 @@ use Jenssegers\Optimus\Optimus;
  * App\Models\Archive
  *
  * @property int $id
- * @property string $title
  * @property int $category_id 分类ID
- * @property mixed|null $flag
+ * @property string $title
  * @property string|null $subtitle
  * @property string|null $search_title
  * @property string|null $keywords
  * @property string|null $description
- * @property string $cover
- * @property array $tags
- * @property string|null $writer 作者
- * @property string|null $source_name 来源名称
- * @property string|null $source_url 来源地址
+ * @property mixed|null $flag
  * @property int $has_cover 是否有封面
+ * @property string $cover 封面图片
+ * @property array $tags
+ * @property string $writer 作者
+ * @property string|null $source_name 来源
+ * @property string|null $source_url 来源URL
  * @property string|null $images
  * @property int $view_num 点击量
  * @property int $user_id 后台发布ID
@@ -34,12 +34,13 @@ use Jenssegers\Optimus\Optimus;
  * @property string $publish_at
  * @property int $is_html 生成 PC html
  * @property int $is_wap_html 生成 WAP html
- * @property int $is_sitemap 生成
+ * @property int $is_sitemap 生成 地图 html
  * @property string|null $task_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Category|null $category
  * @property-read \App\Models\ArchiveExtend|null $extend
+ * @property-write mixed $is_publish
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Archive checked()
  * @method static \Illuminate\Database\Eloquent\Builder|Archive newModelQuery()
@@ -56,11 +57,11 @@ use Jenssegers\Optimus\Optimus;
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereIsHtml($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Archive whereIsPublish($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereIsSitemap($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereIsWapHtml($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereKeywords($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive wherePublishAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Archive wherePublished($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereSearchTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereSourceName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Archive whereSourceUrl($value)

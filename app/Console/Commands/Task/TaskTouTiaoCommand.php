@@ -30,23 +30,21 @@ class TaskTouTiaoCommand extends Command
      */
     public function handle(): void
     {
-        $list = Task::where('run_time', '<', now()->timestamp)
-            ->orderBy('run_time')
-            ->limit(500)
-            ->get(['id', 'title', 'run_time']);
+        $list = Task::runStatus()->limit(100)->get();
         if ($list->isEmpty()) {
             $this->info('无可执行数据.');
-        } else {
-            $bar = $this->output->createProgressBar($list->count());
-            collect($list)->each(function ($task) use ($bar) {
-                $this->info($task->id.' - '.$task->title);
-                // 下次运行时间
-                $task->increment('run_num', 1, [
-                    'run_time' => now()->addDay()->timestamp,
-                ]);
-                TaskTouTiaoListJob::dispatch($task)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
-                $bar->advance();
-            });
+            return;
         }
+
+        $ids = collect($list)->pluck('id')->toArray();
+
+        // 设置下次运行时间
+        Task::whereIn('id', $ids)->update(['run_time' => now()->addDay()->timestamp]);
+
+        $bar = $this->output->createProgressBar($list->count());
+        collect($list)->each(function ($task) use ($bar) {
+            TaskTouTiaoListJob::dispatch($task)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
+            $bar->advance();
+        });
     }
 }

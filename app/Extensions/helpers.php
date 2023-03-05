@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
 if (!function_exists('cache_increment')) {
     /**
      * @param $key
@@ -167,5 +172,98 @@ if (!function_exists('getFontSize')) {
         }
 
         return round($fontSize);
+    }
+}
+
+if (!function_exists('setTaskLog')) {
+    /**
+     * 每条任务获取到的搜索记录
+     *
+     * @param  string  $hash
+     * @param  array  $contents
+     * @return bool
+     */
+    function setTaskLog(string $hash, array $contents): bool
+    {
+        if (!empty($contents)) {
+            return Cache::driver('file')->put($hash, $contents, now()->addDay());
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('getTaskLog')) {
+    /**
+     * 设置每条任务搜索到的记录
+     *
+     * @param  string  $hash
+     * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    function getTaskLog(string $hash): array
+    {
+        return Cache::driver('file')->get($hash);
+    }
+}
+
+if (!function_exists('makeTitleCover')) {
+    /**
+     * 制作标题图片
+     *
+     * @param $title
+     * @param $forever
+     * @return string|null
+     */
+    function makeTitleCover($title, $forever = false): ?string
+    {
+        // 底图目录
+        $backgroundDir = resource_path('title_backgrounds');
+        $backgrounds = File::files($backgroundDir);
+        if (empty($backgrounds)) {
+            return null;
+        }
+
+        // 随机获取一张背景图
+        $background = $backgrounds[array_rand($backgrounds)];
+
+        // 字体
+        $fontSize = getFontSize($title);
+        $fontPath = resource_path('fonts/zcool-yangyu-W04.ttf');
+
+        // 根据文件名里的关键字来决定文字使用颜色
+        $color = '#000000';
+        if (str()->contains($background->getBasename(), 'white')) {
+            $color = '#FFFFFF';
+        } elseif (str()->contains($background->getBasename(), 'tea')) {
+            $color = '#134e4a';
+        }
+
+        // 永久位置
+        if ($forever) {
+            $imageFilename = md5($title).'.jpg';
+            $imageDir = 'files/'.date('Ymd');
+            Storage::disk('public')->makeDirectory($imageDir);
+            $imagePath = $imageDir.'/'.$imageFilename;
+        } else {
+            $imageFilename = md5($title).'-'.$background->getBasename();
+            $imagePath = 'title_background_temps/'.$imageFilename;
+        }
+
+        // 生成图片
+        if (!Storage::disk('public')->exists($imagePath)) {
+            $imageTempPath = Storage::disk('public')->path($imagePath);
+            Image::make($background->getPathname())
+                ->text($title, 400, 160, function ($font) use ($fontSize, $fontPath, $color) {
+                    $font->file($fontPath);
+                    $font->size($fontSize);
+                    $font->color($color);
+                    $font->align('center');
+                    $font->valign('center');
+                })
+                ->save($imageTempPath);
+        }
+
+        return Storage::url($imagePath);
     }
 }
