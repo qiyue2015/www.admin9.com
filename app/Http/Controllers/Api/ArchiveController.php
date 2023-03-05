@@ -7,6 +7,7 @@ use App\Http\Resources\ArchiveCollection;
 use App\Http\Resources\ArchiveDetailResource;
 use App\Models\Archive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArchiveController extends Controller
 {
@@ -59,7 +60,19 @@ class ArchiveController extends Controller
     {
         $data = $request->all(['title', 'description', 'category_id', 'cover']);
         $content = $request->input('content');
+        $content = trim($content);
         $data['checked'] = 1;
+
+        // 临时地址
+        if (str()->contains($request->input('cover'), '/title_background_temps/')) {
+            $pathinfo = pathinfo($request->input('cover'));
+            $filepath = '/files/'.date('Y-m-d');
+            Storage::disk('public')->directories($filepath);
+            $filename = $filepath.'/'.md5($pathinfo['filename']).'.'.$pathinfo['extension'];
+            Storage::disk('public')->move('title_background_temps/'.$pathinfo['basename'], $filename);
+            $data['cover'] = $filename;
+        }
+
         $archive->update($data);
         if ($archive->extend()->exists()) {
             $archive->extend()->update(['content' => $content]);

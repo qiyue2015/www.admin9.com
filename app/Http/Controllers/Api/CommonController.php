@@ -52,7 +52,7 @@ class CommonController extends Controller
         }
 
         // 判断图片是否已存在
-        $imageFilename = md5($title).'.'.$background->getExtension();
+        $imageFilename = md5($title).'-'.$background->getBasename();
         $imagePath = 'title_background_temps/'.$imageFilename;
         if (Storage::disk('public')->exists($imagePath)) {
             return $this->success([
