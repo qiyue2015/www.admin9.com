@@ -31,13 +31,13 @@ class ArchiveCover extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        $lastId = Archive::whereHasCover(0)->where('is_publish', 1)->max('id');
-        $count = Archive::whereHasCover(0)->where('is_publish', 1)->count();
+        $lastId = Archive::whereHasCover(0)->where('published', 1)->max('id');
+        $count = Archive::whereHasCover(0)->where('published', 1)->count();
         $bar = $this->output->createProgressBar($count);
         $star = 0;
         while ($star < $lastId) {
             $data = Archive::whereHasCover(0)
-                ->where('is_publish', 1)
+                ->where('published', 1)
                 ->where('id', '>', $star)
                 ->orderBy('id')
                 ->limit(500)

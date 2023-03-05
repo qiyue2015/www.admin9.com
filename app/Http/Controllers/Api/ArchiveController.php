@@ -14,8 +14,8 @@ class ArchiveController extends Controller
     public function index(request $request): \Illuminate\Http\JsonResponse
     {
         $list = Archive::with(['category', 'user'])
-            ->when($request->get('is_publish'), function ($query) use ($request) {
-                $query->where('is_publish', $request->get('is_publish'));
+            ->when($request->get('published'), function ($query) use ($request) {
+                $query->where('published', $request->get('published'));
             })
             ->when((int) $request->get('checked') === 0, function ($query) {
                 $query->where('checked', 0);
@@ -124,11 +124,11 @@ class ArchiveController extends Controller
             return $this->fail('该文档未审核');
         }
 
-        if ($archive->is_publish) {
+        if ($archive->published) {
             return $this->fail('该文档已发布');
         }
 
-        $archive->update(['is_publish' => false, 'publish_at' => now()]);
+        $archive->update(['published' => false, 'publish_at' => now()]);
 
         return $this->success();
     }

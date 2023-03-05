@@ -55,7 +55,7 @@ class ClearData extends Command
 
         $this->error('4.articles info to archives.');
         if (!cache()->has('clear-data:4')) {
-            DB::insert("INSERT INTO archives (id, title, keywords, tags, description, is_publish, publish_at, created_at, updated_at) SELECT id, title, keywords, tags, description, checked AS is_publish, updated_at AS publish_at, created_at, updated_at FROM articles;");
+            DB::insert("INSERT INTO archives (id, title, keywords, tags, description, published, publish_at, created_at, updated_at) SELECT id, title, keywords, tags, description, checked AS published, updated_at AS publish_at, created_at, updated_at FROM articles;");
             cache()->put('clear-data:4', true);
         }
 

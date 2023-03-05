@@ -30,7 +30,7 @@ use Jenssegers\Optimus\Optimus;
  * @property int $view_num 点击量
  * @property int $user_id 后台发布ID
  * @property int $checked
- * @property int $is_publish
+ * @property int $published
  * @property string $publish_at
  * @property int $is_html 生成 PC html
  * @property int $is_wap_html 生成 WAP html
@@ -93,7 +93,7 @@ class Archive extends Model
      */
     public function setIsPublishAttribute(): void
     {
-        $this->attributes['is_publish'] = true;
+        $this->attributes['published'] = true;
     }
 
     public function category(): BelongsTo
@@ -136,7 +136,7 @@ class Archive extends Model
 
     public function scopePublished($query): void
     {
-        $query->where('is_publish', true);
+        $query->where('published', true);
     }
 
     /**
