@@ -38,12 +38,12 @@ class Test extends Command
      */
     public function handle()
     {
-        $lastId = Archive::where('category_id', 0)->max('id');
-        $count = Archive::where('category_id', 0)->count();
+        $lastId = Archive::where('has_cover', 0)->max('id');
+        $count = Archive::where('has_cover', 0)->count();
         $bar = $this->output->createProgressBar($count);
         $star = 0;
         while ($star < $lastId) {
-            $list = Archive::where('id', '>', $star)->limit(200)->get(['id', 'title', 'tags']);
+            $list = Archive::where('has_cover', 0)->where('id', '>', $star)->limit(200)->get(['id', 'title', 'tags']);
             if ($list->isEmpty()) {
                 break;
             }
@@ -52,12 +52,13 @@ class Test extends Command
             $star = $list->last()->id;
 
             foreach ($list as $row) {
-                if (count($row->tags)) {
-                    $categoryId = $this->getCategory($row->tags[0])->id;
-                } else {
-                    $categoryId = 1;
-                }
-                $row->update(['category_id' => $categoryId]);
+                dispatch(static function () use ($row) {
+                    $cover = makeTitleCover($row->title, true);
+                    $row->update([
+                        'cover' => $cover ?: null,
+                        'has_cover' => (bool) $cover,
+                    ]);
+                })->onQueue(CustomQueue::LARGE_PROCESSES_QUEUE);
             }
         }
     }
