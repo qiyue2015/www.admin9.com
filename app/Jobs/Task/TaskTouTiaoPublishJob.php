@@ -72,6 +72,7 @@ class TaskTouTiaoPublishJob implements ShouldQueue
                     $cover = makeTitleCover($this->task->title, true);
 
                     DB::transaction(function () use ($contents, $item, $cover) {
+                        $writerArray = config('writer');
                         $archive = new Archive();
                         $archive->category_id = $this->getCategory($this->task->tags)->id;
                         $archive->title = $this->task->title;
@@ -79,7 +80,7 @@ class TaskTouTiaoPublishJob implements ShouldQueue
                         $archive->description = str($item['summary'])->limit();
                         $archive->cover = $cover ?? null;
                         $archive->has_cover = (bool) $cover;
-                        $archive->writer = fake()->name();
+                        $archive->writer = $writerArray[array_rand($writerArray)];
                         $archive->task_id = $this->task->hash;
                         $archive->save();
                         $archive->extend()->create([
