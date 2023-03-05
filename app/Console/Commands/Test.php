@@ -9,7 +9,10 @@ use App\Models\Category;
 use App\Models\Task;
 use App\Repositories\TaskRepository;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Overtrue\Pinyin\Pinyin;
 
 class Test extends Command
 {
@@ -27,11 +30,6 @@ class Test extends Command
      */
     protected $description = 'Command description';
 
-    private function query(): \Illuminate\Database\Eloquent\Builder|Archive
-    {
-        return Task::where('run_num', '>', 0);
-    }
-
     /**
      * Execute the console command.
      *
@@ -40,23 +38,37 @@ class Test extends Command
      */
     public function handle()
     {
-        // test chat GPT
-        $lastId = $this->query()->max('id');
-        $count = $this->query()->count();
+        $lastId = Archive::where('category_id', 0)->max('id');
+        $count = Archive::where('category_id', 0)->count();
         $bar = $this->output->createProgressBar($count);
         $star = 0;
         while ($star < $lastId) {
-            $list = $this->query()->where('id', '>', $star)->limit(100)->get();
+            $list = Archive::where('id', '>', $star)->limit(200)->get(['id', 'title', 'tags']);
             if ($list->isEmpty()) {
                 break;
             }
 
-            foreach ($list as $task) {
-                TaskTouTiaoPublishJob::dispatch($task)->onQueue(CustomQueue::SPIDER_TOUTIAO_WENBA_QUEUE);
-            }
-
-            $star = $list->last()->id;
             $bar->advance($list->count());
+            $star = $list->last()->id;
+
+            foreach ($list as $row) {
+                $categoryId = $this->getCategory($row->tags[0])->id;
+                $row->update(['category_id' => $categoryId]);
+            }
         }
+    }
+
+    private function getCategory($string): Model|Category
+    {
+        $arr = explode(',', $string);
+        return Category::firstOrCreate([
+            'alias' => $arr[0],
+            'parent_id' => 0,
+        ], [
+            'name' => $arr[0],
+            'slug' => Pinyin::permalink($arr[0], ''),
+            'children' => [],
+            'parents' => [],
+        ]);
     }
 }
