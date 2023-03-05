@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 use Jenssegers\Optimus\Optimus;
 
 /**
@@ -116,11 +117,11 @@ class Archive extends Model
             return $value;
         }
 
-        if ($value) {
-            return '/storage'.$value;
+        if (str()->contains($value, '/storage')) {
+            return $value;
         }
 
-        return '/storage/files/'.now()->format('Ymd/').$this->attributes['id'].'-1.jpg';
+        return Storage::url($value);
     }
 
     public function getTagsAttribute($value): array

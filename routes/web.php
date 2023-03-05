@@ -1,10 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\CommonController;
 use App\Http\Controllers\ArchiveController;
-use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LocoyController;
 use Illuminate\Support\Facades\Route;
-use Intervention\Image\Facades\Image;
 
 /*
 |--------------------------------------------------------------------------

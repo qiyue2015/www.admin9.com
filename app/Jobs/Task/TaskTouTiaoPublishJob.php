@@ -40,18 +40,15 @@ class TaskTouTiaoPublishJob implements ShouldQueue
         // 取相似度大于80的第1条信息
         $item = collect($this->task->contents)
             ->map(function ($row) {
-                // 根据两个字符串得到相似度
-                similar_text($this->task->title, $row['title'], $percent);
+                similar_text($this->task->title, $row['title'], $percent); // 两个字符串的相似度
                 $row['percent'] = $percent;
                 return $row;
             })
             ->filter(function ($row) {
-                // 取出大于80分的
-                return $row['percent'] > 80;
+                return $row['percent'] > 80; // 取出大于80分的
             })
             ->sortByDesc(function ($row) {
-                // 倒叙排一下
-                return $row['percent'];
+                return $row['percent']; // 倒叙排一下
             })
             ->first();
 

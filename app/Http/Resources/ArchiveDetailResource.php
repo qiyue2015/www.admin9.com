@@ -43,6 +43,7 @@ class ArchiveDetailResource extends JsonResource
             'category' => $category,
             'title' => $this->title,
             'description' => $this->description,
+            'tags' => $this->tags,
             'has_cover' => $this->has_cover,
             'cover' => $this->cover,
             'checked' => $this->checked,
