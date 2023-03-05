@@ -30,7 +30,7 @@ class TaskTouTiaoCommand extends Command
      */
     public function handle(): void
     {
-        $list = Task::runStatus()->limit(100)->get();
+        $list = Task::runStatus()->limit(500)->get();
         if ($list->isEmpty()) {
             $this->info('无可执行数据.');
             return;
