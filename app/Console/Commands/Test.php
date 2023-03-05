@@ -52,7 +52,7 @@ class Test extends Command
             $star = $list->last()->id;
 
             foreach ($list as $row) {
-                if (is_array($row->tags)) {
+                if (count($row->tags)) {
                     $categoryId = $this->getCategory($row->tags[0])->id;
                 } else {
                     $categoryId = 1;
